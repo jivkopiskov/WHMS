@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WHMS.Data;
 
 namespace WHMS.Data.Migrations
 {
     [DbContext(typeof(WhmsDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200926214813_AddProductInitial")]
+    partial class AddProductInitial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -315,10 +317,10 @@ namespace WHMS.Data.Migrations
                     b.Property<decimal>("AverageCost")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("BrandId")
+                    b.Property<int>("BrandId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ConditionId")
+                    b.Property<int>("ConditionId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Cost")
@@ -353,6 +355,9 @@ namespace WHMS.Data.Migrations
                     b.Property<decimal>("MAPPrice")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("ManufactuerId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ManufacturerId")
                         .HasColumnType("int");
 
@@ -366,8 +371,7 @@ namespace WHMS.Data.Migrations
 
                     b.Property<string>("SKU")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShortDescription")
                         .HasColumnType("nvarchar(250)")
@@ -398,9 +402,6 @@ namespace WHMS.Data.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.HasIndex("ManufacturerId");
-
-                    b.HasIndex("SKU")
-                        .IsUnique();
 
                     b.ToTable("Products");
                 });
@@ -524,11 +525,15 @@ namespace WHMS.Data.Migrations
                 {
                     b.HasOne("WHMS.Data.Models.Brand", "Brand")
                         .WithMany("Products")
-                        .HasForeignKey("BrandId");
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("WHMS.Data.Models.ProductCondition", "Condition")
                         .WithMany("Products")
-                        .HasForeignKey("ConditionId");
+                        .HasForeignKey("ConditionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("WHMS.Data.Models.Manufacturer", "Manufacturer")
                         .WithMany("Products")

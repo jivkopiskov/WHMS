@@ -1,9 +1,8 @@
 ﻿namespace WHMS.Web.Areas.Administration.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
     using WHMS.Services.Data;
     using WHMS.Web.ViewModels.Administration.Dashboard;
-
-    using Microsoft.AspNetCore.Mvc;
 
     public class DashboardController : AdministrationController
     {

@@ -26,6 +26,14 @@
 
         public DbSet<Setting> Settings { get; set; }
 
+        public DbSet<Product> Products { get; set; }
+
+        public DbSet<ProductCondition> ProductConditions { get; set; }
+
+        public DbSet<Brand> Brands { get; set; }
+
+        public DbSet<Manufacturer> Manufacturers { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

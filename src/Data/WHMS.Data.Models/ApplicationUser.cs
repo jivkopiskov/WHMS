@@ -1,12 +1,11 @@
-﻿// ReSharper disable VirtualMemberCallInConstructor
-namespace WHMS.Data.Models
+﻿namespace WHMS.Data.Models
 {
     using System;
     using System.Collections.Generic;
 
-    using WHMS.Data.Common.Models;
-
     using Microsoft.AspNetCore.Identity;
+
+    using WHMS.Data.Common.Models;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {
