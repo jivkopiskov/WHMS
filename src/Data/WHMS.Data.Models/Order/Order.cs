@@ -34,5 +34,15 @@
         public PaymentStatus PaymentStatus { get; set; }
 
         public ICollection<OrderItem> OrderItems { get; set; } = new HashSet<OrderItem>();
+
+        public int? ShippingMethodId { get; set; }
+
+        public ShippingMethod ShippingMethod { get; set; }
+
+        [MaxLength(50)]
+        public string TrackingNumber { get; set; }
+
+        [MaxLength(2048)]
+        public string TrackingURL { get; set; }
     }
 }
