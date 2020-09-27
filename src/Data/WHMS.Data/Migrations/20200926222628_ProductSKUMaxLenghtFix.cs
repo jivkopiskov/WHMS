@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace WHMS.Data.Migrations
+﻿namespace WHMS.Data.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class ProductSKUMaxLenghtFix : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

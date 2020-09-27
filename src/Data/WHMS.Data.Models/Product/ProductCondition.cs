@@ -1,4 +1,4 @@
-﻿namespace WHMS.Data.Models
+﻿namespace WHMS.Data.Models.Product
 {
     using System.Collections.Generic;
 

@@ -3,7 +3,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-    using WHMS.Data.Models;
+    using WHMS.Data.Models.Product;
 
     public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {

@@ -1,11 +1,11 @@
-﻿namespace WHMS.Data.Models
+﻿namespace WHMS.Data.Models.Product
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using WHMS.Data.Common.Models;
 
-    public class Brand : BaseDeletableModel<int>
+    public class Manufacturer : BaseDeletableModel<int>
     {
         [Required]
         [MaxLength(100)]

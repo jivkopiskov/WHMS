@@ -22,5 +22,10 @@
   <ItemGroup>
     <ProjectReference Include="..\WHMS.Data.Common\WHMS.Data.Common.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="PurchaseOrder\" />
+    <Folder Include="Order\" />
+  </ItemGroup>
   
 </Project>
