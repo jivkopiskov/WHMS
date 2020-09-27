@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
 
@@ -23,9 +24,17 @@
             return this.context.Settings.Count();
         }
 
-        IEnumerable<Setting> ISettingsService.GetAll()
+        public async Task<Setting> AddAsync(Setting setting)
         {
-            return this.context.Settings.ToList();
+            var s = await this.context.Settings.AddAsync(setting);
+            return s.Entity;
+        }
+
+        public Task<int> SaveChangesAsync() => this.context.SaveChangesAsync();
+
+        public IEnumerable<T> GetAll<T>()
+        {
+           return this.context.Settings.Where(x => 1 == 1).To<T>().ToList();
         }
     }
 }

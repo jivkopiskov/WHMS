@@ -1,6 +1,7 @@
 ﻿namespace WHMS.Services.Data
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     using WHMS.Data.Models;
 
@@ -8,6 +9,10 @@
     {
         int GetCount();
 
-        IEnumerable<Setting> GetAll();
+        IEnumerable<T> GetAll<T>();
+
+        Task<Setting> AddAsync(Setting setting);
+
+        Task<int> SaveChangesAsync();
     }
 }
