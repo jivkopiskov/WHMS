@@ -8,7 +8,7 @@
 
     internal class SettingsSeeder : ISeeder
     {
-        public async Task SeedAsync(WhmsDbContext dbContext, IServiceProvider serviceProvider)
+        public async Task SeedAsync(WHMSDbContext dbContext, IServiceProvider serviceProvider)
         {
             if (dbContext.Settings.Any())
             {

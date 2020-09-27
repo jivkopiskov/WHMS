@@ -13,7 +13,6 @@
 
     using WHMS.Data;
     using WHMS.Data.Common;
-    using WHMS.Data.Common.Repositories;
     using WHMS.Data.Models;
     using WHMS.Data.Seeding;
     using WHMS.Services.Data;
@@ -33,11 +32,11 @@
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<WhmsDbContext>(
+            services.AddDbContext<WHMSDbContext>(
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
-                .AddRoles<ApplicationRole>().AddEntityFrameworkStores<WhmsDbContext>();
+                .AddRoles<ApplicationRole>().AddEntityFrameworkStores<WHMSDbContext>();
 
             services.Configure<CookiePolicyOptions>(
                 options =>
@@ -68,7 +67,7 @@
             // Seed data on application startup
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
-                var dbContext = serviceScope.ServiceProvider.GetRequiredService<WhmsDbContext>();
+                var dbContext = serviceScope.ServiceProvider.GetRequiredService<WHMSDbContext>();
                 dbContext.Database.Migrate();
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }

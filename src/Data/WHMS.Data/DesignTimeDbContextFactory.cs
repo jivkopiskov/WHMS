@@ -6,20 +6,20 @@
     using Microsoft.EntityFrameworkCore.Design;
     using Microsoft.Extensions.Configuration;
 
-    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<WhmsDbContext>
+    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<WHMSDbContext>
     {
-        public WhmsDbContext CreateDbContext(string[] args)
+        public WHMSDbContext CreateDbContext(string[] args)
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
-            var builder = new DbContextOptionsBuilder<WhmsDbContext>();
+            var builder = new DbContextOptionsBuilder<WHMSDbContext>();
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             builder.UseSqlServer(connectionString);
 
-            return new WhmsDbContext(builder.Options);
+            return new WHMSDbContext(builder.Options);
         }
     }
 }

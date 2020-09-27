@@ -10,8 +10,8 @@ using WHMS.Data;
 namespace WHMS.Data.Migrations
 {
     [DbContext(typeof(WHMSDbContext))]
-    [Migration("20200926222628_ProductSKUMaxLenghtFix")]
-    partial class ProductSKUMaxLenghtFix
+    [Migration("20200927092956_CreateOrderEntities")]
+    partial class CreateOrderEntities
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -123,6 +123,44 @@ namespace WHMS.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("WHMS.Data.Models.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("StreetAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StreetAddress2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ZIP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("WHMS.Data.Models.ApplicationRole", b =>
@@ -245,7 +283,173 @@ namespace WHMS.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("WHMS.Data.Models.Brand", b =>
+            modelBuilder.Entity("WHMS.Data.Models.Order.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("WHMS.Data.Models.Order.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Channel")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("GrandTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ShipByDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("ShippingFees")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ShippingStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SourceOrderId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("WHMS.Data.Models.Order.OrderItem", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("QtyOrdered")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId", "ProductId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("WHMS.Data.Models.Order.Payment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymentType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("Payments");
+                });
+
+            modelBuilder.Entity("WHMS.Data.Models.Product.Brand", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -276,7 +480,7 @@ namespace WHMS.Data.Migrations
                     b.ToTable("Brands");
                 });
 
-            modelBuilder.Entity("WHMS.Data.Models.Manufacturer", b =>
+            modelBuilder.Entity("WHMS.Data.Models.Product.Manufacturer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -307,7 +511,7 @@ namespace WHMS.Data.Migrations
                     b.ToTable("Manufacturers");
                 });
 
-            modelBuilder.Entity("WHMS.Data.Models.Product", b =>
+            modelBuilder.Entity("WHMS.Data.Models.Product.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -407,7 +611,7 @@ namespace WHMS.Data.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("WHMS.Data.Models.ProductCondition", b =>
+            modelBuilder.Entity("WHMS.Data.Models.Product.ProductCondition", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -437,6 +641,69 @@ namespace WHMS.Data.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("ProductConditions");
+                });
+
+            modelBuilder.Entity("WHMS.Data.Models.Product.ProductWarehouse", b =>
+                {
+                    b.Property<int>("WarehouseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AggregateQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReservedQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalPhysicalQuanitiy")
+                        .HasColumnType("int");
+
+                    b.HasKey("WarehouseId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductWarehouse");
+                });
+
+            modelBuilder.Entity("WHMS.Data.Models.Product.Warehouse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSellable")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Warehouse");
                 });
 
             modelBuilder.Entity("WHMS.Data.Models.Setting", b =>
@@ -522,19 +789,79 @@ namespace WHMS.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WHMS.Data.Models.Product", b =>
+            modelBuilder.Entity("WHMS.Data.Models.Order.Customer", b =>
                 {
-                    b.HasOne("WHMS.Data.Models.Brand", "Brand")
+                    b.HasOne("WHMS.Data.Models.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
+                });
+
+            modelBuilder.Entity("WHMS.Data.Models.Order.Order", b =>
+                {
+                    b.HasOne("WHMS.Data.Models.Order.Customer", "Customer")
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerId");
+                });
+
+            modelBuilder.Entity("WHMS.Data.Models.Order.OrderItem", b =>
+                {
+                    b.HasOne("WHMS.Data.Models.Order.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WHMS.Data.Models.Product.Product", "Product")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WHMS.Data.Models.Order.Payment", b =>
+                {
+                    b.HasOne("WHMS.Data.Models.Order.Order", "Order")
+                        .WithMany("Payments")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WHMS.Data.Models.Product.Product", b =>
+                {
+                    b.HasOne("WHMS.Data.Models.Product.Brand", "Brand")
                         .WithMany("Products")
                         .HasForeignKey("BrandId");
 
-                    b.HasOne("WHMS.Data.Models.ProductCondition", "Condition")
+                    b.HasOne("WHMS.Data.Models.Product.ProductCondition", "Condition")
                         .WithMany("Products")
                         .HasForeignKey("ConditionId");
 
-                    b.HasOne("WHMS.Data.Models.Manufacturer", "Manufacturer")
+                    b.HasOne("WHMS.Data.Models.Product.Manufacturer", "Manufacturer")
                         .WithMany("Products")
                         .HasForeignKey("ManufacturerId");
+                });
+
+            modelBuilder.Entity("WHMS.Data.Models.Product.ProductWarehouse", b =>
+                {
+                    b.HasOne("WHMS.Data.Models.Product.Product", "Product")
+                        .WithMany("ProductWarehouses")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WHMS.Data.Models.Product.Warehouse", "Warehouse")
+                        .WithMany("ProductWarehouses")
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WHMS.Data.Models.Product.Warehouse", b =>
+                {
+                    b.HasOne("WHMS.Data.Models.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,7 +12,7 @@
 
     internal class RolesSeeder : ISeeder
     {
-        public async Task SeedAsync(WhmsDbContext dbContext, IServiceProvider serviceProvider)
+        public async Task SeedAsync(WHMSDbContext dbContext, IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
 

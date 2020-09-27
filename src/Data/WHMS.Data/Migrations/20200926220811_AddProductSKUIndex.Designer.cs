@@ -9,7 +9,7 @@ using WHMS.Data;
 
 namespace WHMS.Data.Migrations
 {
-    [DbContext(typeof(WhmsDbContext))]
+    [DbContext(typeof(WHMSDbContext))]
     [Migration("20200926220811_AddProductSKUIndex")]
     partial class AddProductSKUIndex
     {

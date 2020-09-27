@@ -3,27 +3,29 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using WHMS.Data.Common.Repositories;
+    using Microsoft.EntityFrameworkCore;
+
+    using WHMS.Data;
     using WHMS.Data.Models;
     using WHMS.Services.Mapping;
 
     public class SettingsService : ISettingsService
     {
-        private readonly IDeletableEntityRepository<Setting> settingsRepository;
+        private readonly WHMSDbContext context;
 
-        public SettingsService(IDeletableEntityRepository<Setting> settingsRepository)
+        public SettingsService(WHMSDbContext context)
         {
-            this.settingsRepository = settingsRepository;
+            this.context = context;
         }
 
         public int GetCount()
         {
-            return this.settingsRepository.AllAsNoTracking().Count();
+            return this.context.Settings.Count();
         }
 
-        public IEnumerable<T> GetAll<T>()
+        IEnumerable<Setting> ISettingsService.GetAll()
         {
-            return this.settingsRepository.All().To<T>().ToList();
+            return this.context.Settings.ToList();
         }
     }
 }

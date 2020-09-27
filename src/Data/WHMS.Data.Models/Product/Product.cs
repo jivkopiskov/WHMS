@@ -5,6 +5,7 @@
     using System.ComponentModel.DataAnnotations.Schema;
 
     using WHMS.Data.Common.Models;
+    using WHMS.Data.Models.Order;
 
     public class Product : BaseDeletableModel<int>
     {
@@ -61,5 +62,7 @@
         public Manufacturer Manufacturer { get; set; }
 
         public ICollection<ProductWarehouse> ProductWarehouses { get; set; } = new HashSet<ProductWarehouse>();
+
+        public ICollection<OrderItem> OrderItems { get; set; } = new HashSet<OrderItem>();
     }
 }

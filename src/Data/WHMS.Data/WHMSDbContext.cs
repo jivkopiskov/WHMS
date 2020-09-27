@@ -11,15 +11,17 @@
 
     using WHMS.Data.Common.Models;
     using WHMS.Data.Models;
+    using WHMS.Data.Models.Order;
+    using WHMS.Data.Models.Product;
 
-    public class WhmsDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
+    public class WHMSDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
         private static readonly MethodInfo SetIsDeletedQueryFilterMethod =
-            typeof(WhmsDbContext).GetMethod(
+            typeof(WHMSDbContext).GetMethod(
                 nameof(SetIsDeletedQueryFilter),
                 BindingFlags.NonPublic | BindingFlags.Static);
 
-        public WhmsDbContext(DbContextOptions<WhmsDbContext> options)
+        public WHMSDbContext(DbContextOptions<WHMSDbContext> options)
             : base(options)
         {
         }
@@ -33,6 +35,16 @@
         public DbSet<Brand> Brands { get; set; }
 
         public DbSet<Manufacturer> Manufacturers { get; set; }
+
+        public DbSet<Customer> Customers { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<OrderItem> OrderItems { get; set; }
+
+        public DbSet<Payment> Payments { get; set; }
+
+        public DbSet<Address> Addresses { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

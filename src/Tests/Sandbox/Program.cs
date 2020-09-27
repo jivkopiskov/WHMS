@@ -14,7 +14,6 @@
 
     using WHMS.Data;
     using WHMS.Data.Common;
-    using WHMS.Data.Common.Repositories;
     using WHMS.Data.Models;
     using WHMS.Data.Seeding;
     using WHMS.Services.Data;
@@ -32,7 +31,7 @@
             // Seed data on application startup
             using (var serviceScope = serviceProvider.CreateScope())
             {
-                var dbContext = serviceScope.ServiceProvider.GetRequiredService<WhmsDbContext>();
+                var dbContext = serviceScope.ServiceProvider.GetRequiredService<WHMSDbContext>();
                 dbContext.Database.Migrate();
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
@@ -67,12 +66,12 @@
 
             services.AddSingleton<IConfiguration>(configuration);
 
-            services.AddDbContext<WhmsDbContext>(
+            services.AddDbContext<WHMSDbContext>(
                 options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
                     .UseLoggerFactory(new LoggerFactory()));
 
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
-                .AddRoles<ApplicationRole>().AddEntityFrameworkStores<WhmsDbContext>();
+                .AddRoles<ApplicationRole>().AddEntityFrameworkStores<WHMSDbContext>();
 
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();

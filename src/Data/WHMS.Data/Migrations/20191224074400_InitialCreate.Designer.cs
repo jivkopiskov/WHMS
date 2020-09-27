@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace WHMS.Data.Migrations
 {
-    [DbContext(typeof(WhmsDbContext))]
+    [DbContext(typeof(WHMSDbContext))]
     [Migration("20191224074400_InitialCreate")]
     partial class InitialCreate
     {

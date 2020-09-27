@@ -13,11 +13,7 @@
 
         public bool IsSellable { get; set; }
 
-        public string StreetAdress { get; set; }
-
-        public string ZIP { get; set; }
-
-        public string Country { get; set; }
+        public Address Address { get; set; }
 
         public ICollection<ProductWarehouse> ProductWarehouses { get; set; } = new HashSet<ProductWarehouse>();
     }

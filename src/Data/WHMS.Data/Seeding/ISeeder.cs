@@ -5,6 +5,6 @@
 
     public interface ISeeder
     {
-        Task SeedAsync(WhmsDbContext dbContext, IServiceProvider serviceProvider);
+        Task SeedAsync(WHMSDbContext dbContext, IServiceProvider serviceProvider);
     }
 }

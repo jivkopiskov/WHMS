@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="PurchaseOrder\" />
-    <Folder Include="Order\" />
   </ItemGroup>
   
 </Project>

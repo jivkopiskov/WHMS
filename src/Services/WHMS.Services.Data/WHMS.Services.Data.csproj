@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\WHMS.Data.Common\WHMS.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\WHMS.Data.Models\WHMS.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Data\WHMS.Data\WHMS.Data.csproj" />
     <ProjectReference Include="..\WHMS.Services.Mapping\WHMS.Services.Mapping.csproj" />
   </ItemGroup>
 
