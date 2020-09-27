@@ -12,7 +12,10 @@
     {
         public OrderStatus OrderStatus { get; set; }
 
+        [MaxLength(30)]
         public string SourceOrderId { get; set; }
+
+        public int CustomerId { get; set; }
 
         public Customer Customer { get; set; }
 
