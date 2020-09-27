@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WHMS.Data;
 
 namespace WHMS.Data.Migrations
 {
     [DbContext(typeof(WHMSDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200927144036_PurchaseOrders")]
+    partial class PurchaseOrders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -836,23 +838,44 @@ namespace WHMS.Data.Migrations
 
             modelBuilder.Entity("WHMS.Data.Models.PurchaseOrder.PurchaseItem", b =>
                 {
-                    b.Property<int>("PurchaseOrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<decimal>("Cost")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PurchaseOrderId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Qty")
                         .HasColumnType("int");
 
-                    b.HasKey("PurchaseOrderId", "ProductId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("PurchaseItems");
+                    b.HasIndex("PurchaseOrderId");
+
+                    b.ToTable("PurchaseItem");
                 });
 
             modelBuilder.Entity("WHMS.Data.Models.PurchaseOrder.PurchaseOrder", b =>
@@ -903,7 +926,7 @@ namespace WHMS.Data.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("PurchaseOrders");
+                    b.ToTable("PurchaseOrder");
                 });
 
             modelBuilder.Entity("WHMS.Data.Models.PurchaseOrder.Vendor", b =>
@@ -943,7 +966,7 @@ namespace WHMS.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("Vendors");
+                    b.ToTable("Vendor");
                 });
 
             modelBuilder.Entity("WHMS.Data.Models.Setting", b =>
@@ -1141,7 +1164,7 @@ namespace WHMS.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("WHMS.Data.Models.PurchaseOrder.PurchaseOrder", "PurchaseOrder")
-                        .WithMany("PurchaseItems")
+                        .WithMany("PurchaseItem")
                         .HasForeignKey("PurchaseOrderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();

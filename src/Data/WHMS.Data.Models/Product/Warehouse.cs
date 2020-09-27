@@ -4,6 +4,7 @@
     using System.ComponentModel.DataAnnotations;
 
     using WHMS.Data.Common.Models;
+    using WHMS.Data.Models.Order;
 
     public class Warehouse : BaseDeletableModel<int>
     {
@@ -16,5 +17,7 @@
         public Address Address { get; set; }
 
         public ICollection<ProductWarehouse> ProductWarehouses { get; set; } = new HashSet<ProductWarehouse>();
+
+        public ICollection<Order> Orders { get; set; } = new HashSet<Order>();
     }
 }

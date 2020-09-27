@@ -14,6 +14,12 @@
 
         public Address Address { get; set; }
 
+        [MaxLength(30)]
+        public string FirstName { get; set; }
+
+        [MaxLength(30)]
+        public string LastName { get; set; }
+
         public string PhoneNumber { get; set; }
 
         public ICollection<Order> Orders { get; set; }

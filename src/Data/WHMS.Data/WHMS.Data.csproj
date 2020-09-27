@@ -17,6 +17,8 @@
     <Compile Remove="Migrations\20200926221604_SmallProductFixes.Designer.cs" />
     <Compile Remove="Migrations\20200927101502_Test.cs" />
     <Compile Remove="Migrations\20200927101502_Test.Designer.cs" />
+    <Compile Remove="Migrations\20200927145327_Add-Migration FixPurchaseITems.cs" />
+    <Compile Remove="Migrations\20200927145327_Add-Migration FixPurchaseITems.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
