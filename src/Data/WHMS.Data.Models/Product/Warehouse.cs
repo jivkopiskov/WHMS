@@ -1,10 +1,10 @@
-﻿namespace WHMS.Data.Models.Product
+﻿namespace WHMS.Data.Models.Products
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using WHMS.Data.Common.Models;
-    using WHMS.Data.Models.Order;
+    using WHMS.Data.Models.Orders;
 
     public class Warehouse : BaseDeletableModel<int>
     {

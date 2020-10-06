@@ -1,11 +1,11 @@
-﻿namespace WHMS.Data.Models.PurchaseOrder
+﻿namespace WHMS.Data.Models.PurchaseOrders
 {
     using System;
     using System.Collections.Generic;
 
     using WHMS.Data.Common.Models;
-    using WHMS.Data.Models.Product;
-    using WHMS.Data.Models.PurchaseOrder.Enum;
+    using WHMS.Data.Models.Products;
+    using WHMS.Data.Models.PurchaseOrders.Enum;
 
     public class PurchaseOrder : BaseDeletableModel<int>
     {

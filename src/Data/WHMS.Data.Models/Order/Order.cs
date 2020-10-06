@@ -1,4 +1,4 @@
-﻿namespace WHMS.Data.Models.Order
+﻿namespace WHMS.Data.Models.Orders
 {
     using System;
     using System.Collections.Generic;
@@ -6,8 +6,8 @@
     using System.Security.Authentication.ExtendedProtection;
 
     using WHMS.Data.Common.Models;
-    using WHMS.Data.Models.Order.Enum;
-    using WHMS.Data.Models.Product;
+    using WHMS.Data.Models.Orders.Enum;
+    using WHMS.Data.Models.Products;
 
     public class Order : BaseDeletableModel<int>
     {

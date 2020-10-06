@@ -1,7 +1,7 @@
-﻿namespace WHMS.Data.Models.Order
+﻿namespace WHMS.Data.Models.Orders
 {
     using WHMS.Data.Common.Models;
-    using WHMS.Data.Models.Order.Enum;
+    using WHMS.Data.Models.Orders.Enum;
 
     public class Payment : BaseDeletableModel<int>
     {

@@ -3,8 +3,8 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-    using WHMS.Data.Models.Product;
-    using WHMS.Data.Models.PurchaseOrder;
+    using WHMS.Data.Models.Products;
+    using WHMS.Data.Models.PurchaseOrders;
 
     public class PurchaseItemConfiguration : IEntityTypeConfiguration<PurchaseItem>
     {

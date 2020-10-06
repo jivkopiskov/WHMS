@@ -1,4 +1,4 @@
-﻿namespace WHMS.Data.Models.Order
+﻿namespace WHMS.Data.Models.Orders
 {
     using System.ComponentModel.DataAnnotations;
 

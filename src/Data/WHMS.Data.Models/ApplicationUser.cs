@@ -6,6 +6,9 @@
     using Microsoft.AspNetCore.Identity;
 
     using WHMS.Data.Common.Models;
+    using WHMS.Data.Models.Products;
+
+    using Test = WHMS.Data.Models.Products;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {
@@ -15,6 +18,7 @@
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
+            this.Products = new HashSet<Product>();
         }
 
         // Audit info
@@ -32,5 +36,7 @@
         public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
+
+        public ICollection<Product> Products { get; set; }
     }
 }

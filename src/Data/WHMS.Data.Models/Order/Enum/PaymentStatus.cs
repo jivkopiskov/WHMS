@@ -1,4 +1,4 @@
-﻿namespace WHMS.Data.Models.Order.Enum
+﻿namespace WHMS.Data.Models.Orders.Enum
 {
     public enum PaymentStatus
     {

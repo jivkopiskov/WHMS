@@ -1,12 +1,12 @@
-﻿namespace WHMS.Data.Models.Product
+﻿namespace WHMS.Data.Models.Products
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     using WHMS.Data.Common.Models;
-    using WHMS.Data.Models.Order;
-    using WHMS.Data.Models.PurchaseOrder;
+    using WHMS.Data.Models.Orders;
+    using WHMS.Data.Models.PurchaseOrders;
 
     public class Product : BaseDeletableModel<int>
     {
@@ -26,6 +26,10 @@
 
         [MaxLength(12)]
         public string UPC { get; set; }
+
+        public string CreatedById { get; set; }
+
+        public ApplicationUser CreatedBy { get; set; }
 
         public decimal WebsitePrice { get; set; }
 

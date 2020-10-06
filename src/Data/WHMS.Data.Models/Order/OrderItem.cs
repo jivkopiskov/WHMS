@@ -1,7 +1,7 @@
-﻿namespace WHMS.Data.Models.Order
+﻿namespace WHMS.Data.Models.Orders
 {
     using WHMS.Data.Common.Models;
-    using WHMS.Data.Models.Product;
+    using WHMS.Data.Models.Products;
 
     public class OrderItem : BaseDeletableModel<int>
     {

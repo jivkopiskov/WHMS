@@ -1,4 +1,4 @@
-﻿namespace WHMS.Data.Models.PurchaseOrder
+﻿namespace WHMS.Data.Models.PurchaseOrders
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;

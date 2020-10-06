@@ -1,4 +1,4 @@
-﻿namespace WHMS.Data.Models.PurchaseOrder.Enum
+﻿namespace WHMS.Data.Models.PurchaseOrders.Enum
 {
     public enum ReceivingStatus
     {

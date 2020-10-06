@@ -2,8 +2,7 @@
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-    using WHMS.Data.Models.Product;
+    using WHMS.Data.Models.Products;
 
     public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
@@ -11,6 +10,9 @@
         {
             product.HasIndex(p => p.SKU)
                 .IsUnique();
+
+            product.HasOne(p => p.CreatedBy)
+                .WithMany(u => u.Products);
         }
     }
 }

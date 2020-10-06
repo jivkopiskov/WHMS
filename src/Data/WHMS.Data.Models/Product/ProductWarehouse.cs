@@ -1,4 +1,4 @@
-﻿namespace WHMS.Data.Models.Product
+﻿namespace WHMS.Data.Models.Products
 {
     public class ProductWarehouse
     {
