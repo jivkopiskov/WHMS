@@ -7,6 +7,7 @@
 
     public class Carrier : BaseDeletableModel<int>
     {
+        [Required]
         [MaxLength(20)]
         public string Name { get; set; }
 

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     using WHMS.Data.Common.Models;
     using WHMS.Data.Models.Products;
@@ -9,6 +10,10 @@
 
     public class PurchaseOrder : BaseDeletableModel<int>
     {
+        [Required]
+        [MaxLength(100)]
+        public string Description { get; set; }
+
         public int WarehouseId { get; set; }
 
         public Warehouse Warehouse { get; set; }
