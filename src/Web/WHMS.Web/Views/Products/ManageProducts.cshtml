@@ -1,10 +1,12 @@
-﻿@model IEnumerable<WHMS.Data.Models.Products.Product>;
-
+﻿@model IEnumerable<WHMS.Web.ViewModels.Products.ManageProductsViewModel>;
+    <div>
+        <a type="button" class="btn-primary p-2" href="/Products/AddProduct" role="button">Add Product</a>
+    </div>
 <div class="row">
         @foreach (var item in Model)
         {
             <div class="card col-md-3">
-                <img class="card-img-top" src="@(item.Images.FirstOrDefault()?.Url ?? "/img/noimage.png")" style="height: 150px; width: 151px;">
+                <img class="card-img-top" src="@(!String.IsNullOrEmpty(item.ImageUrl) ? item.ImageUrl : "/img/noimage.png")" style="height: 150px; width: 151px;">
                 <div class="card-body">
                     <h5 class="card-title">@item.ProductName</h5>
                     <p class="card-text">@item.ShortDescription</p>

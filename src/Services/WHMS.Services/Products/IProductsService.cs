@@ -5,16 +5,18 @@
 
     using WHMS.Data.Models.Products;
 
+    using WHMS.Web.ViewModels.Products;
+
     public interface IProductsService
     {
-        Task<int> CreateProductAsync();
+        Task<int> CreateProductAsync(AddProductViewModel model);
 
         Task<int> EditProductAsync(int productId);
 
         Task<int> GetProductDetails(int productId);
 
         // pagination with SelectTop50 where id > lastIdReceived
-        IEnumerable<Product> GetAllProducts(int id);
+        IEnumerable<ManageProductsViewModel> GetAllProducts(int id);
 
         Task<int> CreateBrandAsync(string brandName);
 
@@ -39,5 +41,7 @@
         Task<int> EditWarehouseAsync(int warehouseId, bool isSellable);
 
         Task<int> RecalculateAvailableInventory(int productId);
+
+        IEnumerable<Brand> GetAllBrands(int id);
     }
 }

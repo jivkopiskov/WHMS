@@ -3,12 +3,15 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Cryptography.X509Certificates;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
 
     using WHMS.Data;
     using WHMS.Data.Models.Products;
+    using WHMS.Services.Mapping;
+    using WHMS.Web.ViewModels.Products;
 
     public class ProductsService : IProductsService
     {
@@ -29,9 +32,12 @@
             throw new System.NotImplementedException();
         }
 
-        public Task<int> CreateBrandAsync(string brandName)
+        public async Task<int> CreateBrandAsync(string brandName)
         {
-            throw new System.NotImplementedException();
+            var brand = new Brand() { Name = brandName };
+            await this.context.Brands.AddAsync(brand);
+            await this.context.SaveChangesAsync();
+            return brand.Id;
         }
 
         public Task<int> CreateManufacturerAsync(string manufactuerName)
@@ -39,9 +45,26 @@
             throw new System.NotImplementedException();
         }
 
-        public Task<int> CreateProductAsync()
+        public async Task<int> CreateProductAsync(AddProductViewModel model)
         {
-            throw new System.NotImplementedException();
+            var product = new Product()
+            {
+                SKU = model.SKU,
+                AverageCost = model.AverageCost,
+                ProductName = model.ProductName,
+                ShortDescription = model.ShortDescription,
+                MAPPrice = model.MAPPrice,
+                Cost = model.Cost,
+                WebsitePrice = model.WebsitePrice,
+                WholesalePrice = model.WholesalePrice,
+                Height = model.Height,
+                Weight = model.Weight,
+                Width = model.Width,
+                Lenght = model.Lenght,
+            };
+            await this.context.Products.AddAsync(product);
+            await this.context.SaveChangesAsync();
+            return product.Id;
         }
 
         public Task<int> CreateWarehouseAsync(string warehouseName, bool isSellable)
@@ -79,13 +102,23 @@
             throw new System.NotImplementedException();
         }
 
-        public IEnumerable<Product> GetAllProducts(int id)
+        public IEnumerable<Brand> GetAllBrands(int id = 0)
+        {
+            var brands = this.context.Brands
+                .Where(x => x.Id > id)
+                .Take(50)
+                .ToList();
+            return brands;
+        }
+
+        public IEnumerable<ManageProductsViewModel> GetAllProducts(int id)
         {
             var products =
                 this.context.Products.Include(x => x.Brand)
                 .Include(x => x.Images)
                 .Where(x => x.Id >= id)
                 .Take(50)
+                .To<ManageProductsViewModel>()
                 .ToList();
 
             return products;

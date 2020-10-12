@@ -1,0 +1,39 @@
+﻿@model WHMS.Web.ViewModels.Products.AddProductViewModel
+
+<form asp-controller="Products" asp-action="AddProduct" method="post">
+    <div>
+        <label asp-for="SKU">SKU</label>
+        <input asp-for="SKU" class="form-control">
+    </div>
+    <div>
+        <label asp-for="ProductName">Product Name</label>
+        <input asp-for="ProductName" class="form-control">
+    </div>
+    <div>
+        <label asp-for="ShortDescription">Short Description</label>
+        <input asp-for="ShortDescription" class="form-control">
+    </div>
+    <div>
+        <label asp-for="WebsitePrice">Website Price</label>
+        <input asp-for="WebsitePrice" class="form-control">
+    </div>
+    <div>
+        <label asp-for="WholesalePrice">Wholesale Price</label>
+        <input asp-for="WholesalePrice" class="form-control">
+    </div>
+    <div>
+        <label asp-for="Cost">Cost</label>
+        <input asp-for="Cost" class="form-control">
+    </div>
+    <div>
+        <label asp-for="Height">Height</label>
+        <input asp-for="Height" class="form-control">
+        <label asp-for="Width">Width</label>
+        <input asp-for="Width" class="form-control">
+        <label asp-for="Lenght">Lenght</label>
+        <input asp-for="Lenght" class="form-control">
+
+    </div>
+
+    <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Products" asp-action="AddProduct">Add Product</button>
+</form>
