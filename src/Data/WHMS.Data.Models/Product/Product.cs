@@ -72,7 +72,7 @@
 
         public ICollection<PurchaseItem> PurchaseItems { get; set; } = new HashSet<PurchaseItem>();
 
-        public ICollection<Image> Images { get; set; }
+        public ICollection<Image> Images { get; set; } = new HashSet<Image>();
 
         public int VendorId { get; set; }
     }

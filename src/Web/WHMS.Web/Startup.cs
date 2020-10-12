@@ -18,6 +18,7 @@
     using WHMS.Services.Data;
     using WHMS.Services.Mapping;
     using WHMS.Services.Messaging;
+    using WHMS.Services.Products;
     using WHMS.Web.ViewModels;
 
     public class Startup
@@ -57,6 +58,7 @@
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<IProductsService, ProductsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

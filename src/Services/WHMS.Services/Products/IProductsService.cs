@@ -3,6 +3,8 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using WHMS.Data.Models.Products;
+
     public interface IProductsService
     {
         Task<int> CreateProductAsync();
@@ -12,7 +14,7 @@
         Task<int> GetProductDetails(int productId);
 
         // pagination with SelectTop50 where id > lastIdReceived
-        Task<IEnumerable<int>> GetAllProducts(int id);
+        IEnumerable<Product> GetAllProducts(int id);
 
         Task<int> CreateBrandAsync(string brandName);
 

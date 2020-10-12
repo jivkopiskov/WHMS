@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\WHMS.Data.Models\WHMS.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Data\WHMS.Data\WHMS.Data.csproj" />
   </ItemGroup>
 
 </Project>

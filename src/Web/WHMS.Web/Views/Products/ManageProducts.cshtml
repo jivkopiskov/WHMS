@@ -1,0 +1,16 @@
+﻿@model IEnumerable<WHMS.Data.Models.Products.Product>;
+
+<div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="card col-md-3">
+                <img class="card-img-top" src="@(item.Images.FirstOrDefault()?.Url ?? "/img/noimage.png")" style="height: 150px; width: 151px;">
+                <div class="card-body">
+                    <h5 class="card-title">@item.ProductName</h5>
+                    <p class="card-text">@item.ShortDescription</p>
+                    <a href="#" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        }
+
+</div>
