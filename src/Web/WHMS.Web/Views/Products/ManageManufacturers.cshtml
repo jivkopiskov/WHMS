@@ -1,0 +1,22 @@
+﻿@model IEnumerable<WHMS.Web.ViewModels.Products.ManufacturerViewModel>;
+
+<div>
+    <a type="button" class="btn-primary p-2" href="/Products/AddManufacturer" role="button">Add Brand</a>
+</div>
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Manufacturer Name</th>>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var manufacturer in Model)
+        {
+            <tr>
+                <td>@manufacturer.Id</td>
+                <td>@manufacturer.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>

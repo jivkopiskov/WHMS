@@ -6,7 +6,8 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
-
+    using WHMS.Common;
+    using WHMS.Data.Models.Products;
     using WHMS.Services.Products;
     using WHMS.Web.ViewModels.Products;
 
@@ -19,9 +20,10 @@
             this.productService = productsService;
         }
 
+        #region products
         public IActionResult ManageProducts(int lastId = 0)
         {
-            var products = this.productService.GetAllProducts(lastId);
+            var products = this.productService.GetAllProducts<ManageProductsViewModel>(lastId);
             return this.View(products);
         }
 
@@ -37,10 +39,12 @@
 
             return this.Redirect("/Products/ManageProducts");
         }
+        #endregion
 
+        #region brands
         public IActionResult ManageBrands(int lastId = 0)
         {
-            var brands = this.productService.GetAllBrands(lastId);
+            var brands = this.productService.GetAllBrands<BrandViewModel>(lastId);
             return this.View(brands);
         }
 
@@ -56,5 +60,27 @@
 
             return this.Redirect("/Products/ManageBrands");
         }
+        #endregion
+
+        #region manufacturers
+        public IActionResult ManageManufacturers(int lastId = 0)
+        {
+            var brands = this.productService.GetAllManufacturers<ManufacturerViewModel>(lastId);
+            return this.View(brands);
+        }
+
+        public IActionResult AddManufacturer()
+        {
+            return this.View();
+        }
+
+        [HttpPost("/Products/AddManufacturer")]
+        public async Task<IActionResult> AddManufacturer(string name)
+        {
+            await this.productService.CreateManufacturerAsync(name);
+
+            return this.Redirect("/Products/ManageManufacturers");
+        }
+        #endregion
     }
 }

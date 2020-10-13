@@ -7,7 +7,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
-
+    using WHMS.Common;
     using WHMS.Data;
     using WHMS.Data.Models.Products;
     using WHMS.Services.Mapping;
@@ -40,9 +40,12 @@
             return brand.Id;
         }
 
-        public Task<int> CreateManufacturerAsync(string manufactuerName)
+        public async Task<int> CreateManufacturerAsync(string manufactuerName)
         {
-            throw new System.NotImplementedException();
+            var manufacturer = new Manufacturer() { Name = manufactuerName };
+            await this.context.Manufacturers.AddAsync(manufacturer);
+            await this.context.SaveChangesAsync();
+            return manufacturer.Id;
         }
 
         public async Task<int> CreateProductAsync(AddProductViewModel model)
@@ -102,26 +105,41 @@
             throw new System.NotImplementedException();
         }
 
-        public IEnumerable<Brand> GetAllBrands(int id = 0)
+        public IEnumerable<T> GetAllBrands<T>(int id = 0)
         {
             var brands = this.context.Brands
                 .Where(x => x.Id > id)
                 .Take(50)
+                .To<T>()
                 .ToList();
             return brands;
         }
 
-        public IEnumerable<ManageProductsViewModel> GetAllProducts(int id)
+        public IEnumerable<T> GetAllManufacturers<T>(int id = 0)
+        {
+            var brands = this.context.Manufacturers
+                .Where(x => x.Id > id)
+                .Take(50)
+                .To<T>()
+                .ToList();
+            return brands;
+        }
+
+        public IEnumerable<T> GetAllProducts<T>(int id)
         {
             var products =
-                this.context.Products.Include(x => x.Brand)
-                .Include(x => x.Images)
+                this.context.Products
                 .Where(x => x.Id >= id)
-                .Take(50)
-                .To<ManageProductsViewModel>()
+                .Take(GlobalConstants.PageSize)
+                .To<T>()
                 .ToList();
 
             return products;
+        }
+
+        public int GetAllProductsCount()
+        {
+            return this.context.Products.Count();
         }
 
         public Task<int> GetProductAvailableInventory(int productId)

@@ -15,8 +15,10 @@
 
         Task<int> GetProductDetails(int productId);
 
+        public int GetAllProductsCount();
+
         // pagination with SelectTop50 where id > lastIdReceived
-        IEnumerable<ManageProductsViewModel> GetAllProducts(int id);
+        IEnumerable<T> GetAllProducts<T>(int id);
 
         Task<int> CreateBrandAsync(string brandName);
 
@@ -42,6 +44,8 @@
 
         Task<int> RecalculateAvailableInventory(int productId);
 
-        IEnumerable<Brand> GetAllBrands(int id);
+        IEnumerable<T> GetAllBrands<T>(int id);
+
+        IEnumerable<T> GetAllManufacturers<T>(int id);
     }
 }
