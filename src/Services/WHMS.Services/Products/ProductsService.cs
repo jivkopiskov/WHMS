@@ -142,6 +142,13 @@
             return this.context.Products.Count();
         }
 
+        public IEnumerable<T> GetAllWarehouses<T>()
+        {
+            return this.context.Warehouses
+                .To<T>()
+                .ToList();
+        }
+
         public Task<int> GetProductAvailableInventory(int productId)
         {
             throw new System.NotImplementedException();

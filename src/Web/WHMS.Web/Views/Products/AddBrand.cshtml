@@ -1,9 +1,11 @@
-﻿@model WHMS.Data.Models.Products.Brand
+﻿@model WHMS.Web.ViewModels.Products.BrandViewModel
 
 <form asp-controller="Products" asp-action="AddBrand" method="post">
     <div>
+        <div asp-validation-summary="ModelOnly"></div>
         <label asp-for="Name">Brand name</label>
-        <input asp-for="Name" class="form-control">
+        <input asp-for="Name" class="form-control col-md-3">
+        <span asp-validation-for="Name" class="text-danger"></span><br />
     </div>
-    <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Products" asp-action="AddBrand">Add Brand</button>
+    <button class="btn btn-outline-primary" asp-controller="Products" asp-action="AddBrand">Add Brand</button>
 </form>

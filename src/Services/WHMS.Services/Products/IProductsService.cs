@@ -11,25 +11,6 @@
     {
         Task<int> CreateProductAsync(AddProductViewModel model);
 
-        Task<int> EditProductAsync(int productId);
-
-        Task<int> GetProductDetails(int productId);
-
-        public int GetAllProductsCount();
-
-        // pagination with SelectTop50 where id > lastIdReceived
-        IEnumerable<T> GetAllProducts<T>(int id);
-
-        Task<int> CreateBrandAsync(string brandName);
-
-        Task<int> CreateManufacturerAsync(string manufactuerName);
-
-        Task<int> EditBrandAsync(int brandId);
-
-        Task<int> EditManufactuerAsync(int manufactuerId);
-
-        Task<int> GetProductAvailableInventory(int productId);
-
         Task<int> AddProductImageAsync(int productId, string imageURL);
 
         Task<int> DeleteProductImageAsync(int imageId);
@@ -38,14 +19,35 @@
 
         Task<int> EditProductCondition(int conditionId, string conditionName, string conditionDescription);
 
+        Task<int> EditProductAsync(int productId);
+
+        Task<int> GetProductDetails(int productId);
+
+        Task<int> GetProductAvailableInventory(int productId);
+
+        Task<int> RecalculateAvailableInventory(int productId);
+
+        // pagination with SelectTop50 where id > lastIdReceived
+        IEnumerable<T> GetAllProducts<T>(int id);
+
+        public int GetAllProductsCount();
+
+        Task<int> CreateBrandAsync(string brandName);
+
+        Task<int> EditBrandAsync(int brandId);
+
+        IEnumerable<T> GetAllBrands<T>(int id);
+
+        Task<int> CreateManufacturerAsync(string manufactuerName);
+
+        Task<int> EditManufactuerAsync(int manufactuerId);
+
+        IEnumerable<T> GetAllManufacturers<T>(int id);
+
         Task<int> CreateWarehouseAsync(string warehouseName, bool isSellable);
 
         Task<int> EditWarehouseAsync(int warehouseId, bool isSellable);
 
-        Task<int> RecalculateAvailableInventory(int productId);
-
-        IEnumerable<T> GetAllBrands<T>(int id);
-
-        IEnumerable<T> GetAllManufacturers<T>(int id);
+        IEnumerable<T> GetAllWarehouses<T>();
     }
 }
