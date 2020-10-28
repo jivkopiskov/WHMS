@@ -156,8 +156,8 @@
 
         public T GetProductDetails<T>(int productId)
         {
-            var productDetails = this.context.Products.Where(x => x.Id == productId).To<T>().ToList();
-            return productDetails.First();
+            var productDetails = this.context.Products.Where(x => x.Id == productId).To<T>().FirstOrDefault();
+            return productDetails;
         }
 
         public Task<int> RecalculateAvailableInventory(int productId)

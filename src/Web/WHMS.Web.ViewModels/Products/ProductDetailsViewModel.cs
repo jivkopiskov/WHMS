@@ -1,5 +1,6 @@
 ﻿namespace WHMS.Web.ViewModels.Products
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
 
@@ -27,6 +28,10 @@
 
         [MaxLength(12)]
         public string UPC { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+
+        public string CreatedByEmail { get; set; }
 
         public decimal WebsitePrice { get; set; }
 
