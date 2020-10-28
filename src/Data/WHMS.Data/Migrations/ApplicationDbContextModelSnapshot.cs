@@ -15,7 +15,7 @@ namespace WHMS.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.6")
+                .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -716,7 +716,7 @@ namespace WHMS.Data.Migrations
                         .HasColumnType("nvarchar(12)")
                         .HasMaxLength(12);
 
-                    b.Property<int>("VendorId")
+                    b.Property<int?>("VendorId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("WebsitePrice")
@@ -746,6 +746,8 @@ namespace WHMS.Data.Migrations
                     b.HasIndex("SKU")
                         .IsUnique();
 
+                    b.HasIndex("VendorId");
+
                     b.ToTable("Products");
                 });
 
@@ -756,26 +758,26 @@ namespace WHMS.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ConditionDescription")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("ConditionName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
 
                     b.HasKey("Id");
 
@@ -1130,6 +1132,10 @@ namespace WHMS.Data.Migrations
                     b.HasOne("WHMS.Data.Models.Products.Manufacturer", "Manufacturer")
                         .WithMany("Products")
                         .HasForeignKey("ManufacturerId");
+
+                    b.HasOne("WHMS.Data.Models.PurchaseOrders.Vendor", "Vendor")
+                        .WithMany()
+                        .HasForeignKey("VendorId");
                 });
 
             modelBuilder.Entity("WHMS.Data.Models.Products.ProductWarehouse", b =>

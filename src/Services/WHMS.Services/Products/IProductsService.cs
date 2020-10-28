@@ -21,7 +21,7 @@
 
         Task<int> EditProductAsync(int productId);
 
-        Task<int> GetProductDetails(int productId);
+        T GetProductDetails<T>(int productId);
 
         Task<int> GetProductAvailableInventory(int productId);
 

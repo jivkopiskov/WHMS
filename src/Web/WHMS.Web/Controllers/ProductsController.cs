@@ -32,12 +32,18 @@
             return this.View();
         }
 
-        [HttpPost("/Products/AddProduct")]
+        [HttpPost]
         public async Task<IActionResult> AddProduct(AddProductViewModel model)
         {
             await this.productService.CreateProductAsync(model);
 
             return this.Redirect("/Products/ManageProducts");
+        }
+
+        public IActionResult ProductDetails(int id)
+        {
+            var product = this.productService.GetProductDetails<ProductDetailsViewModel>(id);
+            return this.View(product);
         }
         #endregion
 
@@ -53,7 +59,7 @@
             return this.View();
         }
 
-        [HttpPost("/Products/AddBrand")]
+        [HttpPost]
         public async Task<IActionResult> AddBrand(string name)
         {
             await this.productService.CreateBrandAsync(name);
@@ -74,7 +80,7 @@
             return this.View();
         }
 
-        [HttpPost("/Products/AddManufacturer")]
+        [HttpPost]
         public async Task<IActionResult> AddManufacturer(string name)
         {
             await this.productService.CreateManufacturerAsync(name);

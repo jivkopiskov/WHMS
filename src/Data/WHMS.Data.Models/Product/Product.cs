@@ -74,6 +74,8 @@
 
         public ICollection<Image> Images { get; set; } = new HashSet<Image>();
 
-        public int VendorId { get; set; }
+        public int? VendorId { get; set; }
+
+        public Vendor Vendor { get; set; }
     }
 }

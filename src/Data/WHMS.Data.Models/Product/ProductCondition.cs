@@ -9,10 +9,10 @@
     {
         [Required]
         [MaxLength(30)]
-        public string ConditionName { get; set; }
+        public string Name { get; set; }
 
         [MaxLength(250)]
-        public string ConditionDescription { get; set; }
+        public string Description { get; set; }
 
         public ICollection<Product> Products { get; set; } = new HashSet<Product>();
     }

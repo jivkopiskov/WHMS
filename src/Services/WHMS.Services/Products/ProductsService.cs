@@ -154,9 +154,10 @@
             throw new System.NotImplementedException();
         }
 
-        public Task<int> GetProductDetails(int productId)
+        public T GetProductDetails<T>(int productId)
         {
-            throw new System.NotImplementedException();
+            var productDetails = this.context.Products.Where(x => x.Id == productId).To<T>().ToList();
+            return productDetails.First();
         }
 
         public Task<int> RecalculateAvailableInventory(int productId)

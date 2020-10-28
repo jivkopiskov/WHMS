@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <h5 class="card-title">@item.ProductName</h5>
                     <p class="card-text">@item.ShortDescription</p>
-                    <a href="#" class="btn btn-primary">View Details</a>
+                    <a class="btn btn-primary" asp-controller="Products" asp-action="ProductDetails" asp-route-id="@item.Id">View Details</a>
                 </div>
             </div>
         }
