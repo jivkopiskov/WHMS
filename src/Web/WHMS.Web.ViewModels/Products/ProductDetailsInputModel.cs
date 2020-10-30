@@ -1,7 +1,6 @@
 ﻿namespace WHMS.Web.ViewModels.Products
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
 
@@ -9,13 +8,9 @@
     using WHMS.Data.Models.Products;
     using WHMS.Services.Mapping;
 
-    public class ProductDetailsViewModel : IHaveCustomMappings
+    public class ProductDetailsInputModel : IMapTo<Product>
     {
         public int Id { get; set; }
-
-        [Required]
-        [MaxLength(100)]
-        public string SKU { get; set; }
 
         [Required]
         [MaxLength(100)]
@@ -30,10 +25,6 @@
         [MaxLength(12)]
         public string UPC { get; set; }
 
-        public DateTime CreatedOn { get; set; }
-
-        public string CreatedByEmail { get; set; }
-
         public decimal WebsitePrice { get; set; }
 
         public decimal WholesalePrice { get; set; }
@@ -41,10 +32,6 @@
         public decimal MAPPrice { get; set; }
 
         public decimal Cost { get; set; }
-
-        public decimal LastCost { get; set; }
-
-        public decimal AverageCost { get; set; }
 
         public string ConditionName { get; set; }
 
@@ -59,24 +46,10 @@
 
         public float Lenght { get; set; }
 
-        public string BrandName { get; set; }
+        public int? BrandId { get; set; }
 
-        public string ManufacturerName { get; set; }
+        public int? ManufacturerId { get; set; }
 
-        public string VendorName { get; set; }
-
-        public string DefaultImage { get; set; }
-
-        public IEnumerable<BrandViewModel> Brands { get; set; }
-
-        public void CreateMappings(IProfileExpression configuration)
-        {
-            configuration.CreateMap<Product, ProductDetailsViewModel>().ForMember(
-                            x => x.DefaultImage,
-                            opt => opt.MapFrom(x => x.Images.FirstOrDefault().Url)).
-                            ForMember(
-                            x => x.Brands,
-                            opt => opt.Ignore());
-        }
+        public int? VendorId { get; set; }
     }
 }

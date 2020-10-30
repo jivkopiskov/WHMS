@@ -4,7 +4,7 @@
     <div asp-validation-summary="ModelOnly"></div>
     <div>
         <label asp-for="SKU">SKU</label>
-        <input asp-for="SKU" class="form-control" value ="@Model.SKU" >
+        <input asp-for="SKU" class="form-control" >
         <span asp-validation-for="SKU" class="text-danger"></span><br />
     </div>
     <div>
@@ -14,17 +14,17 @@
     </div>
     <div>
         <label asp-for="ShortDescription">Short Description</label>
-        <input asp-for="ShortDescription" value ="@Model.ShortDescription" class="form-control">
+        <input asp-for="ShortDescription" class="form-control">
         <span asp-validation-for="ShortDescription" class="text-danger"></span><br />
     </div>
     <div>
         <label asp-for="WebsitePrice">Website Price</label>
-        <input asp-for="WebsitePrice" value="@Model.WebsitePrice" class="form-control">
+        <input asp-for="WebsitePrice"  class="form-control">
         <span asp-validation-for="WebsitePrice" class="text-danger"></span><br />
     </div>
     <div>
         <label asp-for="WholesalePrice">Wholesale Price</label>
-        <input asp-for="WholesalePrice" value="@Model.WebsitePrice" class="form-control">
+        <input asp-for="WholesalePrice" class="form-control">
         <span asp-validation-for="WholesalePrice" class="text-danger"></span><br />
     </div>
     <div>

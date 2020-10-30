@@ -10,6 +10,7 @@
 
     <form asp-controller="Products" asp-action="ProductDetails" method="post">
         <div asp-validation-summary="ModelOnly"></div>
+        <input asp-for="Id" hidden />
         <div>
             <label asp-for="SKU">SKU</label>
             <input asp-for="SKU" disabled class="form-control">
@@ -99,11 +100,29 @@
             <label asp-for="LongDescription">Long Description</label>
             <input asp-for="LongDescription">
         </div>
-
+        <p></p>
         <div class="mt-2">
             <label asp-for="LocationNotes">Location notes</label>
             <input asp-for="LocationNotes" class="form-control">
-            <span asp-validation-for="Lenght" class="text-danger"></span><br />
+            <span asp-validation-for="LocationNotes" class="text-danger"></span><br />
         </div>
+        <div class="mt-2">
+            <label asp-for="UPC">UPC</label>
+            <input asp-for="UPC" class="form-control">
+            <span asp-validation-for="UPC" class="text-danger"></span><br />
+        </div>
+        <label asp-for="BrandName"> Brand Name </label>
+        <select class="form-control" name="brandId"> 
+            <option value="">No brand selected</option>
+            @foreach (var brand in Model.Brands.OrderBy(x => x.Name))
+           {
+               <option value="@brand.Id" selected="@(brand.Name == Model.BrandName)">@brand.Name</option>
+           }
+        </select>
+
         <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Products" asp-action="ProductDetails">Submit Changes</button>
     </form>
+
+    <script>
+        setTimeout(() => { document.getElementsByClassName("tox tox-silver-sink tox-tinymce-aux")[0].style = "none"}, 1000);        
+    </script>

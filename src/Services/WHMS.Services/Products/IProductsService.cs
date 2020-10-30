@@ -19,7 +19,7 @@
 
         Task<int> EditProductCondition(int conditionId, string conditionName, string conditionDescription);
 
-        Task<int> EditProductAsync(int productId);
+        Task<T> EditProductAsync<T, TInput>(TInput model);
 
         T GetProductDetails<T>(int productId);
 

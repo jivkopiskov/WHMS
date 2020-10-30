@@ -43,7 +43,20 @@
         public IActionResult ProductDetails(int id)
         {
             var product = this.productService.GetProductDetails<ProductDetailsViewModel>(id);
+            product.Brands = this.productService.GetAllBrands<BrandViewModel>(0);
             return this.View(product);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ProductDetails(ProductDetailsInputModel input)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.ProductDetails(input.Id);
+            }
+
+            ProductDetailsViewModel product = await this.productService.EditProductAsync<ProductDetailsViewModel, ProductDetailsInputModel>(input);        
+            return this.ProductDetails(input.Id);
         }
         #endregion
 

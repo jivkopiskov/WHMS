@@ -6,6 +6,7 @@
     using System.Security.Cryptography.X509Certificates;
     using System.Threading.Tasks;
 
+    using AutoMapper;
     using Microsoft.EntityFrameworkCore;
     using WHMS.Common;
     using WHMS.Data;
@@ -16,10 +17,12 @@
     public class ProductsService : IProductsService
     {
         private WHMSDbContext context;
+        private IMapper mapper;
 
         public ProductsService(WHMSDbContext context)
         {
             this.context = context;
+            this.mapper = AutoMapperConfig.MapperInstance;
         }
 
         public Task<int> AddProductCondition(string conditionName, string conditionDescription)
@@ -90,9 +93,28 @@
             throw new System.NotImplementedException();
         }
 
-        public Task<int> EditProductAsync(int productId)
+        public async Task<T> EditProductAsync<T, TInput>(TInput input)
         {
-            throw new System.NotImplementedException();
+            var product = this.mapper.Map<TInput, Product>(input);
+            var dbProduct = this.context.Products.Find(product.Id);
+
+            // dbProduct.BrandId = product.BrandId;
+            // dbProduct.ConditionId = product.ConditionId;
+            // dbProduct.Cost = product.Cost;
+            // dbProduct.Height = product.Height;
+            // dbProduct.Lenght = product.Lenght;
+            // dbProduct.Width = product.Width;
+            // dbProduct.LocationNotes = product.LocationNotes;
+            // dbProduct.ShortDescription = product.ShortDescription;
+            // dbProduct.LongDescription = product.LongDescription;
+            // dbProduct.ManufacturerId = product.ManufacturerId;
+            // dbProduct.MAPPrice = product.MAPPrice;
+            // dbProduct.ProductName = product.ProductName;
+            // dbProduct.UPC = product.UPC;
+            this.mapper.Map<TInput, Product>(input, dbProduct);
+            await this.context.SaveChangesAsync();
+
+            return this.mapper.Map<Product, T>(product);
         }
 
         public Task<int> EditProductCondition(int conditionId, string conditionName, string conditionDescription)
