@@ -53,21 +53,7 @@
 
         public async Task<int> CreateProductAsync(AddProductViewModel model)
         {
-            var product = new Product()
-            {
-                SKU = model.SKU,
-                AverageCost = model.AverageCost,
-                ProductName = model.ProductName,
-                ShortDescription = model.ShortDescription,
-                MAPPrice = model.MAPPrice,
-                Cost = model.Cost,
-                WebsitePrice = model.WebsitePrice,
-                WholesalePrice = model.WholesalePrice,
-                Height = model.Height,
-                Weight = model.Weight,
-                Width = model.Width,
-                Lenght = model.Lenght,
-            };
+            var product = this.mapper.Map<Product>(model);
             await this.context.Products.AddAsync(product);
             await this.context.SaveChangesAsync();
             return product.Id;

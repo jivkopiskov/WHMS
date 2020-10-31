@@ -69,16 +69,11 @@
 
         public string DefaultImage { get; set; }
 
-        public IEnumerable<BrandViewModel> Brands { get; set; }
-
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Product, ProductDetailsViewModel>().ForMember(
                             x => x.DefaultImage,
-                            opt => opt.MapFrom(x => x.Images.FirstOrDefault().Url)).
-                            ForMember(
-                            x => x.Brands,
-                            opt => opt.Ignore());
+                            opt => opt.MapFrom(x => x.Images.FirstOrDefault().Url));
         }
     }
 }

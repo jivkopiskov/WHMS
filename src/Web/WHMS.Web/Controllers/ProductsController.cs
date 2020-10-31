@@ -43,7 +43,6 @@
         public IActionResult ProductDetails(int id)
         {
             var product = this.productService.GetProductDetails<ProductDetailsViewModel>(id);
-            product.Brands = this.productService.GetAllBrands<BrandViewModel>(0).OrderBy(x => x.Name);
             return this.View(product);
         }
 

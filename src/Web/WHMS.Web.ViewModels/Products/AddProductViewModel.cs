@@ -2,7 +2,10 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class AddProductViewModel
+    using WHMS.Data.Models.Products;
+    using WHMS.Services.Mapping;
+
+    public class AddProductViewModel : IMapTo<Product>
     {
         [Required]
         [MaxLength(100)]
@@ -18,24 +21,20 @@
         [MaxLength(12)]
         public string UPC { get; set; }
 
-        public decimal WebsitePrice { get; set; } = 0;
+        public decimal WebsitePrice { get; set; }
 
-        public decimal WholesalePrice { get; set; } = 0;
+        public decimal WholesalePrice { get; set; }
 
-        public decimal MAPPrice { get; set; } = 0;
+        public decimal Cost { get; set; }
 
-        public decimal Cost { get; set; } = 0;
+        public float Weight { get; set; }
 
-        public decimal LastCost { get; set; } = 0;
+        public float Width { get; set; }
 
-        public decimal AverageCost { get; set; } = 0;
+        public float Height { get; set; }
 
-        public float Weight { get; set; } = 0;
+        public float Lenght { get; set; }
 
-        public float Width { get; set; } = 0;
-
-        public float Height { get; set; } = 0;
-
-        public float Lenght { get; set; } = 0;
+        public int? BrandId { get; set; }
     }
 }

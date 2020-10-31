@@ -111,11 +111,7 @@
         <input asp-for="UPC" class="form-control">
         <span asp-validation-for="UPC" class="text-danger"></span><br />
     </div>
-    <label asp-for="BrandId"> Brand Name </label>
-    <select class="form-control" asp-for="BrandId" asp-items="@(new SelectList(Model.Brands, nameof(BrandViewModel.Id), nameof(BrandViewModel.Name)))">
-        <option value="">No brand selected</option>
-
-    </select>
+    <vc:brand-dropdown id="Model.BrandId ?? 0"></vc:brand-dropdown>
 
     <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Products" asp-action="ProductDetails">Submit Changes</button>
 </form>
