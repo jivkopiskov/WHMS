@@ -59,6 +59,8 @@
 
         public float Lenght { get; set; }
 
+        public int? BrandId { get; set; }
+
         public string BrandName { get; set; }
 
         public string ManufacturerName { get; set; }

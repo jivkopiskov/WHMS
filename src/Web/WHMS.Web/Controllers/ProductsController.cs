@@ -43,7 +43,7 @@
         public IActionResult ProductDetails(int id)
         {
             var product = this.productService.GetProductDetails<ProductDetailsViewModel>(id);
-            product.Brands = this.productService.GetAllBrands<BrandViewModel>(0);
+            product.Brands = this.productService.GetAllBrands<BrandViewModel>(0).OrderBy(x => x.Name);
             return this.View(product);
         }
 
@@ -55,7 +55,7 @@
                 return this.ProductDetails(input.Id);
             }
 
-            ProductDetailsViewModel product = await this.productService.EditProductAsync<ProductDetailsViewModel, ProductDetailsInputModel>(input);        
+            ProductDetailsViewModel product = await this.productService.EditProductAsync<ProductDetailsViewModel, ProductDetailsInputModel>(input);
             return this.ProductDetails(input.Id);
         }
         #endregion
