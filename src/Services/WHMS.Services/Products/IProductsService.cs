@@ -15,7 +15,7 @@
 
         Task<int> DeleteProductImageAsync(int imageId);
 
-        Task<int> AddProductCondition(string conditionName, string conditionDescription);
+        Task<int> AddProductConditionAsync<T>(T input);
 
         Task<int> EditProductCondition(int conditionId, string conditionName, string conditionDescription);
 
@@ -32,7 +32,7 @@
         Task<int> RecalculateAvailableInventory(int productId);
 
         // pagination with SelectTop50 where id > lastIdReceived
-        IEnumerable<T> GetAllProducts<T>(int id);
+        IEnumerable<T> GetAllProducts<T>(int id = 0);
 
         public int GetAllProductsCount();
 
@@ -40,18 +40,20 @@
 
         Task<int> EditBrandAsync(int brandId);
 
-        IEnumerable<T> GetAllBrands<T>(int id);
+        IEnumerable<T> GetAllBrands<T>(int id = 0);
 
         Task<int> CreateManufacturerAsync(string manufactuerName);
 
         Task<int> EditManufactuerAsync(int manufactuerId);
 
-        IEnumerable<T> GetAllManufacturers<T>(int id);
+        IEnumerable<T> GetAllManufacturers<T>(int id = 0);
 
         Task<int> CreateWarehouseAsync(string warehouseName, bool isSellable);
 
         Task<int> EditWarehouseAsync(int warehouseId, bool isSellable);
 
         IEnumerable<T> GetAllWarehouses<T>();
+
+        IEnumerable<T> GetAllConditions<T>(int id = 0);
     }
 }

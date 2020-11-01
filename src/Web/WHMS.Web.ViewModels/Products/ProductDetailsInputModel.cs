@@ -33,7 +33,7 @@
 
         public decimal Cost { get; set; }
 
-        public string ConditionName { get; set; }
+        public int? ConditionId { get; set; }
 
         [MaxLength(250)]
         public string LocationNotes { get; set; }

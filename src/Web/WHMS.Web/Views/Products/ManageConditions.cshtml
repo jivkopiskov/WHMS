@@ -1,0 +1,24 @@
+﻿@model IEnumerable<WHMS.Web.ViewModels.Products.ConditionViewModel>
+
+<div>
+    <a type="button" class="btn-primary p-2" href="/Products/AddCondition" role="button">Add Condition</a>
+</div>
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Condition Name</th>
+            <th scope="col">Condition Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var condition in Model)
+        {
+            <tr>
+                <td>@condition.Id</td>
+                <td>@condition.Name</td>
+                <td>@condition.Description</td>
+            </tr>
+        }
+    </tbody>
+</table>

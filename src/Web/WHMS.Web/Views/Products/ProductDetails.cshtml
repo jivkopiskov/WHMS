@@ -27,6 +27,7 @@
                 <input asp-for="ShortDescription" class="form-control">
                 <span asp-validation-for="ShortDescription" class="text-danger"></span><br />
             </div>
+            <vc:condition-dropdown id="Model.ManufacturerId ?? 0"></vc:condition-dropdown>
             <div class="row">
                 <div class="col-sm-4">
                     <label asp-for="CreatedOn">Created On</label>

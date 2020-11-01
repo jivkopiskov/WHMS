@@ -25,6 +25,8 @@
 
         public decimal WholesalePrice { get; set; }
 
+        public decimal MAPPrice { get; set; }
+
         public decimal Cost { get; set; }
 
         public float Weight { get; set; }

@@ -25,9 +25,12 @@
             this.mapper = AutoMapperConfig.MapperInstance;
         }
 
-        public Task<int> AddProductCondition(string conditionName, string conditionDescription)
+        public async Task<int> AddProductConditionAsync<T>(T input)
         {
-            throw new System.NotImplementedException();
+            var condition = this.mapper.Map<ProductCondition>(input);
+            this.context.ProductConditions.Add(condition);
+            await this.context.SaveChangesAsync();
+            return condition.Id;
         }
 
         public async Task AddProductImageAsync<T>(T input)
@@ -197,6 +200,12 @@
         public Task<int> RecalculateAvailableInventory(int productId)
         {
             throw new System.NotImplementedException();
+        }
+
+        public IEnumerable<T> GetAllConditions<T>(int id)
+        {
+            var conditions = this.context.ProductConditions.To<T>();
+            return conditions;
         }
     }
 }

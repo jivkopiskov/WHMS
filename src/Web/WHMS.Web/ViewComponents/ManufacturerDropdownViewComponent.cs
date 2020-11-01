@@ -18,7 +18,7 @@
 
         public IViewComponentResult Invoke(int id)
         {
-            var manufacturers = this.productsService.GetAllManufacturers<ManufacturerViewModel>(0).
+            var manufacturers = this.productsService.GetAllManufacturers<ManufacturerViewModel>().
                 OrderBy(x => x.Name).
                 Select(x => new SelectListItem
                 {

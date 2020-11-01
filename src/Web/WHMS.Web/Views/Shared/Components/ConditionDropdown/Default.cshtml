@@ -1,0 +1,9 @@
+﻿@using WHMS.Web.ViewModels.Products
+@model IEnumerable<SelectListItem>
+
+<label for="@nameof(ProductDetailsInputModel.ConditionId)"> Condition </label>
+<select name="@nameof(ProductDetailsInputModel.ManufacturerId)" id="@nameof(ProductDetailsInputModel.ConditionId)" class="form-control" asp-items="Model">
+    <option value="">No condition selected</option>
+
+</select>
+

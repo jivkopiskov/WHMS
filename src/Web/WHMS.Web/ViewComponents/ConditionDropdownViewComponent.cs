@@ -7,18 +7,18 @@
     using WHMS.Services.Products;
     using WHMS.Web.ViewModels.Products;
 
-    public class BrandDropdownViewComponent : ViewComponent
+    public class ConditionDropdownViewComponent : ViewComponent
     {
         private readonly IProductsService productsService;
 
-        public BrandDropdownViewComponent(IProductsService productsService)
+        public ConditionDropdownViewComponent(IProductsService productsService)
         {
             this.productsService = productsService;
         }
 
         public IViewComponentResult Invoke(int id)
         {
-            var brands = this.productsService.GetAllBrands<BrandViewModel>().
+            var conditions = this.productsService.GetAllConditions<ConditionViewModel>().
                 OrderBy(x => x.Name).
                 Select(x => new SelectListItem
                 {
@@ -26,7 +26,7 @@
                     Text = x.Name,
                     Selected = x.Id == id,
                 });
-            return this.View(brands);
+            return this.View(conditions);
         }
     }
 }

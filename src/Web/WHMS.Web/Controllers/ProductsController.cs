@@ -112,6 +112,7 @@
 
             return this.Redirect("/Products/ManageBrands");
         }
+
         #endregion
 
         #region manufacturers
@@ -134,5 +135,27 @@
             return this.Redirect("/Products/ManageManufacturers");
         }
         #endregion
+
+        public IActionResult ManageConditions(int lastId = 0)
+        {
+            var brands = this.productService.GetAllConditions<ConditionViewModel>(lastId);
+            return this.View(brands);
+        }
+
+        public IActionResult AddCondition()
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCondition(ConditionViewModel input)
+        {
+            if (this.ModelState.IsValid)
+            {
+                await this.productService.AddProductConditionAsync(input);
+            }
+
+            return this.Redirect("/Products/ManageConditions");
+        }
     }
 }
