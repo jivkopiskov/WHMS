@@ -13,6 +13,9 @@
 
             product.HasOne(p => p.CreatedBy)
                 .WithMany(u => u.Products);
+
+            product.HasMany(p => p.Images)
+                .WithOne(i => i.Product);
         }
     }
 }

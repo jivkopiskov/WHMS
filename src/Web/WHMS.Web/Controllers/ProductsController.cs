@@ -46,6 +46,20 @@
             return this.View(product);
         }
 
+        public IActionResult ProductImages(int id)
+        {
+            var images = this.productService.GetProductImages<ImageViewModel>(id) ?? new List<ImageViewModel>();
+            return this.View(images);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ProductImages(ImageViewModel input)
+        {
+            await this.productService.UpdateDefaultImageAsync(input.Id);
+            var images = this.productService.GetProductImages<ImageViewModel>(input.Id) ?? new List<ImageViewModel>();
+            return this.ProductImages(input.ProductId);
+        }
+
         [HttpPost]
         public async Task<IActionResult> ProductDetails(ProductDetailsInputModel input)
         {

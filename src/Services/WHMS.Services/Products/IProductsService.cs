@@ -23,6 +23,10 @@
 
         T GetProductDetails<T>(int productId);
 
+        IEnumerable<T> GetProductImages<T>(int productId);
+
+        Task UpdateDefaultImageAsync(int imageId);
+
         Task<int> GetProductAvailableInventory(int productId);
 
         Task<int> RecalculateAvailableInventory(int productId);

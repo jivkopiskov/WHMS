@@ -168,6 +168,25 @@
             return productDetails;
         }
 
+        public IEnumerable<T> GetProductImages<T>(int productId)
+        {
+            var productDetails = this.context.Images.Where(x => x.ProductId == productId).To<T>();
+            return productDetails;
+        }
+
+        public async Task UpdateDefaultImageAsync(int imageId)
+        {
+            var image = this.context.Images.Find(imageId);
+            image.IsPrimary = true;
+            var otherImages = this.context.Images.Where(i => i.ProductId == image.ProductId && i.Id != image.Id && i.IsPrimary);
+            foreach (var img in otherImages)
+            {
+                img.IsPrimary = false;
+            }
+
+            await this.context.SaveChangesAsync();
+        }
+
         public Task<int> RecalculateAvailableInventory(int productId)
         {
             throw new System.NotImplementedException();

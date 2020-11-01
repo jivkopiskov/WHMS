@@ -1,0 +1,9 @@
+﻿@using WHMS.Web.ViewModels.Products
+@model IEnumerable<SelectListItem>
+
+<label for="@nameof(ProductDetailsInputModel.ManufacturerId)"> Manufacturer Name </label>
+<select name="@nameof(ProductDetailsInputModel.ManufacturerId)" id="@nameof(ProductDetailsInputModel.ManufacturerId)" class="form-control" asp-items="Model">
+    <option value="">No manufacturer selected</option>
+
+</select>
+

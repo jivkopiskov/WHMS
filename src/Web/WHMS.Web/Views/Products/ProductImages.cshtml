@@ -1,0 +1,31 @@
+﻿@model IEnumerable<ImageViewModel>
+<form asp-controller="Products" asp-action="UpdateDefaultImage" method="post">
+    <input id="productId" name="productId" value="@Model.FirstOrDefault()?.ProductId" hidden />
+    <table class="table">
+        <thead>
+            <tr class="row">
+                <th class="col-sm-1">#</th>
+                <th class="col-sm-3">Image</th>
+                <th class="col-sm-1">IsPrimary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var i = 1;
+            }
+            @foreach (var item in Model)
+            {
+                <tr class="row">
+                    <th class="col-sm-1">@(i++)</th>
+                    <td class="col-sm-3"><img src="@item.Url" class="img-thumbnail" width="150" height="150"></td>
+                    <td class="col-sm-1">
+                        <div class="form-check-input">
+                            <input class="form-check-input" type="radio" name="id" checked="@item.IsPrimary"value="@item.Id">
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Products" asp-action="ProductImages">Change default image</button>
+</form>

@@ -35,14 +35,19 @@
                 </div>
                 <div class="col-sm-4">
                     <label asp-for="CreatedByEmail">Created By</label>
-                    <input asp-for="CreatedByEmail" disabled class="form-control">
+                    <input asp-for="CreatedByEmail" disabled class="form-conssstrol">
                     <span asp-validation-for="CreatedByEmail" class="text-danger"></span><br />
                 </div>
+                <div class="col-sm-4">
+                    <a class="btn btn-primary float-right mt-2" href="/Products/ProductImages/@Model.Id">Manage Images</a>
+                </div>
+                
             </div>
         </div>
         <div class="card col-sm-3" style="width: 3rem;">
             <img class="card-img-top" src="@Model.DefaultImage" alt="Card image cap">
         </div>
+        
     </div>
     <div class="row">
         <div class="col-sm-4">
@@ -112,6 +117,7 @@
         <span asp-validation-for="UPC" class="text-danger"></span><br />
     </div>
     <vc:brand-dropdown id="Model.BrandId ?? 0"></vc:brand-dropdown>
+    <vc:manufacturer-dropdown id="Model.ManufacturerId ?? 0"></vc:manufacturer-dropdown>
 
     <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Products" asp-action="ProductDetails">Submit Changes</button>
 </form>

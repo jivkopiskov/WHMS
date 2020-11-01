@@ -36,5 +36,7 @@
         public float Lenght { get; set; }
 
         public int? BrandId { get; set; }
+
+        public int? ManufacturerId { get; set; }
     }
 }

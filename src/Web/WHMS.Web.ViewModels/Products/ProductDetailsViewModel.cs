@@ -46,8 +46,6 @@
 
         public decimal AverageCost { get; set; }
 
-        public string ConditionName { get; set; }
-
         [MaxLength(250)]
         public string LocationNotes { get; set; }
 
@@ -61,11 +59,7 @@
 
         public int? BrandId { get; set; }
 
-        public string BrandName { get; set; }
-
-        public string ManufacturerName { get; set; }
-
-        public string VendorName { get; set; }
+        public int? ManufacturerId { get; set; }
 
         public string DefaultImage { get; set; }
 
@@ -73,7 +67,7 @@
         {
             configuration.CreateMap<Product, ProductDetailsViewModel>().ForMember(
                             x => x.DefaultImage,
-                            opt => opt.MapFrom(x => x.Images.FirstOrDefault().Url));
+                            opt => opt.MapFrom(x => x.Images.Where(i => i.IsPrimary).FirstOrDefault().Url));
         }
     }
 }

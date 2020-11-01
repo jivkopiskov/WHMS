@@ -24,7 +24,7 @@
         {
             configuration.CreateMap<Product, ManageProductsViewModel>().ForMember(
                 x => x.ImageUrl,
-                opt => opt.MapFrom(x => x.Images.FirstOrDefault().Url));
+                opt => opt.MapFrom(x => x.Images.Where(i => i.IsPrimary).FirstOrDefault().Url));
         }
     }
 }

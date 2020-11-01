@@ -12,5 +12,7 @@
 
         [MaxLength(2048)]
         public string Url { get; set; }
+
+        public bool IsPrimary { get; set; }
     }
 }
