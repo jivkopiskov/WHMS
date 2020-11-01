@@ -11,7 +11,7 @@
     {
         Task<int> CreateProductAsync(AddProductViewModel model);
 
-        Task<int> AddProductImageAsync(int productId, string imageURL);
+        Task AddProductImageAsync<T>(T input);
 
         Task<int> DeleteProductImageAsync(int imageId);
 

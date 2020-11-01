@@ -30,9 +30,16 @@
             throw new System.NotImplementedException();
         }
 
-        public Task<int> AddProductImageAsync(int productId, string imageURL)
+        public async Task AddProductImageAsync<T>(T input)
         {
-            throw new System.NotImplementedException();
+            var image = this.mapper.Map<Image>(input);
+            if (this.context.Images.Where(i => i.ProductId == image.ProductId && i.IsPrimary == true).Count() == 0)
+            {
+                image.IsPrimary = true;
+            }
+
+            this.context.Images.Add(image);
+            await this.context.SaveChangesAsync();
         }
 
         public async Task<int> CreateBrandAsync(string brandName)

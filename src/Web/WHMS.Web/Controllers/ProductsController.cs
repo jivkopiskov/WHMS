@@ -46,20 +46,6 @@
             return this.View(product);
         }
 
-        public IActionResult ProductImages(int id)
-        {
-            var images = this.productService.GetProductImages<ImageViewModel>(id) ?? new List<ImageViewModel>();
-            return this.View(images);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ProductImages(ImageViewModel input)
-        {
-            await this.productService.UpdateDefaultImageAsync(input.Id);
-            var images = this.productService.GetProductImages<ImageViewModel>(input.Id) ?? new List<ImageViewModel>();
-            return this.ProductImages(input.ProductId);
-        }
-
         [HttpPost]
         public async Task<IActionResult> ProductDetails(ProductDetailsInputModel input)
         {
@@ -70,6 +56,40 @@
 
             ProductDetailsViewModel product = await this.productService.EditProductAsync<ProductDetailsViewModel, ProductDetailsInputModel>(input);
             return this.ProductDetails(input.Id);
+        }
+
+        public IActionResult ProductImages(int id)
+        {
+            var model = new ProductImagesViewModel()
+            {
+                ProductId = id,
+                Images = this.productService.GetProductImages<ImageViewModel>(id) ?? new List<ImageViewModel>(),
+            };
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ProductImages(ImageViewModel input)
+        {
+            await this.productService.UpdateDefaultImageAsync(input.Id);
+            return this.ProductImages(input.ProductId);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddProductImage(ImageViewModel input)
+        {
+            if (this.ModelState.IsValid)
+            {
+                await this.productService.AddProductImageAsync(input);
+                this.TempData["wasSuccess"] = true;
+            }
+            else
+            {
+                this.TempData["wasSuccess"] = false;
+            }
+
+            return this.Redirect("ProductImages/" + input.ProductId);
         }
         #endregion
 

@@ -45,7 +45,7 @@
             </div>
         </div>
         <div class="card col-sm-3" style="width: 3rem;">
-            <img class="card-img-top" src="@Model.DefaultImage" alt="Card image cap">
+            <img class="card-img-top" src="@(!String.IsNullOrEmpty(Model.DefaultImage) ? Model.DefaultImage : "/img/noimage.png")" alt="Card image cap">
         </div>
         
     </div>
