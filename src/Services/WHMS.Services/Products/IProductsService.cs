@@ -57,7 +57,7 @@
 
         int GetAllManufacturersCount();
 
-        Task<int> CreateWarehouseAsync(string warehouseName, bool isSellable);
+        Task CreateWarehouseAsync<T>(T input);
 
         Task<int> EditWarehouseAsync(int warehouseId, bool isSellable);
 

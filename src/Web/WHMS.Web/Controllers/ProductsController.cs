@@ -154,9 +154,9 @@
         }
         #endregion
 
-        public IActionResult ManageConditions(int lastId = 0)
+        public IActionResult ManageConditions()
         {
-            var conditions = this.productService.GetAllConditions<ConditionViewModel>(lastId);
+            var conditions = this.productService.GetAllConditions<ConditionViewModel>();
             return this.View(conditions);
         }
 
@@ -174,6 +174,28 @@
             }
 
             return this.Redirect("/Products/ManageConditions");
+        }
+
+        public IActionResult ManageWarehouses()
+        {
+            var warehouses = this.productService.GetAllWarehouses<WarehouseViewModel>();
+            return this.View(warehouses);
+        }
+
+        public IActionResult AddWarehouse()
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddWarehouse(WarehouseViewModel input)
+        {
+            if (this.ModelState.IsValid)
+            {
+                await this.productService.CreateWarehouseAsync(input);
+            }
+
+            return this.Redirect("/Products/ManageWarehouses");
         }
     }
 }

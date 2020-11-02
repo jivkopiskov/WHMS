@@ -69,9 +69,11 @@
             return product.Id;
         }
 
-        public Task<int> CreateWarehouseAsync(string warehouseName, bool isSellable)
+        public async Task CreateWarehouseAsync<T>(T input)
         {
-            throw new System.NotImplementedException();
+            var wh = this.mapper.Map<Warehouse>(input);
+            this.context.Warehouses.Add(wh);
+            await this.context.SaveChangesAsync();
         }
 
         public Task<int> DeleteProductImageAsync(int imageId)

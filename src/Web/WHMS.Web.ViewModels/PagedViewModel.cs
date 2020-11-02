@@ -18,7 +18,6 @@
 
         private int MidPage()
         {
-
             if (this.Page - 5 < 1)
             {
                 return 5;

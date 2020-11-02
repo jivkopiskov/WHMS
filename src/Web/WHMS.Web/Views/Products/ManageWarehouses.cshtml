@@ -1,0 +1,26 @@
+﻿@model IEnumerable<WarehouseViewModel>
+
+<div>
+    <a type="button" class="btn-primary p-2" href="/Products/AddWarehouse" role="button">Add Warehouse</a>
+</div>
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Warehouse Name</th>
+            <th scope="col">IsSellable</th>
+            <th scope="col">Address</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var warehouse in Model)
+        {
+            <tr>
+                <td>@warehouse.Id</td>
+                <td>@warehouse.Name</td>
+                <td>@warehouse.IsSellable</td>
+                <td>@warehouse.Address?.ToString()</td>
+            </tr>
+        }
+    </tbody>
+</table>
