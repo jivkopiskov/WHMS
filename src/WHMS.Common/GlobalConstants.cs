@@ -6,6 +6,6 @@
 
         public const string AdministratorRoleName = "Administrator";
 
-        public const int PageSize = 20;
+        public const int PageSize = 10;
     }
 }

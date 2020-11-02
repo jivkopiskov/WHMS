@@ -123,32 +123,58 @@
             throw new System.NotImplementedException();
         }
 
-        public IEnumerable<T> GetAllBrands<T>(int id = 0)
+        public IEnumerable<T> GetAllBrands<T>(int page = 1)
         {
             var brands = this.context.Brands
-                .Where(x => x.Id > id)
-                .Take(50)
+                .Skip((page - 1) * GlobalConstants.PageSize)
+                .Take(GlobalConstants.PageSize)
                 .To<T>()
                 .ToList();
             return brands;
         }
 
-        public IEnumerable<T> GetAllManufacturers<T>(int id = 0)
+        public IEnumerable<T> GetAllBrands<T>()
+        {
+            var brands = this.context.Brands
+                .To<T>()
+                .ToList();
+            return brands;
+        }
+
+        public IEnumerable<T> GetAllManufacturers<T>(int page = 1)
         {
             var brands = this.context.Manufacturers
-                .Where(x => x.Id > id)
-                .Take(50)
+                .Skip((page - 1) * GlobalConstants.PageSize)
+                .Take(GlobalConstants.PageSize)
                 .To<T>()
                 .ToList();
             return brands;
         }
 
-        public IEnumerable<T> GetAllProducts<T>(int id)
+        public IEnumerable<T> GetAllManufacturers<T>()
+        {
+            var brands = this.context.Manufacturers
+                .To<T>()
+                .ToList();
+            return brands;
+        }
+
+        public IEnumerable<T> GetAllProducts<T>(int page = 1)
         {
             var products =
                 this.context.Products
-                .Where(x => x.Id >= id)
+                .Skip((page - 1) * GlobalConstants.PageSize)
                 .Take(GlobalConstants.PageSize)
+                .To<T>()
+                .ToList();
+
+            return products;
+        }
+
+        public IEnumerable<T> GetAllProducts<T>()
+        {
+            var products =
+                this.context.Products
                 .To<T>()
                 .ToList();
 
@@ -206,6 +232,16 @@
         {
             var conditions = this.context.ProductConditions.To<T>();
             return conditions;
+        }
+
+        public int GetAllBrandsCount()
+        {
+            return this.context.Brands.Count();
+        }
+
+        public int GetAllManufacturersCount()
+        {
+            return this.context.Manufacturers.Count();
         }
     }
 }

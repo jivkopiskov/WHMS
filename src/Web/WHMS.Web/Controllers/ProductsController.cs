@@ -21,10 +21,16 @@
         }
 
         #region products
-        public IActionResult ManageProducts(int lastId = 0)
+        public IActionResult ManageProducts(int page = 1)
         {
-            var products = this.productService.GetAllProducts<ManageProductsViewModel>(lastId);
-            return this.View(products);
+            var model = new ManageProductsViewModel()
+            {
+                Page = page,
+                Products = this.productService.GetAllProducts<ProductsViewModel>(page),
+                PagesCount = (int)Math.Ceiling(this.productService.GetAllProductsCount() / (double)GlobalConstants.PageSize),
+            };
+
+            return this.View(model);
         }
 
         public IActionResult AddProduct()
@@ -94,10 +100,16 @@
         #endregion
 
         #region brands
-        public IActionResult ManageBrands(int lastId = 0)
+        public IActionResult ManageBrands(int page = 1)
         {
-            var brands = this.productService.GetAllBrands<BrandViewModel>(lastId);
-            return this.View(brands);
+            var model = new ManageBrandsViewModel
+            {
+                Brands = this.productService.GetAllBrands<BrandViewModel>(page),
+                Page = page,
+                PagesCount = (int)Math.Ceiling(this.productService.GetAllBrandsCount() / (double)GlobalConstants.PageSize),
+            };
+
+            return this.View(model);
         }
 
         public IActionResult AddBrand()
@@ -116,10 +128,16 @@
         #endregion
 
         #region manufacturers
-        public IActionResult ManageManufacturers(int lastId = 0)
+        public IActionResult ManageManufacturers(int page = 1)
         {
-            var brands = this.productService.GetAllManufacturers<ManufacturerViewModel>(lastId);
-            return this.View(brands);
+            var model = new ManageManufacturersViewModel()
+            {
+                Manufacturers = this.productService.GetAllManufacturers<ManufacturerViewModel>(page),
+                Page = page,
+                PagesCount = (int)Math.Ceiling(this.productService.GetAllManufacturersCount() / (double)GlobalConstants.PageSize),
+            };
+
+            return this.View(model);
         }
 
         public IActionResult AddManufacturer()
@@ -138,8 +156,8 @@
 
         public IActionResult ManageConditions(int lastId = 0)
         {
-            var brands = this.productService.GetAllConditions<ConditionViewModel>(lastId);
-            return this.View(brands);
+            var conditions = this.productService.GetAllConditions<ConditionViewModel>(lastId);
+            return this.View(conditions);
         }
 
         public IActionResult AddCondition()

@@ -31,8 +31,9 @@
 
         Task<int> RecalculateAvailableInventory(int productId);
 
-        // pagination with SelectTop50 where id > lastIdReceived
-        IEnumerable<T> GetAllProducts<T>(int id = 0);
+        IEnumerable<T> GetAllProducts<T>(int page);
+
+        IEnumerable<T> GetAllProducts<T>();
 
         public int GetAllProductsCount();
 
@@ -40,13 +41,21 @@
 
         Task<int> EditBrandAsync(int brandId);
 
-        IEnumerable<T> GetAllBrands<T>(int id = 0);
+        IEnumerable<T> GetAllBrands<T>();
+
+        IEnumerable<T> GetAllBrands<T>(int page);
+
+        int GetAllBrandsCount();
 
         Task<int> CreateManufacturerAsync(string manufactuerName);
 
         Task<int> EditManufactuerAsync(int manufactuerId);
 
-        IEnumerable<T> GetAllManufacturers<T>(int id = 0);
+        IEnumerable<T> GetAllManufacturers<T>(int page);
+
+        IEnumerable<T> GetAllManufacturers<T>();
+
+        int GetAllManufacturersCount();
 
         Task<int> CreateWarehouseAsync(string warehouseName, bool isSellable);
 
