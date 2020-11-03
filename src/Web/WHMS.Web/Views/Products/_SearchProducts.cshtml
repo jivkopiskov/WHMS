@@ -5,7 +5,7 @@
         <div class="row bg-info text-white pb-2">
             <div class="col-sm-3">
                 <label for="keyword">SKU / Product Name</label>
-                <input name="keyword" id="keyword" type="text" />
+                <input name="keyword" id="keyword" type="text" value="@Model.Keyword" />
             </div>
             <div class="col-sm-3">
                 <vc:brand-dropdown id="Model?.BrandId ?? 0"></vc:brand-dropdown>
@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <button class="btn-primary mt-2 mb-2" asp-controller="Products" asp-action="ManageProducts">Search</button>
+        <button class="btn btn-primary mt-2" asp-controller="Products" asp-action="ManageProducts">Search</button>
     </form>
 </div>
 <hr class="="/>
