@@ -21,13 +21,14 @@
         }
 
         #region products
-        public IActionResult ManageProducts(int page = 1)
+        public IActionResult ManageProducts(FilterInputModel input)
         {
             var model = new ManageProductsViewModel()
             {
-                Page = page,
-                Products = this.productService.GetAllProducts<ProductsViewModel>(page),
-                PagesCount = (int)Math.Ceiling(this.productService.GetAllProductsCount() / (double)GlobalConstants.PageSize),
+                Page = input.Page,
+                Products = this.productService.GetAllProducts<ProductsViewModel>(input),
+                PagesCount = (int)Math.Ceiling(this.productService.GetAllProductsCount(input) / (double)GlobalConstants.PageSize),
+                Filters = input,
             };
 
             return this.View(model);

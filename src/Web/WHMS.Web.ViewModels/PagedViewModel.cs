@@ -8,13 +8,13 @@
 
         public int PagesCount { get; set; }
 
-        public string NextDisabled => this.Page == this.PagesCount ? "disabled" : string.Empty;
+        public string NextDisabled => this.Page >= this.PagesCount ? "disabled" : string.Empty;
 
-        public string PreviousDisabled => this.Page == 1 ? "disabled" : string.Empty;
+        public string PreviousDisabled => this.Page <= 1 ? "disabled" : string.Empty;
 
         public int FirstPage => this.PagesCount > 10 ? this.MidPage() - 4 : 1;
 
-        public int LastPage => this.PagesCount > 10 ? this.MidPage() + 5 : this.PagesCount;
+        public int LastPage => this.PagesCount > 10 ? this.MidPage() + 5 : this.PagesCount == 0 ? 1 : this.PagesCount;
 
         private int MidPage()
         {

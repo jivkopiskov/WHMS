@@ -161,11 +161,13 @@
             return brands;
         }
 
-        public IEnumerable<T> GetAllProducts<T>(int page = 1)
+        public IEnumerable<T> GetAllProducts<T>(FilterInputModel input)
         {
+            IQueryable<Product> filteredList = this.FilterProducts(input);
+
             var products =
-                this.context.Products
-                .Skip((page - 1) * GlobalConstants.PageSize)
+                filteredList
+                .Skip((input.Page - 1) * GlobalConstants.PageSize)
                 .Take(GlobalConstants.PageSize)
                 .To<T>()
                 .ToList();
@@ -183,9 +185,10 @@
             return products;
         }
 
-        public int GetAllProductsCount()
+        public int GetAllProductsCount(FilterInputModel input)
         {
-            return this.context.Products.Count();
+            var filteredProducts = this.FilterProducts(input);
+            return filteredProducts.Count();
         }
 
         public IEnumerable<T> GetAllWarehouses<T>()
@@ -244,6 +247,33 @@
         public int GetAllManufacturersCount()
         {
             return this.context.Manufacturers.Count();
+        }
+
+        private IQueryable<Product> FilterProducts(FilterInputModel input)
+        {
+            var filteredList = this.context.Products.Where(x => x.IsDeleted == false);
+
+            if (!string.IsNullOrEmpty(input.Keyword))
+            {
+                filteredList = filteredList.Where(x => x.SKU.Contains(input.Keyword) || x.ProductName.Contains(input.Keyword));
+            }
+
+            if (input.BrandId != null)
+            {
+                filteredList = filteredList.Where(x => x.BrandId == input.BrandId);
+            }
+
+            if (input.ManufacturerId != null)
+            {
+                filteredList = filteredList.Where(x => x.ManufacturerId == input.ManufacturerId);
+            }
+
+            if (input.ConditionId != null)
+            {
+                filteredList = filteredList.Where(x => x.ConditionId == input.ConditionId);
+            }
+
+            return filteredList;
         }
     }
 }

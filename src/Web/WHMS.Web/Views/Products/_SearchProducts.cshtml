@@ -1,0 +1,24 @@
+﻿@model FilterInputModel
+    <h5 class="h5"> Search filters</h5>
+<div class="row border-top my-3 ml-2">
+    <form asp-controller="Products" asp-action="ManageProducts" method="get">
+        <div class="row bg-info text-white pb-2">
+            <div class="col-sm-3">
+                <label for="keyword">SKU / Product Name</label>
+                <input name="keyword" id="keyword" type="text" />
+            </div>
+            <div class="col-sm-3">
+                <vc:brand-dropdown id="Model?.BrandId ?? 0"></vc:brand-dropdown>
+            </div>
+            <div class="col-sm-3">
+                <vc:manufacturer-dropdown id="Model?.ManufacturerId ?? 0"></vc:manufacturer-dropdown>
+            </div>
+            <div class="col-sm-3">
+                <vc:condition-dropdown id="Model?.ConditionId ?? 0"></vc:condition-dropdown>
+            </div>
+        </div>
+
+        <button class="btn-primary mt-2 mb-2" asp-controller="Products" asp-action="ManageProducts">Search</button>
+    </form>
+</div>
+<hr class="="/>

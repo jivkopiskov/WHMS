@@ -31,11 +31,11 @@
 
         Task<int> RecalculateAvailableInventory(int productId);
 
-        IEnumerable<T> GetAllProducts<T>(int page);
+        IEnumerable<T> GetAllProducts<T>(FilterInputModel input);
 
         IEnumerable<T> GetAllProducts<T>();
 
-        public int GetAllProductsCount();
+        public int GetAllProductsCount(FilterInputModel input);
 
         Task<int> CreateBrandAsync(string brandName);
 
