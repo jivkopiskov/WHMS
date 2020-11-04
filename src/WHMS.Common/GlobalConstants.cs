@@ -7,5 +7,7 @@
         public const string AdministratorRoleName = "Administrator";
 
         public const int PageSize = 4;
+
+        public const string UnavailableSKU = "SKU already exists. Please enter a different SKU";
     }
 }

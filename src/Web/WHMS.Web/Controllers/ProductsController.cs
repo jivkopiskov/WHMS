@@ -5,19 +5,26 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+
     using WHMS.Common;
+    using WHMS.Data.Models;
     using WHMS.Data.Models.Products;
     using WHMS.Services.Products;
     using WHMS.Web.ViewModels.Products;
 
+    [Authorize]
     public class ProductsController : Controller
     {
-        private IProductsService productService;
+        private readonly IProductsService productService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public ProductsController(IProductsService productsService)
+        public ProductsController(IProductsService productsService, UserManager<ApplicationUser> userManager)
         {
             this.productService = productsService;
+            this.userManager = userManager;
         }
 
         #region products
@@ -42,8 +49,14 @@
         [HttpPost]
         public async Task<IActionResult> AddProduct(AddProductViewModel model)
         {
-            await this.productService.CreateProductAsync(model);
+            if (!this.productService.IsSkuAvailable(model.SKU))
+            {
+                this.TempData["error"] = GlobalConstants.UnavailableSKU;
+                return this.View(model);
+            }
 
+            model.CreatedById = this.userManager.GetUserId(this.User);
+            await this.productService.CreateProductAsync(model);
             return this.Redirect("/Products/ManageProducts");
         }
 

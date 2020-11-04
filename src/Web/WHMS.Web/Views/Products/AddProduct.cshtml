@@ -1,5 +1,10 @@
 ﻿@model AddProductViewModel
-
+@if (this.TempData.ContainsKey("error"))
+	{
+         <div class="alert alert-danger" role="alert">
+             @TempData["error"]
+         </div>
+	}
 <form asp-controller="Products" asp-action="AddProduct" method="post">
     <div asp-validation-summary="ModelOnly"></div>
     <div>
@@ -17,7 +22,7 @@
         <input asp-for="ShortDescription" class="form-control">
         <span asp-validation-for="ShortDescription" class="text-danger"></span><br />
     </div>
-    <vc:condition-dropdown id= "0"></vc:condition-dropdown>
+    <vc:condition-dropdown id= "Model?.ConditionId ?? 0"></vc:condition-dropdown>
     <div class="mt-2">
         <label asp-for="UPC">UPC</label>
         <input asp-for="UPC" class="form-control">
@@ -60,8 +65,8 @@
             <span asp-validation-for="Lenght" class="text-danger"></span><br />
         </div>
     </div>
-    <vc:brand-dropdown id="0"></vc:brand-dropdown>
-    <vc:manufacturer-dropdown id="0"></vc:manufacturer-dropdown>
+    <vc:brand-dropdown id="Model?.BrandId ?? 0"></vc:brand-dropdown>
+    <vc:manufacturer-dropdown id="Model?.ManufacturerId ?? 0"></vc:manufacturer-dropdown>
 
 
     <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Products" asp-action="AddProduct">Add Product</button>

@@ -40,5 +40,9 @@
         public int? BrandId { get; set; }
 
         public int? ManufacturerId { get; set; }
+
+        public int? ConditionId { get; set; }
+
+        public string CreatedById { get; set; }
     }
 }

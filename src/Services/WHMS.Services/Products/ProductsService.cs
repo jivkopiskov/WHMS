@@ -69,6 +69,11 @@
             return product.Id;
         }
 
+        public bool IsSkuAvailable(string sku)
+        {
+            return !this.context.Products.Any(x => x.SKU == sku);
+        }
+
         public async Task CreateWarehouseAsync<T>(T input)
         {
             var wh = this.mapper.Map<Warehouse>(input);

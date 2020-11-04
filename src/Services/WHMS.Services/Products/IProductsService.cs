@@ -11,6 +11,8 @@
     {
         Task<int> CreateProductAsync(AddProductViewModel model);
 
+        bool IsSkuAvailable(string sku);
+
         Task AddProductImageAsync<T>(T input);
 
         Task<int> DeleteProductImageAsync(int imageId);
