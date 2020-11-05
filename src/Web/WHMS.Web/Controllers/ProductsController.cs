@@ -78,6 +78,12 @@
             return this.ProductDetails(input.Id);
         }
 
+        public IActionResult ManageInventory(int id)
+        {
+            var model = this.productService.GetProductWarehouseInfo(id);
+            return this.View(model);
+        }
+
         public IActionResult ProductImages(int id)
         {
             var model = new ProductImagesViewModel()

@@ -13,6 +13,8 @@
 
         bool IsSkuAvailable(string sku);
 
+        IEnumerable<ProductWarehouseViewModel> GetProductWarehouseInfo(int productId);
+
         Task AddProductImageAsync<T>(T input);
 
         Task<int> DeleteProductImageAsync(int imageId);

@@ -208,6 +208,22 @@
             throw new System.NotImplementedException();
         }
 
+        public IEnumerable<ProductWarehouseViewModel> GetProductWarehouseInfo(int productId)
+        {
+            return this.context.Warehouses
+                .Select(x => new ProductWarehouseViewModel
+                {
+                    ProductId = productId,
+                    ProductSKU = this.context.Products.Find(productId).SKU,
+                    WarehouseName = x.Name,
+                    WarehouseIsSellable = x.IsSellable,
+                    TotalPhysicalQuanitity = this.context.ProductWarehouses.FirstOrDefault(pw => pw.WarehouseId == x.Id && pw.ProductId == productId) == null ? 0 : this.context.ProductWarehouses.FirstOrDefault(pw => pw.WarehouseId == x.Id && pw.ProductId == productId).TotalPhysicalQuanitiy,
+                    AggregateQuantity = this.context.ProductWarehouses.FirstOrDefault(pw => pw.WarehouseId == x.Id && pw.ProductId == productId) == null ? 0 : this.context.ProductWarehouses.FirstOrDefault(pw => pw.WarehouseId == x.Id && pw.ProductId == productId).AggregateQuantity,
+                    ReservedQuantity = this.context.ProductWarehouses.FirstOrDefault(pw => pw.WarehouseId == x.Id && pw.ProductId == productId) == null ? 0 : this.context.ProductWarehouses.FirstOrDefault(pw => pw.WarehouseId == x.Id && pw.ProductId == productId).ReservedQuantity,
+                })
+                .ToList();
+        }
+
         public T GetProductDetails<T>(int productId)
         {
             var productDetails = this.context.Products.Where(x => x.Id == productId).To<T>().FirstOrDefault();

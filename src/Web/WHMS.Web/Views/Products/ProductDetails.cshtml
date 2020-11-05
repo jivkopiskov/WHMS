@@ -7,6 +7,9 @@
         selector: '#LongDescription'
     });
 </script>
+<div>
+    <a class="btn btn-success" asp-controller="Products" asp-action="ManageInventory" asp-route-id="@Model.Id"> Manage Inventory </a>
+</div>
 
 <form asp-controller="Products" asp-action="ProductDetails" method="post">
     <div asp-validation-summary="ModelOnly"></div>
