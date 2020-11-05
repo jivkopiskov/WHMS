@@ -13,6 +13,8 @@
 
         bool IsSkuAvailable(string sku);
 
+        bool IsValidProductId(int id);
+
         IEnumerable<ProductWarehouseViewModel> GetProductWarehouseInfo(int productId);
 
         Task AddProductImageAsync<T>(T input);
@@ -31,9 +33,11 @@
 
         Task UpdateDefaultImageAsync(int imageId);
 
+        Task<bool> AdjustInventory(ProductAdjustmentInputModel input);
+
         Task<int> GetProductAvailableInventory(int productId);
 
-        Task<int> RecalculateAvailableInventory(int productId);
+        Task RecalculateAvailableInventory(int productId);
 
         IEnumerable<T> GetAllProducts<T>(FilterInputModel input);
 

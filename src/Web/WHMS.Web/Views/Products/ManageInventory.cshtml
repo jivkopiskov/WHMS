@@ -1,25 +1,53 @@
 ﻿@model IEnumerable<ProductWarehouseViewModel>
-<h5 class="h5">Inventory for: @Model.FirstOrDefault().ProductSKU  </h5>
-<table class="table table-hover table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Warehouse Name</th>
-            <th scope="col">IsSellable</th>
-            <th scope="col">Total Quantity</th>
-            <th scope="col">Available Quantity</th>
-            <th scope="col">Reserved Quantity</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var productWarehouse in Model)
-        {
+@{
+    var sku = @Model.FirstOrDefault().ProductSKU;
+    var productId = Model.FirstOrDefault().ProductId;
+}
+<h5 class="h5">Inventory for: @sku </h5>
+<div class="row">
+    <table class="col-sm-6 table table-hover table-striped">
+        <thead>
             <tr>
-                <td>@productWarehouse.WarehouseName</td>
-                <td>@productWarehouse.WarehouseIsSellable</td>
-                <td>@productWarehouse.TotalPhysicalQuanitity</td>
-                <td>@productWarehouse.AggregateQuantity</td>
-                <td>@productWarehouse.ReservedQuantity</td>
+                <th scope="col">Warehouse Name</th>
+                <th scope="col">Sellable</th>
+                <th scope="col">Total Quantity</th>
+                <th scope="col">Available Quantity</th>
+                <th scope="col">Reserved Quantity</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var productWarehouse in Model)
+            {
+                <tr>
+                    <td>@productWarehouse.WarehouseName</td>
+                    <td><input type="checkbox" disabled checked="@productWarehouse.WarehouseIsSellable" /></td>
+                    <td>@productWarehouse.TotalPhysicalQuanitity</td>
+                    <td>@productWarehouse.AggregateQuantity</td>
+                    <td>@productWarehouse.ReservedQuantity</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="col-sm-6">
+        <h1> Movement History</h1>
+    </div>
+</div>
+
+<div>
+    <h5 class="h5">Adjust Inventory</h5>
+    <form asp-controller="Products" asp-action="AdjustInventory"  method="post">
+        <div class="row">
+            <div class="col-sm-3">
+                <vc:warehouse-dropdown id="0"></vc:warehouse-dropdown>
+            </div>
+            <input id="productId" name="productId" hidden value="@productId" />
+            <div class="col-sm-2">
+                <label for="Qty"> Qty to adjust</label>
+                <input class="form-control col-sm-6" type="number" id="Qty" name="Qty" />
+            </div>
+        </div>
+        <div class="mt-2">
+            <button class="btn btn-outline-dark"> Adjust inventory</button>
+        </div>
+    </form>
+</div>

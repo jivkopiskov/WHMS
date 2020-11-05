@@ -1,0 +1,6 @@
+﻿@using WHMS.Web.ViewModels.Products
+@model IEnumerable<SelectListItem>
+
+<label for="@nameof(ProductAdjustmentInputModel.WarehouseId)"> Warehouse Name </label>
+<select name="@nameof(ProductAdjustmentInputModel.WarehouseId)" id="@nameof(ProductAdjustmentInputModel.WarehouseId)" class="form-control" asp-items="Model"></select>
+

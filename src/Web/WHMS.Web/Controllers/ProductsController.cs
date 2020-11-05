@@ -117,6 +117,7 @@
 
             return this.Redirect("ProductImages/" + input.ProductId);
         }
+
         #endregion
 
         #region brands
@@ -174,6 +175,7 @@
         }
         #endregion
 
+        #region conditions
         public IActionResult ManageConditions()
         {
             var conditions = this.productService.GetAllConditions<ConditionViewModel>();
@@ -195,6 +197,7 @@
 
             return this.Redirect("/Products/ManageConditions");
         }
+        #endregion
 
         public IActionResult ManageWarehouses()
         {
@@ -216,6 +219,16 @@
             }
 
             return this.Redirect("/Products/ManageWarehouses");
+        }
+
+        public async Task<IActionResult> AdjustInventory(ProductAdjustmentInputModel input)
+        {
+            if (this.productService.IsValidProductId(input.ProductId))
+            {
+                await this.productService.AdjustInventory(input);
+            }
+
+            return this.Redirect("ManageInventory/" + input.ProductId);
         }
     }
 }

@@ -74,6 +74,11 @@
             return !this.context.Products.Any(x => x.SKU == sku);
         }
 
+        public bool IsValidProductId(int id)
+        {
+            return this.context.Products.Any(x => x.Id == id);
+        }
+
         public async Task CreateWarehouseAsync<T>(T input)
         {
             var wh = this.mapper.Map<Warehouse>(input);
@@ -249,9 +254,39 @@
             await this.context.SaveChangesAsync();
         }
 
-        public Task<int> RecalculateAvailableInventory(int productId)
+        public async Task RecalculateAvailableInventory(int productId)
         {
-            throw new System.NotImplementedException();
+            var productWarehouses = this.context.ProductWarehouses.Where(x => x.ProductId == productId).ToList();
+            foreach (var pw in productWarehouses)
+            {
+                pw.AggregateQuantity = pw.TotalPhysicalQuanitiy - pw.ReservedQuantity;
+            }
+
+            await this.context.SaveChangesAsync();
+        }
+
+        public async Task<bool> AdjustInventory(ProductAdjustmentInputModel input)
+        {
+            var productWarehouse = this.context.ProductWarehouses
+                .FirstOrDefault(
+                x => x.ProductId == input.ProductId
+                && x.WarehouseId == input.WarehouseId);
+            if (productWarehouse == null)
+            {
+                productWarehouse = new ProductWarehouse() { ProductId = input.ProductId, WarehouseId = input.WarehouseId };
+                this.context.ProductWarehouses.Add(productWarehouse);
+            }
+
+            productWarehouse.TotalPhysicalQuanitiy += input.Qty;
+            if (productWarehouse.TotalPhysicalQuanitiy < 0)
+            {
+                return false;
+            }
+
+            await this.context.SaveChangesAsync();
+            await this.RecalculateAvailableInventory(input.ProductId);
+
+            return true;
         }
 
         public IEnumerable<T> GetAllConditions<T>(int id)
