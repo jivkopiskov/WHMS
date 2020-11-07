@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class FilterInputModel
+    public class ProductFilterInputModel
     {
         public int Page { get; set; } = 1;
 

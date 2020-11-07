@@ -6,6 +6,6 @@
     {
         public IEnumerable<ProductsViewModel> Products { get; set; }
 
-        public FilterInputModel Filters { get; set; }
+        public ProductFilterInputModel Filters { get; set; }
     }
 }

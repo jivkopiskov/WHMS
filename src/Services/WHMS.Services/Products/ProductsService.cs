@@ -171,7 +171,7 @@
             return brands;
         }
 
-        public IEnumerable<T> GetAllProducts<T>(FilterInputModel input)
+        public IEnumerable<T> GetAllProducts<T>(ProductFilterInputModel input)
         {
             IQueryable<Product> filteredList = this.FilterProducts(input);
 
@@ -195,7 +195,7 @@
             return products;
         }
 
-        public int GetAllProductsCount(FilterInputModel input)
+        public int GetAllProductsCount(ProductFilterInputModel input)
         {
             var filteredProducts = this.FilterProducts(input);
             return filteredProducts.Count();
@@ -208,9 +208,9 @@
                 .ToList();
         }
 
-        public Task<int> GetProductAvailableInventory(int productId)
+        public int GetProductAvailableInventory(int productId)
         {
-            throw new System.NotImplementedException();
+            return this.context.ProductWarehouses.Where(x => x.ProductId == productId).Sum(x => x.AggregateQuantity);
         }
 
         public IEnumerable<ProductWarehouseViewModel> GetProductWarehouseInfo(int productId)
@@ -305,7 +305,7 @@
             return this.context.Manufacturers.Count();
         }
 
-        private IQueryable<Product> FilterProducts(FilterInputModel input)
+        private IQueryable<Product> FilterProducts(ProductFilterInputModel input)
         {
             var filteredList = this.context.Products.Where(x => x.IsDeleted == false);
 

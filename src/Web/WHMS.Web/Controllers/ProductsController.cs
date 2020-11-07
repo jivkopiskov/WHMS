@@ -29,7 +29,7 @@
         }
 
         #region products
-        public IActionResult ManageProducts(FilterInputModel input)
+        public IActionResult ManageProducts(ProductFilterInputModel input)
         {
             var model = new ManageProductsViewModel()
             {

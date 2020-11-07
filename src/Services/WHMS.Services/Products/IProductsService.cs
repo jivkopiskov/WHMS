@@ -35,15 +35,15 @@
 
         Task<bool> AdjustInventory(ProductAdjustmentInputModel input);
 
-        Task<int> GetProductAvailableInventory(int productId);
+        int GetProductAvailableInventory(int productId);
 
         Task RecalculateAvailableInventory(int productId);
 
-        IEnumerable<T> GetAllProducts<T>(FilterInputModel input);
+        IEnumerable<T> GetAllProducts<T>(ProductFilterInputModel input);
 
         IEnumerable<T> GetAllProducts<T>();
 
-        public int GetAllProductsCount(FilterInputModel input);
+        public int GetAllProductsCount(ProductFilterInputModel input);
 
         Task<int> CreateBrandAsync(string brandName);
 

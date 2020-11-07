@@ -1,17 +1,18 @@
 ﻿namespace WHMS.Services.Orders
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using WHMS.Data.Models.Orders;
+    using WHMS.Web.ViewModels.Orders;
 
     public interface IOrdersService
     {
-        // id for pagination
-        Task<int> GetAllOrders(int orderId);
+        IEnumerable<T> GetAllOrders<T>(OrdersFilterInputModel input);
 
         Task<int> GetOrderDetails(int orderId);
 
-        Task<int> CreateOrderAsync();
+        Task<int> CreateOrderAsync(AddOrderInputModel input);
 
         Task<int> EditOrderAsync(int orderId);
 
@@ -37,5 +38,7 @@
         Task<int> GetCustomerOrdersAsync(int customerId);
 
         Task<int> AddPaymentAsync(int orderId, decimal amount);
+
+        T GetCustomer<T>(string email);
     }
 }

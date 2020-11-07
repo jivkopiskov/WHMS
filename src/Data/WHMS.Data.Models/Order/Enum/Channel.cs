@@ -2,10 +2,10 @@
 {
     public enum Channel
     {
-        Other = 0,
-        LocalStore = 1,
-        Phone = 2,
-        Wholesale = 3,
-        Website = 4,
+        Website = 0,
+        Wholesale = 1,
+        Store = 2,
+        Phone = 3,
+        Other = 4,
     }
 }

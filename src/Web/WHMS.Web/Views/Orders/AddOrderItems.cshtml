@@ -1,0 +1,60 @@
+﻿@model AddOrderItemsInputModel
+
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Orders/ManageOrders">Manage Orders</a></li>
+            <li class="breadcrumb-item"><a href="/Orders/OrderDetails/@Model.OrderId">Order # @Model.OrderId </a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Order Items</li>
+        </ol>
+    </nav>
+}
+<h4 class="h4 mt-3">Add order items</h4>
+<div class="mt-2">
+    <form asp-controller="Orders" asp-action="AddOrderItems" method="post">
+        <input id="orderId" name="orderId" value="@Model.OrderId" hidden />
+        <button class="btn btn-primary add_form_field">
+            Add new order item &nbsp;
+            <span style="font-size:16px; font-weight:bold;">+ </span>
+        </button>
+        <div class="OrderItem">
+            <div>
+                <label for="productId">Product Id</label>
+                <input class="form-control" required id="ProductId" name="ProductId" />
+            </div>
+            <div>
+                <label for="Qty">Qty</label>
+                <input class="form-control" required id="Qty" name="Qty" />
+            </div>
+        </div>
+
+        <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Orders" asp-action="AddOrderItems">Add order items</button>
+    </form>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var max_fields = 10;
+            var wrapper = $(".OrderItem");
+            var add_button = $(".add_form_field");
+
+            var x = 1;
+            $(add_button).click(function (e) {
+                e.preventDefault();
+                if (x < max_fields) {
+                    x++;
+                    $(wrapper).append('<div> <div><label for="productId">ProductId</label><input class="form-control"required id="productId" name="productId"/></div><div><label for="Qty">Qty</label><input class="form-control" required id="Qty" name="Qty"/></div> <a href="#" class="delete">Delete</a></div> </div>'); //add input box
+                } else {
+                    alert('You can only add up to 10 order items at once')
+                }
+            });
+
+            $(wrapper).on("click", ".delete", function (e) {
+                e.preventDefault();
+                $(this).parent('div').remove();
+                x--;
+            })
+        });
+    </script>
+}

@@ -1,6 +1,6 @@
-﻿@model FilterInputModel
+﻿@model ProductFilterInputModel
     <h5 class="h5"> Search filters</h5>
-<div class="row border-top my-3 bg-info">
+<div class="row border-top my-3 bg-dark">
     <form asp-controller="Products" asp-action="ManageProducts" method="get">
         <div class="row text-white pb-2 ml-1">
             <div class="col-sm-3">
@@ -18,6 +18,6 @@
             </div>
         </div>
 
-        <button class="btn btn-primary mt-2 ml-2" asp-controller="Products" asp-action="ManageProducts">Search</button>
+        <button class="btn btn-light mt-2 ml-2" asp-controller="Products" asp-action="ManageProducts">Search</button>
     </form>
 </div>

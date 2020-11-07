@@ -1,0 +1,103 @@
+﻿@model AddOrderInputModel
+
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Orders/ManageOrders">Manage Orders</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Order</li>
+        </ol>
+    </nav>
+}
+
+<div class="col-md-6 justify-content-center offset-2">
+    <form asp-controller="Orders" asp-action="AddOrder" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div>
+            <label asp-for="SourceOrderId"></label>
+            <input asp-for="SourceOrderId" class="form-control">
+            <span asp-validation-for="SourceOrderId" class="text-danger"></span><br />
+        </div>
+        <div>
+            <label asp-for="Channel"></label>
+            <select asp-items="@Html.GetEnumSelectList<Channel>()" class="form-control"></select>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <label asp-for="Customer.Email"></label>
+                <input asp-for="Customer.Email" class="form-control">
+                <div class="align-top"><a href="#" id="getCustomerDetails">Get customer details</a></div>
+                <span asp-validation-for="Customer.Email" class="text-danger"></span><br />
+            </div>
+            <div class="col-sm-6">
+                <label asp-for="Customer.PhoneNumber"></label>
+                <input asp-for="Customer.PhoneNumber" class="form-control">
+                <span asp-validation-for="Customer.PhoneNumber" class="text-danger"></span><br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <label asp-for="Customer.FirstName"></label>
+                <input asp-for="Customer.FirstName" class="form-control">
+                <span asp-validation-for="Customer.FirstName" class="text-danger"></span><br />
+            </div>
+            <div class="col-sm-6">
+                <label asp-for="Customer.LastName"></label>
+                <input asp-for="Customer.LastName" class="form-control">
+                <span asp-validation-for="Customer.LastName" class="text-danger"></span><br />
+            </div>
+        </div>
+        <div>
+            <label asp-for="Customer.Address.StreetAddress"></label>
+            <input asp-for="Customer.Address.StreetAddress" class="form-control">
+            <span asp-validation-for="Customer.Address.StreetAddress" class="text-danger"></span><br />
+        </div>
+        <div>
+            <label asp-for="Customer.Address.StreetAddress2"></label>
+            <input asp-for="Customer.Address.StreetAddress2" class="form-control">
+            <span asp-validation-for="Customer.Address.StreetAddress2" class="text-danger"></span><br />
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <label asp-for="Customer.Address.Zip"></label>
+                <input asp-for="Customer.Address.Zip" class="form-control">
+                <span asp-validation-for="Customer.Address.Zip" class="text-danger"></span><br />
+            </div>
+            <div class="col-sm-6">
+                <label asp-for="Customer.Address.Country"></label>
+                <input asp-for="Customer.Address.Country" class="form-control">
+                <span asp-validation-for="Customer.Address.Country" class="text-danger"></span><br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <label asp-for="ShipByDate"></label>
+                <input asp-for="ShipByDate" class="form-control">
+                <span asp-validation-for="ShipByDate" class="text-danger"></span><br />
+            </div>
+        </div>
+        <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Orders" asp-action="AddOrder">Add Product</button>
+    </form>
+</div>
+
+@section Scripts{
+    <script>
+        $("#getCustomerDetails")
+            .click (function () {
+                $.getJSON("CheckCustomerAddress", { email: $("#Customer_Email").val() })
+                    .done(function (customer) {
+                        if (customer != null) {
+                            $("#Customer_PhoneNumber").val(customer.phoneNumber)
+                            $("#Customer_FirstName").val(customer.firstName)
+                            $("#Customer_LastName").val(customer.lastName)
+                            $("#Customer_Address_StreetAddress").val(customer.address.streetAddress)
+                            $("#Customer_Address_StreetAddress2").val(customer.address.streetAddress2)
+                            $("#Customer_Address_Zip").val(customer.address.zip)
+                            $("#Customer_Address_Country").val(customer.address.country)
+                        }
+                        else {
+                            alert("Customer with this email was not found!")
+                        }
+                    })               
+            })
+    </script>
+}
