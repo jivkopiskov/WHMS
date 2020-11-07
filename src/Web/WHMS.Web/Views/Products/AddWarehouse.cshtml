@@ -3,32 +3,32 @@
 <form asp-controller="Products" asp-action="AddCondition" method="post">
     <div asp-validation-summary="ModelOnly"></div>
     <div>
-        <label asp-for="Name">Warehouse</label>
+        <label asp-for="Name"></label>
         <input asp-for="Name" class="form-control col-md-3">
         <span asp-validation-for="Name" class="text-danger"></span><br />
     </div>
     <div class="form-check-inline col-sm-4">
-        <label asp-for="IsSellable">Is Sellable</label>
+        <label asp-for="IsSellable"></label>
         <input asp-for="IsSellable" class="form-control col-sm-1 ml-2">
         <span asp-validation-for="IsSellable" class="text-danger"></span><br />
     </div>
     <div class="mt-2">
-        <label asp-for="Address.StreetAddress">Street Address</label>
+        <label asp-for="Address.StreetAddress"></label>
         <input asp-for="Address.StreetAddress" class="form-control col-md-5 ">
         <span asp-validation-for="Address.StreetAddress" class="text-danger"></span><br />
     </div>
     <div>
-        <label asp-for="Address.StreetAddress2">Street Address 2</label>
+        <label asp-for="Address.StreetAddress2"></label>
         <input asp-for="Address.StreetAddress2" class="form-control col-md-5 ">
         <span asp-validation-for="Address.StreetAddress2" class="text-danger"></span><br />
     </div>
     <div>
-        <label asp-for="Address.Zip">ZIP code</label>
+        <label asp-for="Address.Zip"></label>
         <input asp-for="Address.Zip" class="form-control col-md-5 ">
         <span asp-validation-for="Address.Zip" class="text-danger"></span><br />
     </div>
     <div>
-        <label asp-for="Address.Country">Country</label>
+        <label asp-for="Address.Country"></label>
         <input asp-for="Address.Country" class="form-control col-md-5 ">
         <span asp-validation-for="Address.Country" class="text-danger"></span><br />
     </div>

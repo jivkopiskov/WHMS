@@ -1,0 +1,43 @@
+﻿@model AddImagesInputModel
+
+<h4 class="h4 mt-3">Add image</h4>
+<div class="mt-2">
+    <form asp-controller="Products" asp-action="AddImages" method="post">
+        <input id="productId" name="productId" value="@Model.ProductId" hidden />
+        <button class="btn btn-primary add_form_field">
+            Add New Image Url &nbsp;
+            <span style="font-size:16px; font-weight:bold;">+ </span>
+        </button>
+        <div class="UrlElement">
+            <label asp-for="URL">Image URL</label>
+            <input class="form-control" required type="url" id="Url" name="Url" />
+        </div>
+        <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Products" asp-action="AddImages">Add image</button>
+    </form>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var max_fields = 10;
+            var wrapper = $(".UrlElement");
+            var add_button = $(".add_form_field");
+
+            var x = 1;
+            $(add_button).click(function (e) {
+                e.preventDefault();
+                if (x < max_fields) {
+                    x++;
+                    $(wrapper).append('<div><label for="URL">Image URL</label><input class="form-control" type="url" id="Url" name="Url"> <a href="#" class="delete">Delete</a></div>'); //add input box
+                } else {
+                    alert('You can only add up to 10 images at once')
+                }
+            });
+
+            $(wrapper).on("click", ".delete", function (e) {
+                e.preventDefault();
+                $(this).parent('div').remove();
+                x--;
+            })
+        });
+    </script>
+}

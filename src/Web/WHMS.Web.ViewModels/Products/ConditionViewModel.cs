@@ -11,6 +11,7 @@
 
         [Required]
         [MaxLength(30)]
+        [Display(Name = "Condition")]
         public string Name { get; set; }
 
         [MaxLength(250)]

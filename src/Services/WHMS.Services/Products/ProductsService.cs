@@ -61,7 +61,7 @@
             return manufacturer.Id;
         }
 
-        public async Task<int> CreateProductAsync(AddProductViewModel model)
+        public async Task<int> CreateProductAsync(AddProductInputModel model)
         {
             var product = this.mapper.Map<Product>(model);
             await this.context.Products.AddAsync(product);

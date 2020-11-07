@@ -1,19 +1,10 @@
 ﻿@model ProductImagesViewModel
 
-@if (TempData.ContainsKey("wasSuccess") && (bool)TempData["wasSuccess"] == true)
-{
-    <div class="alert alert-success" role="alert">
-        Successfully added image!
-    </div>
-}
-else if (TempData.ContainsKey("wasSuccess") && (bool)TempData["wasSuccess"] == false)
-{
-    <div class="alert alert-danger" role="alert">
-        Please add valid URL!
-    </div>
-}
+<div class="col-sm-4">
+    <a class="btn btn-primary" href="/Products/AddImages/@Model.ProductId">Add Images</a>
+</div>
 
-<form asp-controller="Products" asp-action="UpdateDefaultImage" method="post">
+<form asp-controller="Products" asp-action="UpdateDefaultImage" method="post" class="mt-2">
     <input id="productId" name="productId" value="@Model.ProductId" hidden />
     <table class="table">
         <thead>
@@ -34,7 +25,7 @@ else if (TempData.ContainsKey("wasSuccess") && (bool)TempData["wasSuccess"] == f
                     <td class="col-sm-3"><img src="@item.Url" class="img-thumbnail" width="150" height="150"></td>
                     <td class="col-sm-1">
                         <div class="form-check-input">
-                            <input class="form-check-input" type="radio" name="id" checked="@item.IsPrimary" value="@item.Id">
+                            <input class="form-check-input" type="radio" name="imageId" checked="@item.IsPrimary" value="@item.ImageId">
                         </div>
                     </td>
                 </tr>
@@ -43,14 +34,3 @@ else if (TempData.ContainsKey("wasSuccess") && (bool)TempData["wasSuccess"] == f
     </table>
     <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Products" asp-action="ProductImages">Change default image</button>
 </form>
-<h4 class="h4 mt-3">Add image</h4>
-<div class="mt-2">
-    <form asp-controller="Products" asp-action="AddProductImage" method="post">
-        <input id="productId" name="productId" value="@Model.ProductId" hidden />
-        <div>
-            <label for="Url">Url</label>
-            <input class="form-control" type="url" id="Url" name="Url" />
-        </div>
-        <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Products" asp-action="AddProductImage">Add image</button>
-    </form>
-</div>

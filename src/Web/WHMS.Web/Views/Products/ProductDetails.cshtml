@@ -1,122 +1,123 @@
 ﻿@model ProductDetailsViewModel
 
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-
-<script>
-    tinymce.init({
-        selector: '#LongDescription'
-    });
-</script>
 <div>
     <a class="btn btn-success" asp-controller="Products" asp-action="ManageInventory" asp-route-id="@Model.Id"> Manage Inventory </a>
 </div>
-
+@if (TempData.ContainsKey("success"))
+{
+    @if ((bool)TempData["success"] == true)
+    {
+        <div class="alert alert-success mt-2" role="alert">
+            Product details updated successfully!
+        </div>
+    }
+}
 <form asp-controller="Products" asp-action="ProductDetails" method="post">
-    <div asp-validation-summary="ModelOnly"></div>
+    <div asp-validation-summary="All" class="text-danger"></div>
     <input asp-for="Id" hidden />
     <div>
-        <label asp-for="SKU">SKU</label>
+        <label asp-for="SKU"></label>
         <input asp-for="SKU" disabled class="form-control">
     </div>
     <div class="row mt-2">
         <div class="col-sm-9">
             <div>
-                <label asp-for="ProductName">Product Name</label>
+                <label asp-for="ProductName"></label>
                 <input asp-for="ProductName" class="form-control">
                 <span asp-validation-for="ProductName" class="text-danger"></span><br />
             </div>
             <div>
-                <label asp-for="ShortDescription">Short Description</label>
-                <input asp-for="ShortDescription" class="form-control">
+                <label asp-for="ShortDescription"></label>
+                <textarea asp-for="ShortDescription" rows="3" class="form-control"></textarea>
                 <span asp-validation-for="ShortDescription" class="text-danger"></span><br />
             </div>
-            <vc:condition-dropdown id="Model.ManufacturerId ?? 0"></vc:condition-dropdown>
+            <vc:condition-dropdown id="Model.ConditionId ?? 0"></vc:condition-dropdown>
             <div class="row">
                 <div class="col-sm-4">
-                    <label asp-for="CreatedOn">Created On</label>
+                    <label asp-for="CreatedOn"></label>
                     <input value="@Model.CreatedOn.ToShortDateString()" disabled class="form-control">
                     <span asp-validation-for="CreatedOn" class="text-danger"></span><br />
                 </div>
                 <div class="col-sm-4">
-                    <label asp-for="CreatedByEmail">Created By</label>
+                    <label asp-for="CreatedByEmail"></label>
                     <input asp-for="CreatedByEmail" disabled class="form-control">
                     <span asp-validation-for="CreatedByEmail" class="text-danger"></span><br />
                 </div>
                 <div class="col-sm-4">
                     <a class="btn btn-primary float-right mt-2" href="/Products/ProductImages/@Model.Id">Manage Images</a>
                 </div>
-                
+
             </div>
         </div>
         <div class="card col-sm-3" style="width: 3rem;">
             <img class="card-img-top" src="@(!String.IsNullOrEmpty(Model.DefaultImage) ? Model.DefaultImage : "/img/noimage.png")" alt="Card image cap">
         </div>
-        
+
     </div>
     <div class="row">
         <div class="col-sm-4">
-            <label asp-for="WebsitePrice">Website Price</label>
+            <label asp-for="WebsitePrice"></label>
             <input asp-for="WebsitePrice" class="form-control">
             <span asp-validation-for="WebsitePrice" class="text-danger"></span><br />
         </div>
         <div class="col-sm-4">
-            <label asp-for="WholesalePrice">Wholesale Price</label>
+            <label asp-for="WholesalePrice"></label>
             <input asp-for="WholesalePrice" class="form-control">
             <span asp-validation-for="WholesalePrice" class="text-danger"></span><br />
         </div>
         <div class="col-sm-4">
-            <label asp-for="MAPPrice">MAP Price</label>
+            <label asp-for="MAPPrice"></label>
             <input asp-for="MAPPrice" class="form-control">
             <span asp-validation-for="MAPPrice" class="text-danger"></span><br />
         </div>
     </div>
     <div class="row">
         <div class="col-sm-4">
-            <label asp-for="Cost">Cost</label>
+            <label asp-for="Cost"></label>
             <input asp-for="Cost" class="form-control">
             <span asp-validation-for="Cost" class="text-danger"></span><br />
         </div>
         <div class="col-sm-4">
-            <label asp-for="LastCost">Last Cost</label>
+            <label asp-for="LastCost"></label>
             <input asp-for="LastCost" class="form-control" disabled>
             <span asp-validation-for="LastCost" class="text-danger"></span><br />
         </div>
         <div class="col-sm-4">
-            <label asp-for="AverageCost">Average Cost</label>
+            <label asp-for="AverageCost"></label>
             <input asp-for="AverageCost" class="form-control" disabled>
             <span asp-validation-for="AverageCost" class="text-danger"></span><br />
         </div>
     </div>
     <div class="row">
         <div class="col-sm-4">
-            <label asp-for="Height">Height</label>
+            <label asp-for="Height"></label>
             <input asp-for="Height" class="form-control">
             <span asp-validation-for="Height" class="text-danger"></span><br />
         </div>
         <div class="col-sm-4">
-            <label asp-for="Width">Width</label>
+            <label asp-for="Width"></label>
             <input asp-for="Width" class="form-control">
             <span asp-validation-for="Width" class="text-danger"></span><br />
         </div>
         <div class="col-sm-4">
-            <label asp-for="Lenght">Lenght</label>
+            <label asp-for="Lenght"></label>
             <input asp-for="Lenght" class="form-control">
             <span asp-validation-for="Lenght" class="text-danger"></span><br />
         </div>
     </div>
 
     <div>
-        <label asp-for="LongDescription">Long Description</label>
-        <input asp-for="LongDescription">
+        <label asp-for="LongDescription"></label>
+        <textarea asp-for="LongDescription" rows="15"></textarea>
     </div>
     <p></p>
     <div class="mt-2">
-        <label asp-for="LocationNotes">Location notes</label>
+        <label asp-for="LocationNotes"></label>
         <input asp-for="LocationNotes" class="form-control">
         <span asp-validation-for="LocationNotes" class="text-danger"></span><br />
     </div>
     <div class="mt-2">
-        <label asp-for="UPC">UPC</label>
+        <label asp-for="UPC"></label>
         <input asp-for="UPC" class="form-control">
         <span asp-validation-for="UPC" class="text-danger"></span><br />
     </div>
@@ -127,6 +128,14 @@
 </form>
 
 @section Scripts {
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <script>
+        tinymce.init({
+            selector: '#LongDescription'
+        });
+    </script>
+
     <script>
         setTimeout(() => { document.getElementsByClassName("tox tox-silver-sink tox-tinymce-aux")[0].style = "none" }, 100);
     </script>

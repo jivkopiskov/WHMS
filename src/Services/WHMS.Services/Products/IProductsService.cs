@@ -9,7 +9,7 @@
 
     public interface IProductsService
     {
-        Task<int> CreateProductAsync(AddProductViewModel model);
+        Task<int> CreateProductAsync(AddProductInputModel model);
 
         bool IsSkuAvailable(string sku);
 

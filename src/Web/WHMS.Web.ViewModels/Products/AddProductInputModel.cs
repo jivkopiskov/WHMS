@@ -1,18 +1,13 @@
 ﻿namespace WHMS.Web.ViewModels.Products
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
 
-    using AutoMapper;
     using WHMS.Data.Models.Products;
     using WHMS.Services.Mapping;
 
-    public class ProductDetailsViewModel : IHaveCustomMappings
+    public class AddProductInputModel : IMapTo<Product>, IValidatableObject
     {
-        public int Id { get; set; }
-
         [Required]
         [MaxLength(100)]
         public string SKU { get; set; }
@@ -27,18 +22,8 @@
         [DataType(DataType.MultilineText)]
         public string ShortDescription { get; set; }
 
-        [MaxLength(4000)]
-        [Display(Name = "Long Description")]
-        public string LongDescription { get; set; }
-
         [MaxLength(12)]
         public string UPC { get; set; }
-
-        [Display(Name = "Created On")]
-        public DateTime CreatedOn { get; set; }
-
-        [Display(Name = "Created By")]
-        public string CreatedByEmail { get; set; }
 
         [Range(0, int.MaxValue)]
         [Display(Name = "Website Price")]
@@ -56,18 +41,6 @@
         public decimal Cost { get; set; }
 
         [Range(0, int.MaxValue)]
-        [Display(Name = "Last Cost")]
-        public decimal LastCost { get; set; }
-
-        [Range(0, int.MaxValue)]
-        [Display(Name = "Average Cost")]
-        public decimal AverageCost { get; set; }
-
-        [MaxLength(250)]
-        [Display(Name = "Location notes")]
-        public string LocationNotes { get; set; }
-
-        [Range(0, int.MaxValue)]
         public float Weight { get; set; }
 
         [Range(0, int.MaxValue)]
@@ -79,19 +52,29 @@
         [Range(0, int.MaxValue)]
         public float Lenght { get; set; }
 
+        [Display(Name = "Brand")]
         public int? BrandId { get; set; }
 
+        [Display(Name = "Manufacturer")]
         public int? ManufacturerId { get; set; }
 
+        [Display(Name = "Condition")]
         public int? ConditionId { get; set; }
 
-        public string DefaultImage { get; set; }
+        [Display(Name = "Created By")]
+        public string CreatedById { get; set; }
 
-        public void CreateMappings(IProfileExpression configuration)
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            configuration.CreateMap<Product, ProductDetailsViewModel>().ForMember(
-                            x => x.DefaultImage,
-                            opt => opt.MapFrom(x => x.Images.Where(i => i.IsPrimary).FirstOrDefault().Url));
+            if (this.MAPPrice > this.WebsitePrice)
+            {
+                yield return new ValidationResult("The website price must be higher or eqaul to the MAP Price");
+            }
+
+            if (this.Cost > this.MAPPrice)
+            {
+                yield return new ValidationResult("The cost must lower or eqaul to the MAP Price");
+            }
         }
     }
 }

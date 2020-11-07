@@ -12,8 +12,10 @@
 
         [Required]
         [MaxLength(30)]
+        [Display(Name = "Warehouse")]
         public string Name { get; set; }
 
+        [Display(Name = "IsSellable")]
         public bool IsSellable { get; set; }
 
         public AddressViewModel Address { get; set; }

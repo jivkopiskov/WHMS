@@ -2,19 +2,29 @@
 {
     using System.ComponentModel.DataAnnotations;
 
+    using AutoMapper;
+
     using WHMS.Data.Models.Products;
     using WHMS.Services.Mapping;
 
-    public class ImageViewModel : IMapFrom<Image>, IMapTo<Image>
+    public class ImageViewModel : IHaveCustomMappings, IMapTo<Image>
     {
-        public int Id { get; set; }
+        public int ImageId { get; set; }
 
+        [Range(1, int.MaxValue)]
         public int ProductId { get; set; }
 
-        [Required]
-        [MaxLength(2048)]
+        [Url]
         public string Url { get; set; }
 
         public bool IsPrimary { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<Image, ImageViewModel>()
+                .ForMember(
+                 x => x.ImageId,
+                 opt => opt.MapFrom(x => x.Id));
+        }
     }
 }

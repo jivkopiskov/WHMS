@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -47,12 +48,17 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProduct(AddProductViewModel model)
+        public async Task<IActionResult> AddProduct(AddProductInputModel model)
         {
             if (!this.productService.IsSkuAvailable(model.SKU))
             {
                 this.TempData["error"] = GlobalConstants.UnavailableSKU;
                 return this.View(model);
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
             }
 
             model.CreatedById = this.userManager.GetUserId(this.User);
@@ -71,10 +77,12 @@
         {
             if (!this.ModelState.IsValid)
             {
+                this.TempData["success"] = false;
                 return this.ProductDetails(input.Id);
             }
 
             ProductDetailsViewModel product = await this.productService.EditProductAsync<ProductDetailsViewModel, ProductDetailsInputModel>(input);
+            this.TempData["success"] = true;
             return this.ProductDetails(input.Id);
         }
 
@@ -98,24 +106,37 @@
         [HttpPost]
         public async Task<IActionResult> ProductImages(ImageViewModel input)
         {
-            await this.productService.UpdateDefaultImageAsync(input.Id);
+            // TO DO:
+            if (this.ModelState.IsValid)
+            {
+            }
+
+            await this.productService.UpdateDefaultImageAsync(input.ImageId);
+
             return this.ProductImages(input.ProductId);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddProductImage(ImageViewModel input)
+        public IActionResult AddImages(int id)
         {
-            if (this.ModelState.IsValid)
+            var model = new AddImagesInputModel { ProductId = id };
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddImages(AddImagesInputModel input)
+        {
+            foreach (var image in input.URL)
             {
-                await this.productService.AddProductImageAsync(input);
-                this.TempData["wasSuccess"] = true;
-            }
-            else
-            {
-                this.TempData["wasSuccess"] = false;
+                if (string.IsNullOrEmpty(image) || !new UrlAttribute().IsValid(image))
+                {
+                    continue;
+                }
+
+                var imageModel = new ImageViewModel() { ProductId = input.ProductId, Url = image };
+                await this.productService.AddProductImageAsync(imageModel);
             }
 
-            return this.Redirect("ProductImages/" + input.ProductId);
+            return this.Redirect("/Products/ProductImages/" + input.ProductId);
         }
 
         #endregion
@@ -141,6 +162,11 @@
         [HttpPost]
         public async Task<IActionResult> AddBrand(string name)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+
             await this.productService.CreateBrandAsync(name);
 
             return this.Redirect("/Products/ManageBrands");
