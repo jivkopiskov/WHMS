@@ -1,4 +1,13 @@
 ﻿@model AddProductInputModel
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Products/ManageProducts">Manage Products</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Product</li>
+        </ol>
+    </nav>
+}
+
 @if (this.TempData.ContainsKey("error"))
 {
     <div class="alert alert-danger" role="alert">

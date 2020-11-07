@@ -1,5 +1,12 @@
 ﻿@model WarehouseViewModel
-
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Products/ManageWarehouses">Manage Warehouses</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Warehouse</li>
+        </ol>
+    </nav>
+}
 <form asp-controller="Products" asp-action="AddCondition" method="post">
     <div asp-validation-summary="ModelOnly"></div>
     <div>

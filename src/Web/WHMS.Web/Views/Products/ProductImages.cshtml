@@ -1,5 +1,13 @@
 ﻿@model ProductImagesViewModel
-
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Products/ManageProducts">Manage Products</a></li>
+            <li class="breadcrumb-item"><a href="/Products/ProductDetails/@Model.ProductId">Product Details: @Model.ProductId</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Manage images</li>
+        </ol>
+    </nav>
+}
 <div class="col-sm-4">
     <a class="btn btn-primary" href="/Products/AddImages/@Model.ProductId">Add Images</a>
 </div>

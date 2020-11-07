@@ -1,5 +1,15 @@
 ﻿@model AddImagesInputModel
 
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Products/ManageProducts">Manage Products</a></li>
+            <li class="breadcrumb-item"><a href="/Products/ProductDetails/@Model.ProductId">Product Details: @Model.ProductId</a></li>
+            <li class="breadcrumb-item"><a href="/Products/ProductImages/@Model.ProductId">Manage images</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add images</li>
+        </ol>
+    </nav>
+}
 <h4 class="h4 mt-3">Add image</h4>
 <div class="mt-2">
     <form asp-controller="Products" asp-action="AddImages" method="post">
