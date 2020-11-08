@@ -28,5 +28,8 @@
         public DateTime? ShipByDate { get; set; }
 
         public ShippingMethodViewModel ShippingMethod { get; set; }
+
+        [Display(Name = "Salesman")]
+        public string CreatedById { get; set; }
     }
 }

@@ -21,6 +21,8 @@
     <Compile Remove="Migrations\20200927145327_Add-Migration FixPurchaseITems.Designer.cs" />
     <Compile Remove="Migrations\20201028183752_ProductConditionName.cs" />
     <Compile Remove="Migrations\20201028183752_ProductConditionName.Designer.cs" />
+    <Compile Remove="Migrations\20201108124240_OrderCreatedByField.cs" />
+    <Compile Remove="Migrations\20201108124240_OrderCreatedByField.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

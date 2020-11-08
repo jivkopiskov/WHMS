@@ -10,20 +10,20 @@
     {
         IEnumerable<T> GetAllOrders<T>(OrdersFilterInputModel input);
 
-        Task<int> GetOrderDetails(int orderId);
+        T GetOrderDetails<T>(int orderId);
 
         Task<int> CreateOrderAsync(AddOrderInputModel input);
 
         Task<int> EditOrderAsync(int orderId);
 
-        Task<int> AddOrderItemAsync(int productId);
+        Task<int> AddOrderItemAsync(AddOrderItemsInputModel input);
 
         Task<int> EditOrderItemAsync(int orderItemId);
 
         // remember to recalcualte order grand total
         Task<int> DeleteOrderItemAsync(int orderItemId);
 
-        Task<int> RecalculateOrderTotal(int orderId);
+        Task RecalculateOrderTotal(int orderId);
 
         Task<int> ShipOrderAsync(int orderId, string shippingMethod, string trackingNumber);
 

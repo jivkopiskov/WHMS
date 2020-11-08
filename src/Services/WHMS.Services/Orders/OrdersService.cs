@@ -13,16 +13,19 @@
     using WHMS.Data.Models.Orders;
     using WHMS.Data.Models.Orders.Enum;
     using WHMS.Services.Mapping;
+    using WHMS.Services.Products;
     using WHMS.Web.ViewModels.Orders;
 
     public class OrdersService : IOrdersService
     {
         private readonly WHMSDbContext context;
+        private readonly IProductsService productsService;
         private IMapper mapper;
 
-        public OrdersService(WHMSDbContext context)
+        public OrdersService(WHMSDbContext context, IProductsService productsService)
         {
             this.context = context;
+            this.productsService = productsService;
             this.mapper = AutoMapperConfig.MapperInstance;
         }
 
@@ -31,9 +34,37 @@
             throw new NotImplementedException();
         }
 
-        public Task<int> AddOrderItemAsync(int productId)
+        public async Task<int> AddOrderItemAsync(AddOrderItemsInputModel input)
         {
-            throw new NotImplementedException();
+            var order = this.context.Orders.FirstOrDefault(x => x.Id == input.OrderId);
+            foreach (var item in input.OrderItems)
+            {
+                var orderItem = this.context.OrderItems.FirstOrDefault(x => x.ProductId == item.ProductId && x.OrderId == input.OrderId);
+                if (orderItem == null)
+                {
+                    orderItem = new OrderItem() { ProductId = item.ProductId, Qty = item.Qty };
+                    var productPrices = this.context.Products.Where(x => x.Id == orderItem.ProductId).Select(x => new { WebsitePrice = x.WebsitePrice, WholesalePrice = x.WholesalePrice }).FirstOrDefault();
+                    orderItem.Price = order.Channel == Channel.Wholesale ? productPrices.WholesalePrice : productPrices.WebsitePrice;
+                    order.OrderItems.Add(orderItem);
+                }
+                else
+                {
+                    orderItem.Qty += item.Qty;
+                    if (orderItem.Qty == 0)
+                    {
+                        this.context.OrderItems.Remove(orderItem);
+                    }
+                }
+            }
+
+            await this.context.SaveChangesAsync();
+            await this.RecalculateOrderTotal(input.OrderId);
+            foreach (var item in input.OrderItems)
+            {
+                await this.productsService.RecalculateAvailableInventory(item.ProductId);
+            }
+
+            return order.Id;
         }
 
         public Task<int> AddPaymentAsync(int orderId, decimal amount)
@@ -102,14 +133,16 @@
             throw new NotImplementedException();
         }
 
-        public Task<int> GetOrderDetails(int orderId)
+        public T GetOrderDetails<T>(int orderId)
         {
-            throw new NotImplementedException();
+            return this.context.Orders.Where(x => x.Id == orderId).To<T>().FirstOrDefault();
         }
 
-        public Task<int> RecalculateOrderTotal(int orderId)
+        public async Task RecalculateOrderTotal(int orderId)
         {
-            throw new NotImplementedException();
+            var order = this.context.Orders.Include(x => x.OrderItems).FirstOrDefault(x => x.Id == orderId);
+            order.GrandTotal = order.OrderItems.Sum(x => x.Qty * x.Price);
+            await this.context.SaveChangesAsync();
         }
 
         public Task<int> ShipOrderAsync(int orderId, string shippingMethod, string trackingNumber)

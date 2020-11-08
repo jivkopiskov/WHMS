@@ -10,6 +10,7 @@
     using Microsoft.EntityFrameworkCore;
     using WHMS.Common;
     using WHMS.Data;
+    using WHMS.Data.Models.Orders.Enum;
     using WHMS.Data.Models.Products;
     using WHMS.Services.Mapping;
     using WHMS.Web.ViewModels.Products;
@@ -256,12 +257,32 @@
 
         public async Task RecalculateAvailableInventory(int productId)
         {
+            var warehouses = this.context.Warehouses.ToList();
+            foreach (var wh in warehouses)
+            {
+                await this.RecalculateReservedInventory(productId, wh.Id);
+            }
+
             var productWarehouses = this.context.ProductWarehouses.Where(x => x.ProductId == productId).ToList();
             foreach (var pw in productWarehouses)
             {
                 pw.AggregateQuantity = pw.TotalPhysicalQuanitiy - pw.ReservedQuantity;
             }
 
+            await this.context.SaveChangesAsync();
+        }
+
+        public async Task RecalculateReservedInventory(int productId, int warehouseId)
+        {
+            var productWarehouse = await this.GetOrCreateProductWarehouseAsync(productId, warehouseId);
+            productWarehouse.ReservedQuantity = this.context.OrderItems
+                .Where(x => x.ProductId == productId &&
+                            x.Order.ShippingStatus == ShippingStatus.Unshipped &&
+                            x.Order.OrderStatus == OrderStatus.Processing &&
+                            x.Order.WarehouseId == warehouseId)
+                .Sum(x => x.Qty);
+
+            this.context.ProductWarehouses.Update(productWarehouse);
             await this.context.SaveChangesAsync();
         }
 
@@ -330,6 +351,23 @@
             }
 
             return filteredList;
+        }
+
+        private async Task<ProductWarehouse> GetOrCreateProductWarehouseAsync(int productId, int warehouseId)
+        {
+            var productWarehouse = this.context.ProductWarehouses
+                .Where(x => x.ProductId == productId &&
+                x.WarehouseId == warehouseId)
+                .FirstOrDefault();
+
+            if (productWarehouse == null)
+            {
+                productWarehouse = new ProductWarehouse() { ProductId = productId, WarehouseId = warehouseId };
+                this.context.Add(productWarehouse);
+                await this.context.SaveChangesAsync();
+            }
+
+            return productWarehouse;
         }
     }
 }

@@ -5,7 +5,9 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using WHMS.Data.Models;
     using WHMS.Services.Orders;
     using WHMS.Web.Infrastructure.ModelBinders;
     using WHMS.Web.ViewModels;
@@ -14,10 +16,12 @@
     public class OrdersController : Controller
     {
         private readonly IOrdersService ordersService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public OrdersController(IOrdersService ordersService)
+        public OrdersController(IOrdersService ordersService, UserManager<ApplicationUser> userManager)
         {
             this.ordersService = ordersService;
+            this.userManager = userManager;
         }
 
         public IActionResult ManageOrders(OrdersFilterInputModel input)
@@ -35,6 +39,7 @@
         [HttpPost]
         public async Task<IActionResult> AddOrder(AddOrderInputModel input)
         {
+            input.CreatedById = this.userManager.GetUserId(this.User);
             await this.ordersService.CreateOrderAsync(input);
 
             return this.RedirectToAction(nameof(this.ManageOrders));
@@ -47,9 +52,15 @@
         }
 
         [HttpPost]
-        public IActionResult AddOrderItems([ModelBinder(BinderType = typeof(OrderItemsBinder))] AddOrderItemsInputModel input)
+        public async Task<IActionResult> AddOrderItems([ModelBinder(BinderType = typeof(OrderItemsBinder))] AddOrderItemsInputModel input)
         {
-            var model = input;
+            await this.ordersService.AddOrderItemAsync(input);
+            return this.View(input);
+        }
+
+        public IActionResult OrderDetails(int id)
+        {
+            var model = this.ordersService.GetOrderDetails<OrderDetailsViewModel>(id);
             return this.View(model);
         }
 

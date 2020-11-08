@@ -21,9 +21,9 @@
         @foreach (var order in Model.Orders)
         {
             <tr>
-                <td>@order.Id</td>
+                <td><a asp-controller="Orders" asp-action="OrderDetails" asp-route-id="@order.Id">@order.Id</a></td>
                 <td>@order.Channel.ToString()</td>
-                <td>@order.OrderSourceOrderNumber</td>
+                <td>@order.SourceOrderId</td>
                 <td>@order.CustomerName</td>
                 <td>@order.GrandTotal</td>
                 <td>@order.OrderStatus.ToString()</td>

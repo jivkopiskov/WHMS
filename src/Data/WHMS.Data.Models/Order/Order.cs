@@ -28,8 +28,6 @@
 
         public DateTime? ShipByDate { get; set; }
 
-        public decimal ShippingFees { get; set; }
-
         public decimal GrandTotal { get; set; }
 
         public ICollection<Payment> Payments { get; set; } = new HashSet<Payment>();
@@ -49,5 +47,9 @@
 
         [MaxLength(2048)]
         public string TrackingURL { get; set; }
+
+        public ApplicationUser CreatedBy { get; set; }
+
+        public string CreatedById { get; set; }
     }
 }

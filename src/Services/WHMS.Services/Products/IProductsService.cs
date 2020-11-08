@@ -39,6 +39,8 @@
 
         Task RecalculateAvailableInventory(int productId);
 
+        Task RecalculateReservedInventory(int productId, int warehouseId);
+
         IEnumerable<T> GetAllProducts<T>(ProductFilterInputModel input);
 
         IEnumerable<T> GetAllProducts<T>();

@@ -1,0 +1,120 @@
+﻿@model OrderDetailsViewModel
+
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Orders/ManageOrders">Manage Orders</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Order details #@Model.Id</li>
+        </ol>
+    </nav>
+}
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Channel</th>
+            <th scope="col">OrderStatus</th>
+            <th scope="col">PaymentStatus</th>
+            <th scope="col">ShippingStatus</th>
+            <th scope="col">Ship from warehouse</th>
+        </tr>
+    </thead>
+    <tbody class="bg-light">
+        <tr>
+            <th>@Model.Channel.ToString()</th>
+            <th>@Model.OrderStatus.ToString()</th>
+            <th>@Model.PaymentStatus.ToString()</th>
+            <th>@Model.ShippingStatus.ToString()</th>
+            <th>@Model.WarehouseName</th>
+        </tr>
+    </tbody>
+</table>
+
+
+<div class="row">
+    <div>
+        <div class="card" style="width: 22rem;">
+            <div class="card-body">
+                <h3>Customer information</h3>
+                <h5 class="card-title">@Model.Customer.FirstName @Model.Customer.LastName</h5>
+                <h6 class="card-subtitle mb-2 text-muted">@Model.Customer.Email</h6>
+                <p class="mb-0"><b>Address:</b></p>
+                <p class="card-text">@Model.Customer.Address.ToString()</p>
+                <p class="mb-0"><b>Phone number:</b></p>
+                <p class="card-text">@Model.Customer.PhoneNumber</p>
+                <a href="#" class="card-link">Card link</a>
+            </div>
+        </div>
+    </div>
+    @{ var salesMan = String.IsNullOrEmpty(Model.CreatedByEmail) ? "Unknown" : Model.CreatedByEmail;}
+    <div class="ml-4">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h3> Order Information</h3>
+                <h5 class="card-title">Channel Order #</h5>
+                <h6 class="card-subtitle mb-2 text-muted">@Model.SourceOrderId</h6>
+                <p class="mb-0"><b>Total paid</b></p>
+                <p class="card-text">0 $</p>
+                <p class="mb-0"><b>Grand total</b></p>
+                <p class="card-text">@Model.GrandTotal</p>
+                <p class="mb-0"><b>Salesman</b></p>
+                <p class="card-text">@salesMan</p>
+                <hr />
+                <a asp-controller="Orders" asp-action="AddPayment" asp-route-id="@Model.Id">Add payment</a></>
+            </div>
+        </div>
+    </div>
+    <div class="ml-4">
+        <div class="card" style="width: 21rem;">
+            <div class="card-body">
+                <h3>Shipping information</h3>
+                <p class="card-title"><b>Shipping carrier</b></p>
+                <p class="card-subtitle mb-2">@(Model?.ShippingMethod?.Carrier?.Name ?? "No carrier select")</p>
+                <p class="mb-0"><b>Shipping method</b></p>
+                <p class="card-text">@(Model?.ShippingMethod?.Name ?? "No method select")</p>
+                <p class="mb-0"><b>Ship By Date</b></p>
+                <p class="card-text">@(Model.ShipByDate?.ToString() ?? "No Ship By Date")</p>
+                <p class="mb-0"><b>Tracking number</b></p>
+                <p class="card-text">@Model.TrackingNumber</p>
+                <hr />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mt-2">
+    <h3>Order items</h3>
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Image</th>
+                <th scope="col">Product SKU</th>
+                <th scope="col">Qty</th>
+                <th scope="col">Price</th>
+                <th scope="col">Line total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var oi in Model.OrderItems)
+            {
+            <tr>
+                <td> @oi.ProductId</td>
+                <td> <img src="@oi.ImageURL" class="rounded-circle img-thumbnail" style="height: 75px; width: 75px;"></td>
+                <td><a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@oi.ProductId">@oi.ProductSKU</a></td>
+                <td>@oi.Qty</td>
+                <td>@oi.Price</td>
+                <td>@(oi.Qty * oi.Price)</td>
+            </tr>
+            }
+        <tr class="bg-secondary text-light">
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>Grand total</th>
+            <th>@Model.GrandTotal</th>
+        </tr>
+        </tbody>
+    </table>
+    <a asp-action="AddOrderItems" asp-route-id="@Model.Id" class="btn btn-primary">Add order items</a>
+</div>

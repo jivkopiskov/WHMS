@@ -20,7 +20,7 @@
                 model.OrderId = int.Parse(bindingContext.HttpContext.Request.Form["orderId"].FirstOrDefault() ?? "0");
                 var orderItems = bindingContext.HttpContext.Request.Form["productId"];
                 var orderItemsQty = bindingContext.HttpContext.Request.Form["Qty"];
-                model.OrderItems = orderItems.Zip(orderItemsQty, (item, qty) => new OrderItemViewModel() { ProductId = int.Parse(item), Qty = int.Parse(qty) });
+                model.OrderItems = orderItems.Zip(orderItemsQty, (item, qty) => new AddOrderItemViewModel() { ProductId = int.Parse(item), Qty = int.Parse(qty) });
                 bindingContext.Result = ModelBindingResult.Success(model);
                 return Task.CompletedTask;
             }

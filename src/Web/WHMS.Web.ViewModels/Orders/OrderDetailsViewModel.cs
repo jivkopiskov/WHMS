@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Text;
 
     using AutoMapper;
@@ -9,7 +10,7 @@
     using WHMS.Data.Models.Orders.Enum;
     using WHMS.Services.Mapping;
 
-    public class OrdersViewModel : IHaveCustomMappings
+    public class OrderDetailsViewModel : IMapFrom<Order>
     {
         public int Id { get; set; }
 
@@ -17,7 +18,7 @@
 
         public string SourceOrderId { get; set; }
 
-        public string CustomerName { get; set; }
+        public CustomerViewModel Customer { get; set; }
 
         public decimal GrandTotal { get; set; }
 
@@ -27,11 +28,16 @@
 
         public ShippingStatus ShippingStatus { get; set; }
 
-        public void CreateMappings(IProfileExpression configuration)
-        {
-            configuration.CreateMap<Order, OrdersViewModel>().ForMember(
-                x => x.CustomerName,
-                opt => opt.MapFrom(c => $"{c.Customer.FirstName} {c.Customer.LastName}"));
-        }
+        public IEnumerable<OrderItemViewModel> OrderItems { get; set; }
+
+        public string WarehouseName { get; set; }
+
+        public DateTime? ShipByDate { get; set; }
+
+        public ShippingMethodViewModel ShippingMethod { get; set; }
+
+        public string TrackingNumber { get; set; }
+
+        public string CreatedByEmail { get; set; }
     }
 }

@@ -6,6 +6,6 @@
     {
         public int OrderId { get; set; }
 
-        public IEnumerable<OrderItemViewModel> OrderItems { get; set; }
+        public IEnumerable<AddOrderItemViewModel> OrderItems { get; set; }
     }
 }

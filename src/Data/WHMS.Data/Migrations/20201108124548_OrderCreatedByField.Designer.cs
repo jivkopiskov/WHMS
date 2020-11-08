@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WHMS.Data;
 
 namespace WHMS.Data.Migrations
 {
     [DbContext(typeof(WHMSDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201108124548_OrderCreatedByField")]
+    partial class OrderCreatedByField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -401,6 +403,9 @@ namespace WHMS.Data.Migrations
 
                     b.Property<DateTime?>("ShipByDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<decimal>("ShippingFees")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("ShippingMethodId")
                         .HasColumnType("int");
