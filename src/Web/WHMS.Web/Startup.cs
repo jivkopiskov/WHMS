@@ -60,6 +60,11 @@
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IProductsService, ProductsService>();
+            services.AddTransient<IBrandsService, BrandsService>();
+            services.AddTransient<ICondiitonsService, ConditionsService>();
+            services.AddTransient<IInventoryService, InventoryService>();
+            services.AddTransient<IManufacturersService, ManufacturersService>();
+            services.AddTransient<IWarehouseService, WarehouseService>();
             services.AddTransient<IOrdersService, OrdersService>();
         }
 

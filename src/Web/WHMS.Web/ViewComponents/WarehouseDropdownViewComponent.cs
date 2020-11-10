@@ -10,16 +10,16 @@
 
     public class WarehouseDropdownViewComponent : ViewComponent
     {
-        private readonly IProductsService productsService;
+        private readonly IWarehouseService warehouseService;
 
-        public WarehouseDropdownViewComponent(IProductsService productsService)
+        public WarehouseDropdownViewComponent(IWarehouseService warehouseService)
         {
-            this.productsService = productsService;
+            this.warehouseService = warehouseService;
         }
 
         public IViewComponentResult Invoke()
         {
-            var warehouses = this.productsService.GetAllWarehouses<WarehouseViewModel>()
+            var warehouses = this.warehouseService.GetAllWarehouses<WarehouseViewModel>()
                 .OrderBy(x => x.Name)
                 .Select(x => new SelectListItem
                 {

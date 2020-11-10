@@ -9,16 +9,16 @@
 
     public class ManufacturerDropdownViewComponent : ViewComponent
     {
-        private readonly IProductsService productsService;
+        private readonly IManufacturersService manufacturersService;
 
-        public ManufacturerDropdownViewComponent(IProductsService productsService)
+        public ManufacturerDropdownViewComponent(IManufacturersService manufacturersService)
         {
-            this.productsService = productsService;
+            this.manufacturersService = manufacturersService;
         }
 
         public IViewComponentResult Invoke(int id)
         {
-            var manufacturers = this.productsService.GetAllManufacturers<ManufacturerViewModel>().
+            var manufacturers = this.manufacturersService.GetAllManufacturers<ManufacturerViewModel>().
                 OrderBy(x => x.Name).
                 Select(x => new SelectListItem
                 {

@@ -20,11 +20,28 @@
     public class ProductsController : Controller
     {
         private readonly IProductsService productService;
+        private readonly IBrandsService brandsService;
+        private readonly ICondiitonsService condiitonsService;
+        private readonly IInventoryService inventoryService;
+        private readonly IManufacturersService manufacturersService;
+        private readonly IWarehouseService warehouseService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public ProductsController(IProductsService productsService, UserManager<ApplicationUser> userManager)
+        public ProductsController(
+            IProductsService productsService,
+            IBrandsService brandsService,
+            ICondiitonsService condiitonsService,
+            IInventoryService inventoryService,
+            IManufacturersService manufacturersService,
+            IWarehouseService warehouseService,
+            UserManager<ApplicationUser> userManager)
         {
             this.productService = productsService;
+            this.brandsService = brandsService;
+            this.condiitonsService = condiitonsService;
+            this.inventoryService = inventoryService;
+            this.manufacturersService = manufacturersService;
+            this.warehouseService = warehouseService;
             this.userManager = userManager;
         }
 
@@ -52,7 +69,7 @@
         {
             if (!this.productService.IsSkuAvailable(model.SKU))
             {
-                this.TempData["error"] = GlobalConstants.UnavailableSKU;
+                this.ModelState.AddModelError("SKU", GlobalConstants.UnavailableSKU);
                 return this.View(model);
             }
 
@@ -77,7 +94,6 @@
         {
             if (!this.ModelState.IsValid)
             {
-                this.TempData["success"] = false;
                 return this.ProductDetails(input.Id);
             }
 
@@ -88,7 +104,7 @@
 
         public IActionResult ManageInventory(int id)
         {
-            var model = this.productService.GetProductWarehouseInfo(id);
+            var model = this.warehouseService.GetProductWarehouseInfo(id);
             return this.View(model);
         }
 
@@ -146,9 +162,9 @@
         {
             var model = new ManageBrandsViewModel
             {
-                Brands = this.productService.GetAllBrands<BrandViewModel>(page),
+                Brands = this.brandsService.GetAllBrands<BrandViewModel>(page),
                 Page = page,
-                PagesCount = (int)Math.Ceiling(this.productService.GetAllBrandsCount() / (double)GlobalConstants.PageSize),
+                PagesCount = (int)Math.Ceiling(this.brandsService.GetAllBrandsCount() / (double)GlobalConstants.PageSize),
             };
 
             return this.View(model);
@@ -167,7 +183,7 @@
                 return this.View();
             }
 
-            await this.productService.CreateBrandAsync(name);
+            await this.brandsService.CreateBrandAsync(name);
 
             return this.Redirect("/Products/ManageBrands");
         }
@@ -179,9 +195,9 @@
         {
             var model = new ManageManufacturersViewModel()
             {
-                Manufacturers = this.productService.GetAllManufacturers<ManufacturerViewModel>(page),
+                Manufacturers = this.manufacturersService.GetAllManufacturers<ManufacturerViewModel>(page),
                 Page = page,
-                PagesCount = (int)Math.Ceiling(this.productService.GetAllManufacturersCount() / (double)GlobalConstants.PageSize),
+                PagesCount = (int)Math.Ceiling(this.manufacturersService.GetAllManufacturersCount() / (double)GlobalConstants.PageSize),
             };
 
             return this.View(model);
@@ -195,7 +211,12 @@
         [HttpPost]
         public async Task<IActionResult> AddManufacturer(string name)
         {
-            await this.productService.CreateManufacturerAsync(name);
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            await this.manufacturersService.CreateManufacturerAsync(name);
 
             return this.Redirect("/Products/ManageManufacturers");
         }
@@ -204,7 +225,7 @@
         #region conditions
         public IActionResult ManageConditions()
         {
-            var conditions = this.productService.GetAllConditions<ConditionViewModel>();
+            var conditions = this.condiitonsService.GetAllConditions<ConditionViewModel>();
             return this.View(conditions);
         }
 
@@ -218,7 +239,7 @@
         {
             if (this.ModelState.IsValid)
             {
-                await this.productService.AddProductConditionAsync(input);
+                await this.condiitonsService.AddProductConditionAsync(input);
             }
 
             return this.Redirect("/Products/ManageConditions");
@@ -227,7 +248,7 @@
 
         public IActionResult ManageWarehouses()
         {
-            var warehouses = this.productService.GetAllWarehouses<WarehouseViewModel>();
+            var warehouses = this.warehouseService.GetAllWarehouses<WarehouseViewModel>();
             return this.View(warehouses);
         }
 
@@ -241,7 +262,7 @@
         {
             if (this.ModelState.IsValid)
             {
-                await this.productService.CreateWarehouseAsync(input);
+                await this.warehouseService.CreateWarehouseAsync(input);
             }
 
             return this.Redirect("/Products/ManageWarehouses");
@@ -251,7 +272,7 @@
         {
             if (this.productService.IsValidProductId(input.ProductId))
             {
-                await this.productService.AdjustInventory(input);
+                await this.inventoryService.AdjustInventory(input);
             }
 
             return this.Redirect("ManageInventory/" + input.ProductId);

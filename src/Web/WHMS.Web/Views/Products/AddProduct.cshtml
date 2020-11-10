@@ -8,12 +8,6 @@
     </nav>
 }
 
-@if (this.TempData.ContainsKey("error"))
-{
-    <div class="alert alert-danger" role="alert">
-        @TempData["error"]
-    </div>
-}
 <div class="col-md-6 justify-content-center offset-2">
     <form asp-controller="Products" asp-action="AddProduct" method="post">
         <div asp-validation-summary="All" class="text-danger"></div>

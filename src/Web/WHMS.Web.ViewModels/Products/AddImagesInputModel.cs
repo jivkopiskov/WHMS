@@ -9,7 +9,6 @@
     {
         public int ProductId { get; set; }
 
-        [Url]
         public string[] URL { get; set; }
     }
 }

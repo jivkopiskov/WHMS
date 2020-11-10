@@ -9,16 +9,16 @@
 
     public class ConditionDropdownViewComponent : ViewComponent
     {
-        private readonly IProductsService productsService;
+        private readonly ICondiitonsService conditionsService;
 
-        public ConditionDropdownViewComponent(IProductsService productsService)
+        public ConditionDropdownViewComponent(ICondiitonsService conditionsService)
         {
-            this.productsService = productsService;
+            this.conditionsService = conditionsService;
         }
 
         public IViewComponentResult Invoke(int id)
         {
-            var conditions = this.productsService.GetAllConditions<ConditionViewModel>().
+            var conditions = this.conditionsService.GetAllConditions<ConditionViewModel>().
                 OrderBy(x => x.Name).
                 Select(x => new SelectListItem
                 {

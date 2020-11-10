@@ -9,16 +9,16 @@
 
     public class BrandDropdownViewComponent : ViewComponent
     {
-        private readonly IProductsService productsService;
+        private readonly IBrandsService brandsService;
 
-        public BrandDropdownViewComponent(IProductsService productsService)
+        public BrandDropdownViewComponent(IBrandsService brandsService)
         {
-            this.productsService = productsService;
+            this.brandsService = brandsService;
         }
 
         public IViewComponentResult Invoke(int id)
         {
-            var brands = this.productsService.GetAllBrands<BrandViewModel>().
+            var brands = this.brandsService.GetAllBrands<BrandViewModel>().
                 OrderBy(x => x.Name).
                 Select(x => new SelectListItem
                 {

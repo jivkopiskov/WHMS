@@ -19,13 +19,13 @@
     public class OrdersService : IOrdersService
     {
         private readonly WHMSDbContext context;
-        private readonly IProductsService productsService;
+        private readonly IInventoryService inventoryService;
         private IMapper mapper;
 
-        public OrdersService(WHMSDbContext context, IProductsService productsService)
+        public OrdersService(WHMSDbContext context, IInventoryService inventoryService)
         {
             this.context = context;
-            this.productsService = productsService;
+            this.inventoryService = inventoryService;
             this.mapper = AutoMapperConfig.MapperInstance;
         }
 
@@ -61,7 +61,7 @@
             await this.RecalculateOrderTotal(input.OrderId);
             foreach (var item in input.OrderItems)
             {
-                await this.productsService.RecalculateAvailableInventory(item.ProductId);
+                await this.inventoryService.RecalculateAvailableInventory(item.ProductId);
             }
 
             return order.Id;
