@@ -27,6 +27,7 @@
                           {
                               new RolesSeeder(),
                               new SettingsSeeder(),
+                              new ConditionsSeeder(),
                           };
 
             foreach (var seeder in seeders)
