@@ -1,5 +1,5 @@
 ﻿@model AddOrderInputModel
-
+@inject WHMS.Services.Common.ICountriesService countries;
 @section Breadcrumbs{
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -64,7 +64,9 @@
             </div>
             <div class="col-sm-6">
                 <label asp-for="Customer.Address.Country"></label>
-                <input asp-for="Customer.Address.Country" class="form-control">
+                <select asp-for="Customer.Address.Country" class="form-control" asp-items="@countries.GetAllCountries()">
+                    <option value="0">Select country</option>
+                </select>
                 <span asp-validation-for="Customer.Address.Country" class="text-danger"></span><br />
             </div>
         </div>

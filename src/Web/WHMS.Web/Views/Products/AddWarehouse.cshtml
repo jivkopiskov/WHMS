@@ -1,4 +1,5 @@
 ﻿@model WarehouseViewModel
+@inject WHMS.Services.Common.ICountriesService countries;
 @section Breadcrumbs{
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -36,7 +37,9 @@
     </div>
     <div>
         <label asp-for="Address.Country"></label>
-        <input asp-for="Address.Country" class="form-control col-md-5 ">
+        <select asp-for="Address.Country" class="form-control col-md-5 " asp-items="@countries.GetAllCountries()">
+            <option value="">Select country</option>
+        </select>
         <span asp-validation-for="Address.Country" class="text-danger"></span><br />
     </div>
     <button class="btn btn-outline-primary" asp-controller="Products" asp-action="AddWarehouse">Add Warehouse</button>

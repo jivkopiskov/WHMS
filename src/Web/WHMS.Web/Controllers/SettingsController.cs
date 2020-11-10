@@ -5,7 +5,7 @@
 
     using Microsoft.AspNetCore.Mvc;
     using WHMS.Data.Models;
-    using WHMS.Services.Data;
+    using WHMS.Services.Data.Common;
     using WHMS.Web.ViewModels.Settings;
 
     public class SettingsController : BaseController

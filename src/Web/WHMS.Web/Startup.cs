@@ -15,7 +15,9 @@
     using WHMS.Data.Common;
     using WHMS.Data.Models;
     using WHMS.Data.Seeding;
+    using WHMS.Services.Common;
     using WHMS.Services.Data;
+    using WHMS.Services.Data.Common;
     using WHMS.Services.Mapping;
     using WHMS.Services.Messaging;
     using WHMS.Services.Orders;
@@ -66,6 +68,7 @@
             services.AddTransient<IManufacturersService, ManufacturersService>();
             services.AddTransient<IWarehouseService, WarehouseService>();
             services.AddTransient<IOrdersService, OrdersService>();
+            services.AddTransient<ICountriesService, CountriesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

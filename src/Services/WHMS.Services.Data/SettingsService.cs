@@ -1,4 +1,4 @@
-﻿namespace WHMS.Services.Data
+﻿namespace WHMS.Services.Data.Common
 {
     using System.Collections.Generic;
     using System.Linq;
