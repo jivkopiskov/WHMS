@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Data\WHMS.Data\WHMS.Data.csproj" />
     <ProjectReference Include="..\WHMS.Web.ViewModels\WHMS.Web.ViewModels.csproj" />
   </ItemGroup>
 

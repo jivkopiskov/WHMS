@@ -12,6 +12,7 @@
     using WHMS.Web.Infrastructure.ModelBinders;
     using WHMS.Web.ViewModels;
     using WHMS.Web.ViewModels.Orders;
+    using WHMS.Web.ViewModels.ValidationAttributes;
 
     public class OrdersController : Controller
     {
@@ -39,6 +40,11 @@
         [HttpPost]
         public async Task<IActionResult> AddOrder(AddOrderInputModel input)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+
             input.CreatedById = this.userManager.GetUserId(this.User);
             await this.ordersService.CreateOrderAsync(input);
 
@@ -54,6 +60,11 @@
         [HttpPost]
         public async Task<IActionResult> AddOrderItems([ModelBinder(BinderType = typeof(OrderItemsBinder))] AddOrderItemsInputModel input)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(input);
+            }
+
             await this.ordersService.AddOrderItemAsync(input);
             return this.View(input);
         }

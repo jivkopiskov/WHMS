@@ -16,8 +16,6 @@
         [Display(Name = "Source Order #")]
         public string SourceOrderId { get; set; }
 
-        public int CustomerId { get; set; }
-
         public CustomerViewModel Customer { get; set; }
 
         public Channel Channel { get; set; }
