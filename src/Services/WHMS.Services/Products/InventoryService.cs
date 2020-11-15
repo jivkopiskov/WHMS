@@ -29,7 +29,7 @@
             return this.context.ProductWarehouses.Where(x => x.ProductId == productId).Sum(x => x.AggregateQuantity);
         }
 
-        public async Task RecalculateAvailableInventory(int productId)
+        public async Task RecalculateAvailableInventoryAsync(int productId)
         {
             var warehouses = this.context.Warehouses.ToList();
             foreach (var wh in warehouses)
@@ -79,7 +79,7 @@
             }
 
             await this.context.SaveChangesAsync();
-            await this.RecalculateAvailableInventory(input.ProductId);
+            await this.RecalculateAvailableInventoryAsync(input.ProductId);
 
             return true;
         }

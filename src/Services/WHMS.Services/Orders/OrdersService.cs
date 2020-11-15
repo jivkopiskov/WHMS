@@ -59,17 +59,79 @@
 
             await this.context.SaveChangesAsync();
             await this.RecalculateOrderTotal(input.OrderId);
-            foreach (var item in input.OrderItems)
-            {
-                await this.inventoryService.RecalculateAvailableInventory(item.ProductId);
-            }
+            await this.RecalculatePaymentStatusAsync(input.OrderId);
+
+            await this.RecalculateOrderReservesAsync(input.OrderId);
 
             return order.Id;
         }
 
-        public Task<int> AddPaymentAsync(int orderId, decimal amount)
+        public async Task RecalculateOrderReservesAsync(int orderId)
         {
-            throw new NotImplementedException();
+            var orderItems = this.context.OrderItems.Where(oi => oi.OrderId == orderId).ToList();
+            foreach (var item in orderItems)
+            {
+                await this.inventoryService.RecalculateAvailableInventoryAsync(item.ProductId);
+            }
+        }
+
+        public async Task CancelOrderAsync(int orderId)
+        {
+            var order = this.context.Orders.FirstOrDefault(o => o.Id == orderId);
+            order.OrderStatus = OrderStatus.Cancelled;
+            await this.context.SaveChangesAsync();
+            await this.RecalculateOrderReservesAsync(orderId);
+        }
+
+        public async Task SetInProcessAsync(int orderId)
+        {
+            var order = this.context.Orders.FirstOrDefault(o => o.Id == orderId);
+            order.OrderStatus = OrderStatus.Processing;
+            await this.context.SaveChangesAsync();
+            await this.RecalculateOrderReservesAsync(orderId);
+        }
+
+        public async Task AddPaymentAsync<T>(T input)
+        {
+            var payment = this.mapper.Map<Payment>(input);
+            await this.context.Payments.AddAsync(payment);
+            await this.context.SaveChangesAsync();
+
+            await this.RecalculatePaymentStatusAsync(payment.OrderId);
+        }
+
+        public IEnumerable<T> GetAllPayments<T>(int orderId)
+        {
+            return this.context.Payments.Where(x => x.OrderId == orderId && x.IsDeleted == false).To<T>().ToList();
+        }
+
+        public async Task RecalculatePaymentStatusAsync(int orderId)
+        {
+            var order = this.context.Orders.FirstOrDefault(o => o.Id == orderId);
+            var totalPaid = this.context.Payments.Where(p => p.OrderId == orderId && p.IsDeleted == false).Sum(p => p.Amount);
+
+            if (totalPaid == 0)
+            {
+                order.PaymentStatus = PaymentStatus.NoPayment;
+            }
+            else if (totalPaid >= order.GrandTotal)
+            {
+                order.PaymentStatus = PaymentStatus.FullyCharged;
+            }
+            else
+            {
+                order.PaymentStatus = PaymentStatus.PartiallyPaid;
+            }
+
+            await this.context.SaveChangesAsync();
+        }
+
+        public async Task DeletePaymentAsync(int paymentId)
+        {
+            var payment = this.context.Payments.FirstOrDefault(p => p.Id == paymentId);
+            this.context.Remove(payment);
+            await this.context.SaveChangesAsync();
+            await this.RecalculatePaymentStatusAsync(payment.OrderId);
         }
 
         public Task<int> AddShippingMethodAsync(Carrier carrier, string shippingMethod)
@@ -82,7 +144,7 @@
             throw new NotImplementedException();
         }
 
-        public async Task<int> CreateOrderAsync(AddOrderInputModel input)
+        public async Task<int> AddOrderAsync(AddOrderInputModel input)
         {
             var customer = this.GetCustomer<Customer>(input.Customer.Email);
             customer = this.mapper.Map<CustomerViewModel, Customer>(input.Customer, customer);
@@ -145,7 +207,7 @@
             await this.context.SaveChangesAsync();
         }
 
-        public Task<int> ShipOrderAsync(int orderId, string shippingMethod, string trackingNumber)
+        public Task<int> ShipOrderAsync(ShipOrderInputModel input)
         {
             throw new NotImplementedException();
         }
@@ -159,6 +221,16 @@
             }
 
             return this.mapper.Map<T>(customer);
+        }
+
+        public IEnumerable<T> GetAllCarriers<T>()
+        {
+            return this.context.Carriers.To<T>().ToList();
+        }
+
+        public IEnumerable<T> GetAllServicesForCarrier<T>(int carrierId)
+        {
+            return this.context.ShippingMethods.Where(x => x.CarrierId == carrierId).To<T>().ToList();
         }
     }
 }

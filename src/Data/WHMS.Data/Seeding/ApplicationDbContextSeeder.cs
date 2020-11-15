@@ -28,6 +28,8 @@
                               new RolesSeeder(),
                               new SettingsSeeder(),
                               new ConditionsSeeder(),
+                              new CarriersSeeder(),
+                              new ShippingMethodsSeeder(),
                           };
 
             foreach (var seeder in seeders)

@@ -9,6 +9,18 @@
     </nav>
 }
 
+<a asp-action="ManagePayments" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Manage payments</a>
+@if (Model.OrderStatus == OrderStatus.Processing)
+{
+    <a asp-action="CancelOrder" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Cancel order</a>
+}
+else if (Model.OrderStatus == OrderStatus.Cancelled)
+{
+    <a asp-action="SetInProcess" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Set in process</a>
+}
+<a asp-action="ShipOrder" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Ship order</a>
+<partial name="_ChangeOrderStatusAlert" />
+
 <table class="table">
     <thead class="thead-dark">
         <tr>
@@ -54,7 +66,7 @@
                 <h5 class="card-title">Channel Order #</h5>
                 <h6 class="card-subtitle mb-2 text-muted">@Model.SourceOrderId</h6>
                 <p class="mb-0"><b>Total paid</b></p>
-                <p class="card-text">0 $</p>
+                <p class="card-text">@Model.PaidAmount</p>
                 <p class="mb-0"><b>Grand total</b></p>
                 <p class="card-text">@Model.GrandTotal</p>
                 <p class="mb-0"><b>Salesman</b></p>
@@ -82,8 +94,9 @@
     </div>
 </div>
 <div class="mt-2">
-    <h3>Order items</h3>
-    <table class="table table-hover table-striped">
+    <h3 class="d-inline">Order items</h3>
+    <a asp-action="AddOrderItems" asp-route-id="@Model.Id" class="btn btn-primary ml-3">Add order items</a>
+    <table class="table table-hover table-striped mt-2">
         <thead>
             <tr>
                 <th scope="col">Id</th>
@@ -97,24 +110,23 @@
         <tbody>
             @foreach (var oi in Model.OrderItems)
             {
-            <tr>
-                <td> @oi.ProductId</td>
-                <td> <img src="@oi.ImageURL" class="rounded-circle img-thumbnail" style="height: 75px; width: 75px;"></td>
-                <td><a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@oi.ProductId">@oi.ProductSKU</a></td>
-                <td>@oi.Qty</td>
-                <td>@oi.Price</td>
-                <td>@(oi.Qty * oi.Price)</td>
-            </tr>
+                <tr>
+                    <td> @oi.ProductId</td>
+                    <td> <img src="@oi.ImageURL" class="rounded-circle img-thumbnail" style="height: 75px; width: 75px;"></td>
+                    <td><a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@oi.ProductId">@oi.ProductSKU</a></td>
+                    <td>@oi.Qty</td>
+                    <td>@oi.Price</td>
+                    <td>@(oi.Qty * oi.Price)</td>
+                </tr>
             }
-        <tr class="bg-secondary text-light">
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th>Grand total</th>
-            <th>@Model.GrandTotal</th>
-        </tr>
+            <tr class="bg-secondary text-light">
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>Grand total</th>
+                <th>@Model.GrandTotal</th>
+            </tr>
         </tbody>
     </table>
-    <a asp-action="AddOrderItems" asp-route-id="@Model.Id" class="btn btn-primary">Add order items</a>
 </div>

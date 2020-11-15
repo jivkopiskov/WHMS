@@ -1,0 +1,43 @@
+﻿@model ManagePaymentsViewModel
+
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Orders/ManageOrders">Manage Orders</a></li>
+            <li class="breadcrumb-item"><a href="/Orders/OrderDetails/@Model.OrderId">Order # @Model.OrderId </a></li>
+            <li class="breadcrumb-item active" aria-current="page">Manage Payments</li>
+        </ol>
+    </nav>
+}
+<a class="btn btn-success" asp-action="AddPayment" asp-route-id="@Model.OrderId">Add payment</a>
+<h3>Manage payments</h3>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Created on</th>
+            <th scope="col">Payment amount</th>
+            <th scope="col">Payment type</th>
+            <th scope="col">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var payment in Model.Payments)
+        {
+            <tr class="table-light">
+                <td>@payment.CreatedOn</td>
+                <th scope="row">@payment.Amount $</th>
+                <td>@payment.PaymentType</td>
+                <td>
+                    <a class="btn btn-danger" asp-action="DeletePayment" asp-route-id="@payment.Id" asp-route-orderId="@Model.OrderId">Delete</a>
+                </td>
+            </tr>
+        }
+        <tr class="table-dark">
+            <td>Total paid</td>
+            <th>@Model.Payments.Sum(x => x.Amount) $</th>
+            <td>Remaining dues</td>
+            <th>@(this.Model.OrderGrandTotal - Model.Payments.Sum(x => x.Amount)) $</th>
+        </tr>
+    </tbody>
+</table>
+<p class="font-weight-bold">Order grand total: @Model.OrderGrandTotal</p>

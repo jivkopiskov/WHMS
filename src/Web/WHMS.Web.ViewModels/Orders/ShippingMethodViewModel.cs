@@ -7,6 +7,8 @@
 
     public class ShippingMethodViewModel : IMapFrom<ShippingMethod>
     {
+        public int Id { get; set; }
+
         public CarrierViewModel Carrier { get; set; }
 
         [Required]

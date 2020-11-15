@@ -1,0 +1,32 @@
+﻿@model PaymentInputModel
+
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Orders/ManageOrders">Manage Orders</a></li>
+            <li class="breadcrumb-item"><a href="/Orders/OrderDetails/@Model.OrderId">Order # @Model.OrderId </a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Payment</li>
+        </ol>
+    </nav>
+}
+<h3>Add payment for order @Model.OrderId</h3>
+<div asp-validation-summary="All" class="text-danger"></div>
+<div class="mt-2">
+    <form asp-controller="Orders" asp-action="AddPayment" method="post">
+        <input id="orderId" name="orderId" value="@Model.OrderId" hidden />      
+        <div>
+            <div>
+                <label asp-for="Amount"></label>
+                <input class="form-control col-sm-1" asp-for="Amount"  />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="PaymentType"></label>
+                <select class="form-control col-sm-2" asp-for="PaymentType" asp-items="Html.GetEnumSelectList<PaymentType>().OrderBy(x => x.Text)"></select>
+                <span asp-validation-for="PaymentType" class="text-danger"></span>
+            </div>
+        </div>
+
+        <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Orders" asp-action="AddPayment">Add payment</button>
+    </form>
+</div>

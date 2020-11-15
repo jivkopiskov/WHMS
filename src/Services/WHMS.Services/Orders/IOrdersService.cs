@@ -12,7 +12,7 @@
 
         T GetOrderDetails<T>(int orderId);
 
-        Task<int> CreateOrderAsync(AddOrderInputModel input);
+        Task<int> AddOrderAsync(AddOrderInputModel input);
 
         Task<int> EditOrderAsync(int orderId);
 
@@ -23,11 +23,21 @@
         // remember to recalcualte order grand total
         Task<int> DeleteOrderItemAsync(int orderItemId);
 
+        Task CancelOrderAsync(int orderId);
+
+        Task SetInProcessAsync(int orderId);
+
         Task RecalculateOrderTotal(int orderId);
 
-        Task<int> ShipOrderAsync(int orderId, string shippingMethod, string trackingNumber);
+        Task RecalculateOrderReservesAsync(int orderId);
+
+        Task<int> ShipOrderAsync(ShipOrderInputModel input);
 
         Task<int> AddCarrierAsync(string carrierName);
+
+        IEnumerable<T> GetAllCarriers<T>();
+
+        IEnumerable<T> GetAllServicesForCarrier<T>(int carrierId);
 
         Task<int> AddShippingMethodAsync(Carrier carrier, string shippingMethod);
 
@@ -37,7 +47,13 @@
 
         Task<int> GetCustomerOrdersAsync(int customerId);
 
-        Task<int> AddPaymentAsync(int orderId, decimal amount);
+        Task AddPaymentAsync<T>(T input);
+
+        IEnumerable<T> GetAllPayments<T>(int orderId);
+
+        Task DeletePaymentAsync(int paymentId);
+
+        Task RecalculatePaymentStatusAsync(int orderId);
 
         T GetCustomer<T>(string email);
     }

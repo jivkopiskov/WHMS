@@ -19,7 +19,7 @@
         </div>
         <div>
             <label asp-for="Channel"></label>
-            <select asp-items="@Html.GetEnumSelectList<Channel>()" class="form-control"></select>
+            <select asp-for="Channel" asp-items="@Html.GetEnumSelectList<Channel>()" class="form-control"></select>
         </div>
         <div class="row">
             <div class="col-sm-6">
@@ -76,8 +76,11 @@
                 <input asp-for="ShipByDate" class="form-control">
                 <span asp-validation-for="ShipByDate" class="text-danger"></span><br />
             </div>
+            <div class="col-sm-6">
+                <vc:warehouse-dropdown></vc:warehouse-dropdown>
+            </div>
         </div>
-        <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Orders" asp-action="AddOrder">Add Product</button>
+        <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Orders" asp-action="AddOrder">Add Order</button>
     </form>
 </div>
 

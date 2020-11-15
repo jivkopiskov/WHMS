@@ -1,0 +1,51 @@
+﻿@model ShipOrderInputModel
+
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Orders/ManageOrders">Manage Orders</a></li>
+            <li class="breadcrumb-item"><a href="/Orders/OrderDetails/@Model.OrderId">Order # @Model.OrderId </a></li>
+            <li class="breadcrumb-item active" aria-current="page">Ship order</li>
+        </ol>
+    </nav>
+}
+
+<h3>Ship order</h3>
+<div asp-validation-summary="All" class="text-danger"></div>
+<div class="mt-2">
+    <form asp-controller="Orders" asp-action="ShipOrder" method="post">
+        <input id="orderId" name="orderId" value="@Model.OrderId" hidden />
+        <div>
+            <div>
+                <label asp-for="ShippingMethod.Carrier"></label>
+                <select class="form-control col-sm-1" asp-for="ShippingMethod.Carrier" asp-items="@(new SelectList(Model.Carriers,"Id", "Name"))">
+                    <option>Select carrier</option>
+                </select>
+                <span asp-validation-for="ShippingMethod.Carrier" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="ShippingMethod.Name"></label>
+                <select class="form-control col-sm-2" asp-for="ShippingMethod.Name" asp-items="@(new SelectList(string.Empty,"Id", "Name"))"></select>
+                <span asp-validation-for="ShippingMethod.Name" class="text-danger"></span>
+            </div>
+        </div>
+
+        <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Orders" asp-action="ShipOrder">Add payment</button>
+    </form>
+</div>
+@section Scripts
+{
+    <script>
+        $('#ShippingMethod_Carrier').change(function () {
+            var url = '/Orders/GetMethodsForCarrier'
+            $.getJSON(url, { carrierId: $('#ShippingMethod_Carrier').val() }, function (data) {
+                var items = '<option>Select method</option>';
+                $("#ShippingMethod_Name").empty();
+                $.each(data, function (i, method) {
+                    items += "<option value='" + method.value + "'>" + method.text + "</option>";
+                });
+                $('#ShippingMethod_Name').html(items);
+            })
+        });
+    </script>
+}

@@ -7,6 +7,7 @@
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using WHMS.Data.Models;
     using WHMS.Services.Orders;
     using WHMS.Web.Infrastructure.ModelBinders;
@@ -46,7 +47,7 @@
             }
 
             input.CreatedById = this.userManager.GetUserId(this.User);
-            await this.ordersService.CreateOrderAsync(input);
+            await this.ordersService.AddOrderAsync(input);
 
             return this.RedirectToAction(nameof(this.ManageOrders));
         }
@@ -72,7 +73,97 @@
         public IActionResult OrderDetails(int id)
         {
             var model = this.ordersService.GetOrderDetails<OrderDetailsViewModel>(id);
+
             return this.View(model);
+        }
+
+        public IActionResult AddPayment(int id)
+        {
+            var model = new PaymentInputModel() { OrderId = id };
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddPayment(PaymentInputModel input)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(input);
+            }
+
+            await this.ordersService.AddPaymentAsync(input);
+
+            return this.RedirectToAction(nameof(this.OrderDetails), new { id = input.OrderId });
+        }
+
+        public IActionResult ManagePayments(int id)
+        {
+            var model = new ManagePaymentsViewModel() { OrderId = id };
+            model.OrderGrandTotal = this.ordersService.GetOrderDetails<OrderDetailsViewModel>(id).GrandTotal;
+            model.Payments = this.ordersService.GetAllPayments<PaymentViewModel>(id);
+            return this.View(model);
+        }
+
+        public async Task<IActionResult> DeletePayment(int id, int orderId)
+        {
+            await this.ordersService.DeletePaymentAsync(id);
+            return this.RedirectToAction(nameof(this.ManagePayments), new { id = orderId });
+        }
+
+        public async Task<IActionResult> CancelOrder([ValidOrder] int id)
+        {
+            if (this.ModelState.IsValid)
+            {
+                await this.ordersService.CancelOrderAsync(id);
+                this.TempData["CancelOrder"] = true;
+            }
+            else
+            {
+                this.TempData["CancelOrder"] = false;
+            }
+
+            return this.RedirectToAction(nameof(this.OrderDetails), new { id = id });
+        }
+
+        public async Task<IActionResult> SetInProcess([ValidOrder] int id)
+        {
+            if (this.ModelState.IsValid)
+            {
+                await this.ordersService.SetInProcessAsync(id);
+                this.TempData["InProcess"] = true;
+            }
+            else
+            {
+                this.TempData["InProcess"] = false;
+            }
+
+            return this.RedirectToAction(nameof(this.OrderDetails), new { id = id });
+        }
+
+        public IActionResult ShipOrder([ValidOrder] int id)
+        {
+            var model = new ShipOrderInputModel() { OrderId = id, Carriers = this.ordersService.GetAllCarriers<CarrierViewModel>() };
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public IActionResult ShipOrder(ShipOrderInputModel input)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            this.ordersService.ShipOrderAsync(input);
+
+            return this.RedirectToAction(nameof(this.OrderDetails), new { id = input.OrderId });
+        }
+
+        public JsonResult GetMethodsForCarrier(int carrierId)
+        {
+            var methods = this.ordersService.GetAllServicesForCarrier<ShippingMethodViewModel>(carrierId);
+            var result = new SelectList(methods, "Id", "Name");
+            return this.Json(result);
         }
 
         public IActionResult CheckCustomerAddress(string email)

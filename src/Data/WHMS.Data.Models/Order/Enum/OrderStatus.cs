@@ -5,6 +5,5 @@
         Processing = 0,
         Cancelled = 1,
         Completed = 2,
-        OnHold = 3,
     }
 }

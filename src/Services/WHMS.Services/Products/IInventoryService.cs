@@ -10,7 +10,7 @@
 
         int GetProductAvailableInventory(int productId);
 
-        Task RecalculateAvailableInventory(int productId);
+        Task RecalculateAvailableInventoryAsync(int productId);
 
         Task RecalculateReservedInventory(int productId, int warehouseId);
     }

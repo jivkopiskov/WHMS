@@ -1,0 +1,22 @@
+﻿@if (this.TempData.ContainsKey("CancelOrder"))
+{
+    if ((bool)this.TempData["CancelOrder"] == true)
+    {
+        <div class="alert alert-success" role="alert">The order was cancelled successfully!</div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">Order is already shipped. Cannot cancel the order!</div>
+    }
+}
+@if (this.TempData.ContainsKey("InProcess"))
+{
+    if ((bool)this.TempData["InProcess"] == true)
+    {
+        <div class="alert alert-success" role="alert">The order was set to In Process successfully!</div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">Order is already shipped. Cannot cancel the order!</div>
+    }
+}

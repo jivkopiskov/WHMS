@@ -4,6 +4,7 @@
     using System.Linq;
 
     using WHMS.Data;
+    using WHMS.Data.Models.Orders.Enum;
 
     public class ValidOrderAttribute : ValidationAttribute
     {
@@ -18,7 +19,14 @@
 
             if (context.Orders.Any(x => x.Id == id))
             {
-                return ValidationResult.Success;
+                if (context.Orders.Any(x => x.Id == id && x.ShippingStatus == ShippingStatus.Unshipped))
+                {
+                    return ValidationResult.Success;
+                }
+                else
+                {
+                    return new ValidationResult("Order is already shipped. You can't modify it.");
+                }
             }
 
             return new ValidationResult("There is no order with this Id");

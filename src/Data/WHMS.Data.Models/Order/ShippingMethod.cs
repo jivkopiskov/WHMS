@@ -6,6 +6,8 @@
 
     public class ShippingMethod : BaseDeletableModel<int>
     {
+        public int CarrierId { get; set; }
+
         public Carrier Carrier { get; set; }
 
         [Required]
