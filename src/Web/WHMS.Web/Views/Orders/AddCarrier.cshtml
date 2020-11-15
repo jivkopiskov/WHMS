@@ -1,0 +1,18 @@
+﻿@model CarrierViewModel
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="ManageCarriers">Manage Carriers</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Carrier</li>
+        </ol>
+    </nav>
+}
+<form asp-controller="Orders" asp-action="AddCarrier" method="post">
+    <div>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control col-md-3">
+        <span asp-validation-for="Name" class="text-danger"></span><br />
+    </div>
+    <button class="btn btn-outline-primary" asp-controller="Orders" asp-action="AddCarrier">Add Carrier</button>
+</form>

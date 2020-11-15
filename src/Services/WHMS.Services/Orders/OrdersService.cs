@@ -29,9 +29,19 @@
             this.mapper = AutoMapperConfig.MapperInstance;
         }
 
-        public Task<int> AddCarrierAsync(string carrierName)
+        public async Task<int> AddCarrierAsync(string carrierName)
         {
-            throw new NotImplementedException();
+            var carrier = this.context.Carriers.FirstOrDefault(c => c.Name.ToLower() == carrierName.ToLower());
+            if (carrier != null)
+            {
+                return carrier.Id;
+            }
+
+            carrier = new Carrier { Name = carrierName };
+            await this.context.AddAsync(carrier);
+            await this.context.SaveChangesAsync();
+
+            return carrier.Id;
         }
 
         public async Task<int> AddOrderItemAsync(AddOrderItemsInputModel input)
@@ -134,9 +144,19 @@
             await this.RecalculatePaymentStatusAsync(payment.OrderId);
         }
 
-        public Task<int> AddShippingMethodAsync(Carrier carrier, string shippingMethod)
+        public async Task<int> AddShippingMethodAsync(int carrierId, string shippingMethod)
         {
-            throw new NotImplementedException();
+            var newMethod = this.context.ShippingMethods.Where(sm => sm.CarrierId == carrierId).FirstOrDefault(sm => sm.Name.ToLower() == shippingMethod.ToLower());
+            if (newMethod != null)
+            {
+                return newMethod.Id;
+            }
+
+            newMethod = new ShippingMethod { Name = shippingMethod, CarrierId = carrierId };
+            await this.context.AddAsync(newMethod);
+            await this.context.SaveChangesAsync();
+
+            return newMethod.Id;
         }
 
         public Task<int> CreateCustomerAsync()
@@ -207,9 +227,36 @@
             await this.context.SaveChangesAsync();
         }
 
-        public Task<int> ShipOrderAsync(ShipOrderInputModel input)
+        public async Task ShipOrderAsync(ShipOrderInputModel input)
         {
-            throw new NotImplementedException();
+            var order = this.context.Orders.FirstOrDefault(x => x.Id == input.OrderId);
+            if (order.ShippingStatus == ShippingStatus.Shipped)
+            {
+                return;
+            }
+
+            order.ShippingMethod = this.context.ShippingMethods.FirstOrDefault(x => x.Id == input.ShippingMethod.Id);
+            order.ShippingStatus = ShippingStatus.Shipped;
+            order.TrackingNumber = input.TrackingNumber;
+            order.OrderStatus = OrderStatus.Completed;
+            await this.context.SaveChangesAsync();
+
+            await this.inventoryService.RecalculateInventoryAfterShippingAsync(order.Id, order.WarehouseId);
+        }
+
+        public async Task UnshipOrderAsync(int orderId)
+        {
+            var order = this.context.Orders.FirstOrDefault(x => x.Id == orderId);
+            if (order.ShippingStatus == ShippingStatus.Unshipped)
+            {
+                return;
+            }
+
+            order.ShippingStatus = ShippingStatus.Unshipped;
+            order.OrderStatus = OrderStatus.Processing;
+            await this.context.SaveChangesAsync();
+
+            await this.inventoryService.RecalculateInventoryAfterUnshippingAsync(order.Id, order.WarehouseId);
         }
 
         public T GetCustomer<T>(string email)

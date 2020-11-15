@@ -1,0 +1,31 @@
+﻿@model ManageShippingMethodsViewModel
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="ManageCarriers">Manage Carriers</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Manage services</li>
+        </ol>
+    </nav>
+}
+<a type="button" class="btn-primary p-2" asp-action="AddShippingMethod" asp-route-id="@Model.CarrierId" role="button">Add Shipping Service</a>
+
+<h3>@Model.CarrierName Services</h3>
+<table class="table table-hover table-striped col-sm-6">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Shipping method</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var method in Model.Methods)
+        {
+            <tr>
+                <td>@method.Id</td>
+                <td>@method.Name</td>
+                <th class="float-right"><a class="btn btn-danger align-items-end" asp-action="DeleteShippingMethod" asp-route-id="@method.Id">Delete</a></th>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,21 @@
+﻿@model ShippingMethodViewModel
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="ManageCarriers">Manage Carriers</a></li>
+            <li class="breadcrumb-item"><a asp-action="ManageShippingMethods" asp-route-id="@Model.CarrierId">Manage services</a></li>
+            <li class="breadcrumb-item"><a>Add service</a></li>
+        </ol>
+    </nav>
+}
+
+<form asp-controller="Orders" asp-action="AddShippingMethod" method="post">
+    <div>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <input asp-for="CarrierId" hidden value="@Model.CarrierId" />
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control col-md-3">
+        <span asp-validation-for="Name" class="text-danger"></span><br />
+    </div>
+    <button class="btn btn-outline-primary" asp-controller="Orders" asp-action="AddShippingMethod">Add Service</button>
+</form>

@@ -34,7 +34,7 @@
             var warehouses = this.context.Warehouses.ToList();
             foreach (var wh in warehouses)
             {
-                await this.RecalculateReservedInventory(productId, wh.Id);
+                await this.RecalculateReservedInventoryAsync(productId, wh.Id);
             }
 
             var productWarehouses = this.context.ProductWarehouses.Where(x => x.ProductId == productId).ToList();
@@ -46,7 +46,7 @@
             await this.context.SaveChangesAsync();
         }
 
-        public async Task RecalculateReservedInventory(int productId, int warehouseId)
+        public async Task RecalculateReservedInventoryAsync(int productId, int warehouseId)
         {
             var productWarehouse = await this.GetOrCreateProductWarehouseAsync(productId, warehouseId);
             productWarehouse.ReservedQuantity = this.context.OrderItems
@@ -82,6 +82,32 @@
             await this.RecalculateAvailableInventoryAsync(input.ProductId);
 
             return true;
+        }
+
+        public async Task RecalculateInventoryAfterShippingAsync(int orderId, int warehouseId)
+        {
+            var orderItems = this.context.OrderItems.Where(oi => oi.OrderId == orderId).ToList();
+
+            foreach (var item in orderItems)
+            {
+                var productWarehouse = await this.GetOrCreateProductWarehouseAsync(item.ProductId, warehouseId);
+                productWarehouse.TotalPhysicalQuanitiy -= item.Qty;
+                await this.context.SaveChangesAsync();
+                await this.RecalculateAvailableInventoryAsync(item.ProductId);
+            }
+        }
+
+        public async Task RecalculateInventoryAfterUnshippingAsync(int orderId, int warehouseId)
+        {
+            var orderItems = this.context.OrderItems.Where(oi => oi.OrderId == orderId).ToList();
+
+            foreach (var item in orderItems)
+            {
+                var productWarehouse = await this.GetOrCreateProductWarehouseAsync(item.ProductId, warehouseId);
+                productWarehouse.TotalPhysicalQuanitiy += item.Qty;
+                await this.context.SaveChangesAsync();
+                await this.RecalculateAvailableInventoryAsync(item.ProductId);
+            }
         }
 
         private async Task<ProductWarehouse> GetOrCreateProductWarehouseAsync(int productId, int warehouseId)

@@ -9,16 +9,7 @@
     </nav>
 }
 
-<a asp-action="ManagePayments" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Manage payments</a>
-@if (Model.OrderStatus == OrderStatus.Processing)
-{
-    <a asp-action="CancelOrder" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Cancel order</a>
-}
-else if (Model.OrderStatus == OrderStatus.Cancelled)
-{
-    <a asp-action="SetInProcess" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Set in process</a>
-}
-<a asp-action="ShipOrder" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Ship order</a>
+<partial name="_OrderDetailsActions" model="Model"/>
 <partial name="_ChangeOrderStatusAlert" />
 
 <table class="table">

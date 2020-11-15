@@ -6,7 +6,7 @@
     using WHMS.Data.Models.Orders;
     using WHMS.Services.Mapping;
 
-    public class CarrierViewModel : IMapFrom<Carrier>
+    public class CarrierViewModel : IMapFrom<Carrier>, IMapTo<Carrier>
     {
         public int Id { get; set; }
 

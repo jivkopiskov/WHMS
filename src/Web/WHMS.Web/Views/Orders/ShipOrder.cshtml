@@ -17,34 +17,39 @@
         <input id="orderId" name="orderId" value="@Model.OrderId" hidden />
         <div>
             <div>
-                <label asp-for="ShippingMethod.Carrier"></label>
-                <select class="form-control col-sm-1" asp-for="ShippingMethod.Carrier" asp-items="@(new SelectList(Model.Carriers,"Id", "Name"))">
+                <label asp-for="ShippingMethod.CarrierId"></label>
+                <select class="form-control col-sm-1" asp-for="ShippingMethod.CarrierId" asp-items="@(new SelectList(Model.Carriers,"Id", "Name"))">
                     <option>Select carrier</option>
                 </select>
-                <span asp-validation-for="ShippingMethod.Carrier" class="text-danger"></span>
+                <span asp-validation-for="ShippingMethod.CarrierId" class="text-danger"></span>
             </div>
             <div>
-                <label asp-for="ShippingMethod.Name"></label>
-                <select class="form-control col-sm-2" asp-for="ShippingMethod.Name" asp-items="@(new SelectList(string.Empty,"Id", "Name"))"></select>
-                <span asp-validation-for="ShippingMethod.Name" class="text-danger"></span>
+                <label asp-for="ShippingMethod.Id"></label>
+                <select class="form-control col-sm-2" asp-for="ShippingMethod.Id" asp-items="@(new SelectList(string.Empty,"Id", "Name"))"></select>
+                <span asp-validation-for="ShippingMethod.Id" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="TrackingNumber"></label>
+                <input class="form-control col-sm-2" asp-for="TrackingNumber"/>
+                <span asp-validation-for="TrackingNumber" class="text-danger"></span>
             </div>
         </div>
 
-        <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Orders" asp-action="ShipOrder">Add payment</button>
+        <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Orders" asp-action="ShipOrder">Ship order</button>
     </form>
 </div>
 @section Scripts
 {
     <script>
-        $('#ShippingMethod_Carrier').change(function () {
+        $('#ShippingMethod_CarrierId').change(function () {
             var url = '/Orders/GetMethodsForCarrier'
-            $.getJSON(url, { carrierId: $('#ShippingMethod_Carrier').val() }, function (data) {
+            $.getJSON(url, { carrierId: $('#ShippingMethod_CarrierId').val() }, function (data) {
                 var items = '<option>Select method</option>';
-                $("#ShippingMethod_Name").empty();
+                $("#ShippingMethod_Id").empty();
                 $.each(data, function (i, method) {
                     items += "<option value='" + method.value + "'>" + method.text + "</option>";
                 });
-                $('#ShippingMethod_Name').html(items);
+                $('#ShippingMethod_Id').html(items);
             })
         });
     </script>

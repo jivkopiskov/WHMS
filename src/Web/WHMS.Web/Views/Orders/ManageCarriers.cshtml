@@ -1,0 +1,23 @@
+﻿@model IEnumerable<CarrierViewModel>
+    <a type="button" class="btn-primary p-2" asp-action="AddCarrier" role="button">Add Carrier</a>
+
+    <h3>Carriers:</h3>
+    <table class="table table-hover table-striped col-sm-6">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Carrier</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var carrier in Model)
+            {
+                <tr>
+                    <td>@carrier.Id</td>
+                    <td>@carrier.Name</td>
+                    <th class="float-right"><a class="btn btn-info align-items-end" asp-action="ManageShippingMethods" asp-route-id="@carrier.Id">Manage services</a></th>
+                </tr>
+            }
+        </tbody>
+    </table>

@@ -31,7 +31,9 @@
 
         Task RecalculateOrderReservesAsync(int orderId);
 
-        Task<int> ShipOrderAsync(ShipOrderInputModel input);
+        Task ShipOrderAsync(ShipOrderInputModel input);
+
+        Task UnshipOrderAsync(int orderId);
 
         Task<int> AddCarrierAsync(string carrierName);
 
@@ -39,7 +41,7 @@
 
         IEnumerable<T> GetAllServicesForCarrier<T>(int carrierId);
 
-        Task<int> AddShippingMethodAsync(Carrier carrier, string shippingMethod);
+        Task<int> AddShippingMethodAsync(int carrierId, string shippingMethod);
 
         Task<int> CreateCustomerAsync();
 

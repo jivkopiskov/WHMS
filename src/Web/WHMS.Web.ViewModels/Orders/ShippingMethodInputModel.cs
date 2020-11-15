@@ -5,16 +5,12 @@
     using WHMS.Data.Models.Orders;
     using WHMS.Services.Mapping;
 
-    public class ShippingMethodViewModel : IMapFrom<ShippingMethod>
+    public class ShippingMethodInputModel
     {
+        [Display(Name = "Shipping method")]
         public int Id { get; set; }
 
+        [Display(Name = "Carrier")]
         public int CarrierId { get; set; }
-
-        public CarrierViewModel Carrier { get; set; }
-
-        [Required]
-        [MaxLength(50)]
-        public string Name { get; set; }
     }
 }

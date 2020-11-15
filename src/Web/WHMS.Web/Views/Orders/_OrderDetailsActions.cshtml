@@ -1,0 +1,19 @@
+﻿@model OrderDetailsViewModel
+
+<a asp-action="ManagePayments" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Manage payments</a>
+@if (Model.OrderStatus == OrderStatus.Processing)
+{
+    <a asp-action="CancelOrder" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Cancel order</a>
+}
+else if (Model.OrderStatus == OrderStatus.Cancelled)
+{
+    <a asp-action="SetInProcess" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Set in process</a>
+}
+@if (Model.ShippingStatus == ShippingStatus.Unshipped)
+{
+    <a asp-action="ShipOrder" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Ship order</a>
+}
+else
+{
+    <a asp-action="UnshipOrder" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Unship order</a>
+}

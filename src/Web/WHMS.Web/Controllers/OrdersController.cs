@@ -147,16 +147,70 @@
         }
 
         [HttpPost]
-        public IActionResult ShipOrder(ShipOrderInputModel input)
+        public async Task<IActionResult> ShipOrder(ShipOrderInputModel input)
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View();
+                var model = new ShipOrderInputModel() { OrderId = input.OrderId, Carriers = this.ordersService.GetAllCarriers<CarrierViewModel>() };
+                return this.View(model);
             }
 
-            this.ordersService.ShipOrderAsync(input);
+            await this.ordersService.ShipOrderAsync(input);
 
             return this.RedirectToAction(nameof(this.OrderDetails), new { id = input.OrderId });
+        }
+
+        public async Task<IActionResult> UnshipOrder(int id)
+        {
+            await this.ordersService.UnshipOrderAsync(id);
+
+            return this.RedirectToAction(nameof(this.OrderDetails), new { id = id });
+        }
+
+        public IActionResult ManageCarriers()
+        {
+            var model = this.ordersService.GetAllCarriers<CarrierViewModel>();
+            return this.View(model);
+        }
+
+        public IActionResult AddCarrier()
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCarrier(CarrierViewModel input)
+        {
+            await this.ordersService.AddCarrierAsync(input.Name);
+            return this.RedirectToAction(nameof(this.ManageCarriers));
+        }
+
+        public IActionResult ManageShippingMethods(int id)
+        {
+            var model = new ManageShippingMethodsViewModel();
+            model.Methods = this.ordersService.GetAllServicesForCarrier<ShippingMethodViewModel>(id);
+            model.CarrierName = this.ordersService.GetAllCarriers<CarrierViewModel>().FirstOrDefault(x => x.Id == id).Name;
+            model.CarrierId = id;
+
+            return this.View(model);
+        }
+
+        public IActionResult AddShippingMethod(int id)
+        {
+            var model = new ShippingMethodViewModel { CarrierId = id };
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddShippingMethod(ShippingMethodViewModel input)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(input);
+            }
+
+            await this.ordersService.AddShippingMethodAsync(input.CarrierId, input.Name);
+            return this.RedirectToAction(nameof(this.ManageShippingMethods), new { id = input.CarrierId });
         }
 
         public JsonResult GetMethodsForCarrier(int carrierId)
