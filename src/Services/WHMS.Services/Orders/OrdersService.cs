@@ -14,6 +14,7 @@
     using WHMS.Data.Models.Orders.Enum;
     using WHMS.Services.Mapping;
     using WHMS.Services.Products;
+    using WHMS.Web.ViewModels;
     using WHMS.Web.ViewModels.Orders;
 
     public class OrdersService : IOrdersService
@@ -278,6 +279,41 @@
         public IEnumerable<T> GetAllServicesForCarrier<T>(int carrierId)
         {
             return this.context.ShippingMethods.Where(x => x.CarrierId == carrierId).To<T>().ToList();
+        }
+
+        public IEnumerable<T> GetAllCustomers<T>(CustomersFilterInputModel input)
+        {
+            var customers = this.context.Customers.Where(c => c.IsDeleted == false);
+            if (!string.IsNullOrEmpty(input.Email))
+            {
+                customers = customers.Where(c => c.Email.Contains(input.Email));
+            }
+
+            if (!string.IsNullOrEmpty(input.PhoneNumber))
+            {
+                customers = customers.Where(c => c.PhoneNumber.Contains(input.PhoneNumber));
+            }
+
+            if (!string.IsNullOrEmpty(input.ZipCode))
+            {
+                customers = customers.Where(c => c.Address.ZIP.Contains(input.ZipCode));
+            }
+
+            customers = input.Sorting switch
+            {
+                CustomerSorting.Id => customers.OrderBy(x => x.Id),
+                CustomerSorting.IdDesc => customers.OrderByDescending(x => x.Id),
+                CustomerSorting.Alphabetically => customers.OrderBy(x => x.Email),
+                CustomerSorting.AlphabeticallyDesc => customers.OrderByDescending(x => x.Email),
+                CustomerSorting.NumberOfOrders => customers.OrderByDescending(x => x.Orders.Count()),
+                _ => customers,
+            };
+            return customers.To<T>().ToList();
+        }
+
+        public int CustomersCount()
+        {
+            return this.context.Customers.Count();
         }
     }
 }

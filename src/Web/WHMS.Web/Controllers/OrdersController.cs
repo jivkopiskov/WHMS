@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using WHMS.Common;
     using WHMS.Data.Models;
     using WHMS.Services.Orders;
     using WHMS.Web.Infrastructure.ModelBinders;
@@ -211,6 +212,19 @@
 
             await this.ordersService.AddShippingMethodAsync(input.CarrierId, input.Name);
             return this.RedirectToAction(nameof(this.ManageShippingMethods), new { id = input.CarrierId });
+        }
+
+        public IActionResult ManageCustomers(CustomersFilterInputModel input)
+        {
+            var model = new ManageCustomersViewModel()
+            {
+                Page = input.Page,
+                Customers = this.ordersService.GetAllCustomers<CustomerViewModel>(input),
+                PagesCount = (int)Math.Ceiling((double)this.ordersService.CustomersCount() / GlobalConstants.PageSize),
+                Filters = input,
+            };
+
+            return this.View(model);
         }
 
         public JsonResult GetMethodsForCarrier(int carrierId)

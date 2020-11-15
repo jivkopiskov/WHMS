@@ -58,5 +58,9 @@
         Task RecalculatePaymentStatusAsync(int orderId);
 
         T GetCustomer<T>(string email);
+
+        IEnumerable<T> GetAllCustomers<T>(CustomersFilterInputModel input);
+
+        int CustomersCount();
     }
 }

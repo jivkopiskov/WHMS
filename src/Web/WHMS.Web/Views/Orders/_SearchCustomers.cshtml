@@ -1,0 +1,27 @@
+﻿@model CustomersFilterInputModel
+<h5 class="h5"> Search filters</h5>
+<div class="row border-top my-3 bg-dark">
+    <form asp-controller="Orders" asp-action="ManageCustomers" method="get">
+        <div class="row text-white pb-2 ml-1">
+            <div class="col-sm-3">
+                <label asp-for="Email">Email Address</label>
+                <input asp-for="Email" value="@Model.Email" />
+            </div>
+            <div class="col-sm-3">
+                <label asp-for="PhoneNumber"></label>
+                <input asp-for="PhoneNumber" value="@Model.PhoneNumber" />
+            </div>
+            <div class="col-sm-3">
+                <label asp-for="ZipCode"></label>
+                <input asp-for="ZipCode" value="@Model.ZipCode" />
+            </div>
+            <div class="col-sm-2">
+                <label asp-for="Sorting">Sorting order</label>
+                <select class="justify-content-end" asp-for="Sorting" value="@Model.Sorting" asp-items="@Html.GetEnumSelectList<CustomerSorting>()"></select>
+            </div>
+
+        </div>
+
+        <button class="btn btn-light mt-2 ml-2" asp-controller="Orders" asp-action="ManageCustomers">Search</button>
+    </form>
+</div>
