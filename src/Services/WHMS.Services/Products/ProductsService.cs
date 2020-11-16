@@ -10,6 +10,7 @@
     using WHMS.Data.Models.Orders.Enum;
     using WHMS.Data.Models.Products;
     using WHMS.Services.Mapping;
+    using WHMS.Web.ViewModels;
     using WHMS.Web.ViewModels.Products;
 
     public class ProductsService : IProductsService
@@ -140,7 +141,16 @@
         private IQueryable<Product> FilterProducts(ProductFilterInputModel input)
         {
             var filteredList = this.context.Products.Where(x => x.IsDeleted == false);
-
+            filteredList = input.Sorting switch
+            {
+                ProductsSorting.Id => filteredList.OrderBy(p => p.Id),
+                ProductsSorting.IdDesc => filteredList.OrderByDescending(p => p.Id),
+                ProductsSorting.Alphabetically => filteredList.OrderBy(p => p.SKU),
+                ProductsSorting.AlphabeticallyDesc => filteredList.OrderByDescending(p => p.SKU),
+                ProductsSorting.Price => filteredList.OrderBy(p => p.WebsitePrice),
+                ProductsSorting.PriceDesc => filteredList.OrderByDescending(p => p.WebsitePrice),
+                _ => filteredList,
+            };
             if (!string.IsNullOrEmpty(input.Keyword))
             {
                 filteredList = filteredList.Where(x => x.SKU.Contains(input.Keyword) || x.ProductName.Contains(input.Keyword));

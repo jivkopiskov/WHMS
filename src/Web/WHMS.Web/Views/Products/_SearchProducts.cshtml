@@ -4,8 +4,8 @@
     <form asp-controller="Products" asp-action="ManageProducts" method="get">
         <div class="row text-white pb-2 ml-1">
             <div class="col-sm-3">
-                <label for="keyword">SKU / Product Name</label>
-                <input name="keyword" id="keyword" type="text" value="@Model.Keyword" />
+                <label asp-for="Keyword">SKU / Product Name</label>
+                <input asp-for="Keyword" class="form-control" value="@Model.Keyword" />
             </div>
             <div class="col-sm-3">
                 <vc:brand-dropdown id="Model?.BrandId ?? 0"></vc:brand-dropdown>
@@ -15,6 +15,10 @@
             </div>
             <div class="col-sm-3">
                 <vc:condition-dropdown id="Model?.ConditionId ?? 0"></vc:condition-dropdown>
+            </div>
+            <div class="col-sm-3">
+                <label asp-for="Sorting">Sorting</label>
+                <select asp-for="Sorting" asp-items="@Html.GetEnumSelectList<ProductsSorting>()" class="form-control" value="@Model.Sorting"></select>
             </div>
         </div>
 

@@ -17,20 +17,21 @@
         public Dictionary<string, string> ToDictionary()
         {
             var dict = new Dictionary<string, string>();
+            dict[nameof(this.Sorting)] = this.Sorting.ToString();
 
             if (!string.IsNullOrEmpty(this.Email))
             {
-                dict["email"] = this.Email;
+                dict[nameof(this.Email)] = this.Email;
             }
 
             if (!string.IsNullOrEmpty(this.PhoneNumber))
             {
-                dict["phoneNumber"] = this.PhoneNumber;
+                dict[nameof(this.PhoneNumber)] = this.PhoneNumber;
             }
 
             if (!string.IsNullOrEmpty(this.ZipCode))
             {
-                dict["zipCode"] = this.ZipCode;
+                dict[nameof(this.ZipCode)] = this.ZipCode;
             }
 
             return dict;

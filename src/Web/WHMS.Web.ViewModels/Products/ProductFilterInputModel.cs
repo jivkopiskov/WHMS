@@ -8,6 +8,8 @@
 
         public string Keyword { get; set; }
 
+        public ProductsSorting Sorting { get; set; }
+
         public int? BrandId { get; set; }
 
         public int? ManufacturerId { get; set; }
@@ -17,24 +19,26 @@
         public Dictionary<string, string> ToDictionary()
         {
             var dict = new Dictionary<string, string>();
+            dict[nameof(this.Sorting)] = this.Sorting.ToString();
+
             if (!string.IsNullOrEmpty(this.Keyword))
             {
-                dict["keyword"] = this.Keyword;
+                dict[nameof(this.Keyword)] = this.Keyword;
             }
 
             if (this.BrandId != null)
             {
-                dict["brandId"] = this.BrandId.ToString();
+                dict[nameof(this.BrandId)] = this.BrandId.ToString();
             }
 
             if (this.BrandId != null)
             {
-                dict["manufacturerId"] = this.ManufacturerId.ToString();
+                dict[nameof(this.ManufacturerId)] = this.ManufacturerId.ToString();
             }
 
             if (this.ConditionId != null)
             {
-                dict["conditionId"] = this.ConditionId.ToString();
+                dict[nameof(this.ConditionId)] = this.ConditionId.ToString();
             }
 
             return dict;
