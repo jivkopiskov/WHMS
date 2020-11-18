@@ -1,0 +1,38 @@
+﻿@model AddProductToOrderInputModel
+
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="ManageProducts">Manage Products</a></li>
+            <li class="breadcrumb-item"><a asp-action="ProductDetails" asp-route-id="@Model.ProductId">Product Details: @Model.ProductId</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add to order</li>
+        </ol>
+    </nav>
+}
+<h4 class="h4 mt-3">Add product to order</h4>
+<div class="mt-2">
+    <form asp-controller="Products" asp-action="AddProductToOrder" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div>
+            <div>
+                <label asp-for="ProductId">Product Id</label>
+                <input class="form-control" asp-for="ProductId" value="@Model.ProductId" />
+                <span asp-validation-for="ProductId" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="Qty">Qty</label>
+                <input class="form-control" asp-for="Qty" />
+                <span asp-validation-for="Qty" class="text-danger"></span>
+
+            </div>
+            <div>
+                <label asp-for="OrderId">Order Id</label>
+                <input class="form-control" asp-for="OrderId" />
+                <span asp-validation-for="OrderId" class="text-danger"></span>
+
+            </div>
+        </div>
+
+        <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="Products" asp-action="AddProductToOrder">Add order items</button>
+    </form>
+</div>

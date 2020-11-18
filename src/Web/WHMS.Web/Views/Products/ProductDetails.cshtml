@@ -1,14 +1,18 @@
 ﻿@model ProductDetailsViewModel
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
 @section Breadcrumbs{
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/Products/ManageProducts">Manage Products</a></li>            
+            <li class="breadcrumb-item"><a asp-action="ManageProducts">Manage Products</a></li>
             <li class="breadcrumb-item active" aria-current="page">Product Details: @Model.Id</li>
         </ol>
     </nav>
 }
 <div>
     <a class="btn btn-success" asp-controller="Products" asp-action="ManageInventory" asp-route-id="@Model.Id"> Manage Inventory </a>
+    <a class="btn btn-success" asp-controller="Products" asp-action="AddProductToOrder" asp-route-productId="@Model.Id"> Add to order</a>
 </div>
 @if (TempData.ContainsKey("success"))
 {
@@ -135,15 +139,11 @@
 </form>
 
 @section Scripts {
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.tiny.cloud/1/@this.Configuration["TinyMCEKey"]/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
     <script>
         tinymce.init({
             selector: '#LongDescription'
         });
-    </script>
-
-    <script>
-        setTimeout(() => { document.getElementsByClassName("tox tox-silver-sink tox-tinymce-aux")[0].style = "none" }, 100);
     </script>
 }

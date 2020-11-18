@@ -13,7 +13,9 @@
     using WHMS.Common;
     using WHMS.Data.Models;
     using WHMS.Data.Models.Products;
+    using WHMS.Services.Orders;
     using WHMS.Services.Products;
+    using WHMS.Web.ViewModels.Orders;
     using WHMS.Web.ViewModels.Products;
 
     [Authorize]
@@ -26,6 +28,7 @@
         private readonly IManufacturersService manufacturersService;
         private readonly IWarehouseService warehouseService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IOrdersService ordersService;
 
         public ProductsController(
             IProductsService productsService,
@@ -34,7 +37,8 @@
             IInventoryService inventoryService,
             IManufacturersService manufacturersService,
             IWarehouseService warehouseService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IOrdersService ordersSrvice)
         {
             this.productService = productsService;
             this.brandsService = brandsService;
@@ -43,6 +47,7 @@
             this.manufacturersService = manufacturersService;
             this.warehouseService = warehouseService;
             this.userManager = userManager;
+            this.ordersService = ordersSrvice;
         }
 
         #region products
@@ -100,6 +105,24 @@
             ProductDetailsViewModel product = await this.productService.EditProductAsync<ProductDetailsViewModel, ProductDetailsInputModel>(input);
             this.TempData["success"] = true;
             return this.ProductDetails(input.Id);
+        }
+
+        public IActionResult AddProductToOrder(int productId)
+        {
+            var model = new AddProductToOrderInputModel() { ProductId = productId };
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddProductToOrder(AddProductToOrderInputModel input)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(input);
+            }
+
+            await this.ordersService.AddOrderItemAsync(input);
+            return this.View();
         }
 
         public IActionResult ManageInventory(int id)

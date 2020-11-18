@@ -3,6 +3,15 @@
     var sku = @Model.FirstOrDefault().ProductSKU;
     var productId = Model.FirstOrDefault().ProductId;
 }
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="ManageProducts">Manage Products</a></li>
+            <li class="breadcrumb-item"><a asp-action="ProductDetails" asp-route-id="@productId">Product Details: @productId</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Manage inventory</li>
+        </ol>
+    </nav>
+}
 <h5 class="h5">Inventory for: @sku </h5>
 <div class="row">
     <table class="col-sm-6 table table-hover table-striped">
@@ -35,7 +44,7 @@
 
 <div>
     <h5 class="h5">Adjust Inventory</h5>
-    <form asp-controller="Products" asp-action="AdjustInventory"  method="post">
+    <form asp-controller="Products" asp-action="AdjustInventory" method="post">
         <div class="row">
             <div class="col-sm-3">
                 <vc:warehouse-dropdown id="0"></vc:warehouse-dropdown>

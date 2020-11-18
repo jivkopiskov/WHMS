@@ -3,8 +3,8 @@
 @section Breadcrumbs{
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/Orders/ManageOrders">Manage Orders</a></li>
-            <li class="breadcrumb-item"><a href="/Orders/OrderDetails/@Model.OrderId">Order # @Model.OrderId </a></li>
+            <li class="breadcrumb-item"><a asp-action="ManageOrders">Manage Orders</a></li>
+            <li class="breadcrumb-item"><a asp-action="OrderDetails" asp-route-id="@Model.OrderId">Order # @Model.OrderId </a></li>
             <li class="breadcrumb-item active" aria-current="page">Add Order Items</li>
         </ol>
     </nav>

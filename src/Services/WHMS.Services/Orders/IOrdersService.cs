@@ -5,6 +5,7 @@
 
     using WHMS.Data.Models.Orders;
     using WHMS.Web.ViewModels.Orders;
+    using WHMS.Web.ViewModels.Products;
 
     public interface IOrdersService
     {
@@ -17,6 +18,8 @@
         Task<int> EditOrderAsync(int orderId);
 
         Task<int> AddOrderItemAsync(AddOrderItemsInputModel input);
+
+        Task<int> AddOrderItemAsync(AddProductToOrderInputModel input);
 
         Task<int> EditOrderItemAsync(int orderItemId);
 

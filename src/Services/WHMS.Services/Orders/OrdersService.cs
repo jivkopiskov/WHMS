@@ -16,6 +16,7 @@
     using WHMS.Services.Products;
     using WHMS.Web.ViewModels;
     using WHMS.Web.ViewModels.Orders;
+    using WHMS.Web.ViewModels.Products;
 
     public class OrdersService : IOrdersService
     {
@@ -45,6 +46,29 @@
             return carrier.Id;
         }
 
+        public async Task<int> AddOrderItemAsync(AddProductToOrderInputModel input)
+        {
+            var order = this.context.Orders.FirstOrDefault(x => x.Id == input.OrderId);
+
+            var orderItem = this.context.OrderItems.FirstOrDefault(x => x.ProductId == input.ProductId && x.OrderId == input.OrderId);
+            if (orderItem == null)
+            {
+                orderItem = new OrderItem() { ProductId = input.ProductId, Qty = input.Qty };
+                var productPrices = this.context.Products.Where(x => x.Id == orderItem.ProductId).Select(x => new { WebsitePrice = x.WebsitePrice, WholesalePrice = x.WholesalePrice }).FirstOrDefault();
+                orderItem.Price = order.Channel == Channel.Wholesale ? productPrices.WholesalePrice : productPrices.WebsitePrice;
+                order.OrderItems.Add(orderItem);
+            }
+            else
+            {
+                orderItem.Qty += input.Qty;
+            }
+
+            await this.context.SaveChangesAsync();
+            await this.RecalculateOrderStatuses(input.OrderId);
+
+            return order.Id;
+        }
+
         public async Task<int> AddOrderItemAsync(AddOrderItemsInputModel input)
         {
             var order = this.context.Orders.FirstOrDefault(x => x.Id == input.OrderId);
@@ -69,10 +93,7 @@
             }
 
             await this.context.SaveChangesAsync();
-            await this.RecalculateOrderTotal(input.OrderId);
-            await this.RecalculatePaymentStatusAsync(input.OrderId);
-
-            await this.RecalculateOrderReservesAsync(input.OrderId);
+            await this.RecalculateOrderStatuses(input.OrderId);
 
             return order.Id;
         }
@@ -314,6 +335,13 @@
         public int CustomersCount()
         {
             return this.context.Customers.Count();
+        }
+
+        private async Task RecalculateOrderStatuses(int orderId)
+        {
+            await this.RecalculateOrderTotal(orderId);
+            await this.RecalculatePaymentStatusAsync(orderId);
+            await this.RecalculateOrderReservesAsync(orderId);
         }
     }
 }
