@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Text;
 
-    public class ManageOrdersViewModel
+    public class ManageOrdersViewModel : PagedViewModel
     {
         public IEnumerable<OrdersViewModel> Orders { get; set; }
 

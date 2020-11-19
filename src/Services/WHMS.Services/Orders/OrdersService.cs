@@ -9,6 +9,7 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Microsoft.EntityFrameworkCore;
+    using WHMS.Common;
     using WHMS.Data;
     using WHMS.Data.Models.Orders;
     using WHMS.Data.Models.Orders.Enum;
@@ -16,6 +17,7 @@
     using WHMS.Services.Products;
     using WHMS.Web.ViewModels;
     using WHMS.Web.ViewModels.Orders;
+    using WHMS.Web.ViewModels.Orders.Enums;
     using WHMS.Web.ViewModels.Products;
 
     public class OrdersService : IOrdersService
@@ -64,7 +66,7 @@
             }
 
             await this.context.SaveChangesAsync();
-            await this.RecalculateOrderStatuses(input.OrderId);
+            await this.RecalculateOrderStatusesAsync(input.OrderId);
 
             return order.Id;
         }
@@ -93,7 +95,7 @@
             }
 
             await this.context.SaveChangesAsync();
-            await this.RecalculateOrderStatuses(input.OrderId);
+            await this.RecalculateOrderStatusesAsync(input.OrderId);
 
             return order.Id;
         }
@@ -181,6 +183,13 @@
             return newMethod.Id;
         }
 
+        public async Task DeleteShippingMethodAsync(int id)
+        {
+            var method = this.context.ShippingMethods.FirstOrDefault(x => x.Id == id);
+            this.context.Remove(method);
+            await this.context.SaveChangesAsync();
+        }
+
         public Task<int> CreateCustomerAsync()
         {
             throw new NotImplementedException();
@@ -207,9 +216,14 @@
             return order.Id;
         }
 
-        public Task<int> DeleteOrderItemAsync(int orderItemId)
+        public async Task DeleteOrderItemAsync(int orderItemId)
         {
-            throw new NotImplementedException();
+            var oi = this.context.OrderItems.FirstOrDefault(x => x.Id == orderItemId);
+            var orderId = oi.OrderId;
+            this.context.OrderItems.Remove(oi);
+            await this.context.SaveChangesAsync();
+            await this.RecalculateOrderStatusesAsync(orderId);
+            await this.inventoryService.RecalculateAvailableInventoryAsync(oi.ProductId);
         }
 
         public Task<int> EditCustomerAsync(int customerId)
@@ -229,7 +243,20 @@
 
         public IEnumerable<T> GetAllOrders<T>(OrdersFilterInputModel input)
         {
-            return this.context.Orders.To<T>().ToList();
+            var orders = this.context.Orders.Where(x => x.IsDeleted == false);
+            var filteredList = this.FilterOrders(input, orders);
+            filteredList = filteredList.OrderByDescending(x => x.Id);
+
+            return filteredList
+                .Skip((input.Page - 1) * GlobalConstants.PageSize)
+                .Take(GlobalConstants.PageSize)
+                .To<T>()
+                .ToList();
+        }
+
+        public int GetAllOrdersCount()
+        {
+            return this.context.Orders.Where(x => !x.IsDeleted).Count();
         }
 
         public Task<int> GetCustomerOrdersAsync(int customerId)
@@ -305,6 +332,30 @@
         public IEnumerable<T> GetAllCustomers<T>(CustomersFilterInputModel input)
         {
             var customers = this.context.Customers.Where(c => c.IsDeleted == false);
+            customers = this.FilterCustomers(input, customers);
+            var result = customers
+               .Skip((input.Page - 1) * GlobalConstants.PageSize)
+               .Take(GlobalConstants.PageSize)
+               .To<T>()
+               .ToList();
+
+            return result;
+        }
+
+        public int CustomersCount()
+        {
+            return this.context.Customers.Count();
+        }
+
+        private async Task RecalculateOrderStatusesAsync(int orderId)
+        {
+            await this.RecalculateOrderTotal(orderId);
+            await this.RecalculatePaymentStatusAsync(orderId);
+            await this.RecalculateOrderReservesAsync(orderId);
+        }
+
+        private IQueryable<Customer> FilterCustomers(CustomersFilterInputModel input, IQueryable<Customer> customers)
+        {
             if (!string.IsNullOrEmpty(input.Email))
             {
                 customers = customers.Where(c => c.Email.Contains(input.Email));
@@ -329,19 +380,37 @@
                 CustomerSorting.NumberOfOrders => customers.OrderByDescending(x => x.Orders.Count()),
                 _ => customers,
             };
-            return customers.To<T>().ToList();
+            return customers;
         }
 
-        public int CustomersCount()
+        private IQueryable<Order> FilterOrders(OrdersFilterInputModel input, IQueryable<Order> orders)
         {
-            return this.context.Customers.Count();
-        }
+            if (input.PaymentStatus != null)
+            {
+                orders = orders.Where(x => x.PaymentStatus == input.PaymentStatus);
+            }
 
-        private async Task RecalculateOrderStatuses(int orderId)
-        {
-            await this.RecalculateOrderTotal(orderId);
-            await this.RecalculatePaymentStatusAsync(orderId);
-            await this.RecalculateOrderReservesAsync(orderId);
+            if (input.ShippingStatus != null)
+            {
+                orders = orders.Where(x => x.ShippingStatus == input.ShippingStatus);
+            }
+
+            if (input.OrderStatus != null)
+            {
+                orders = orders.Where(x => x.OrderStatus == input.OrderStatus);
+            }
+
+            if (!string.IsNullOrEmpty(input.SKU))
+            {
+                orders = orders.Where(x => x.OrderItems.Any(oi => oi.ProductId.ToString() == input.SKU || oi.Product.SKU == input.SKU));
+            }
+
+            if (!string.IsNullOrEmpty(input.CustomerEmail))
+            {
+                orders = orders.Where(x => x.Customer.Email == input.CustomerEmail);
+            }
+
+            return orders;
         }
     }
 }

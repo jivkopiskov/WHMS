@@ -9,7 +9,7 @@
     </nav>
 }
 
-<partial name="_OrderDetailsActions" model="Model"/>
+<partial name="_OrderDetailsActions" model="Model" />
 <partial name="_ChangeOrderStatusAlert" />
 
 <table class="table">
@@ -87,6 +87,10 @@
 <div class="mt-2">
     <h3 class="d-inline">Order items</h3>
     <a asp-action="AddOrderItems" asp-route-id="@Model.Id" class="btn btn-primary ml-3">Add order items</a>
+    @if (this.TempData.ContainsKey("invalidOrder") && (bool)this.TempData["invalidOrder"] == true)
+    {
+        <div class="alert alert-danger">Order is shipped or cancelled. Cannot delete order item.</div>
+    }
     <table class="table table-hover table-striped mt-2">
         <thead>
             <tr>
@@ -96,6 +100,7 @@
                 <th scope="col">Qty</th>
                 <th scope="col">Price</th>
                 <th scope="col">Line total</th>
+                <th scope="col">Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -108,6 +113,7 @@
                     <td>@oi.Qty</td>
                     <td>@oi.Price</td>
                     <td>@(oi.Qty * oi.Price)</td>
+                    <td><a class="btn btn-danger" asp-action="DeleteOrderItem" asp-route-orderId="@Model.Id" asp-route-Id="@oi.Id">Delete</a></td>
                 </tr>
             }
             <tr class="bg-secondary text-light">

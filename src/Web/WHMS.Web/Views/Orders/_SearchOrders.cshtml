@@ -1,0 +1,38 @@
+﻿@model OrdersFilterInputModel
+@using WHMS.Web.ViewModels.Orders.Enums
+
+<h5 class="h5"> Search filters</h5>
+<div class="row border-top my-3 bg-dark">
+    <form asp-controller="Orders" asp-action="ManageOrders" method="get">
+        <div class="row text-white pb-2 ml-1 d-flex justify-content-between">
+            <div class="col-sm-3">
+                <label asp-for="SKU"></label>
+                <input asp-for="SKU" class="form-control" value="@Model.SKU" />
+            </div>
+            <div class="col-sm-3">
+                <label asp-for="CustomerEmail"></label>
+                <input asp-for="CustomerEmail" class="form-control" value="@Model.CustomerEmail" />
+            </div>
+            <div class="col-sm-3">
+                <label asp-for="ShippingStatus"></label>
+                <select asp-for="ShippingStatus" asp-items="@Html.GetEnumSelectList<ShippingStatus>()" class="form-control" value="@Model.ShippingStatus">
+                    <option>Select</option>
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <label asp-for="PaymentStatus"></label>
+                <select asp-for="PaymentStatus" asp-items="@Html.GetEnumSelectList<PaymentStatus>()" class="form-control" value="@Model.PaymentStatus">
+                    <option>Select</option>
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <label asp-for="OrderStatus">                
+                </label>
+                <select asp-for="OrderStatus" asp-items="@Html.GetEnumSelectList<PaymentStatus>()" class="form-control" value="@Model.OrderStatus">
+                    <option>Select</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn btn-light mt-2 ml-2" asp-controller="Orders" asp-action="ManageOrders">Search</button>
+    </form>
+</div>

@@ -4,32 +4,42 @@
     <a type="button" class="btn-success p-2 mb-4" href="/Orders/AddOrder" role="button">Add order</a>
 </div>
 
-<table class="table table-hover table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Order #</th>
-            <th scope="col">Order Source</th>
-            <th scope="col">Order Source Order #</th>
-            <th scope="col">Customer Name</th>
-            <th scope="col">Grand Total</th>
-            <th scope="col">Order Status</th>
-            <th scope="col">Payment Status</th>
-            <th scope="col">Shipping Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var order in Model.Orders)
-        {
+<partial name="_SearchOrders" model="Model.Filters"/>
+
+<div class="row">
+    <table class="table table-hover table-striped">
+        <thead>
             <tr>
-                <td><a asp-controller="Orders" asp-action="OrderDetails" asp-route-id="@order.Id">@order.Id</a></td>
-                <td>@order.Channel.ToString()</td>
-                <td>@order.SourceOrderId</td>
-                <td>@order.CustomerName</td>
-                <td>@order.GrandTotal</td>
-                <td>@order.OrderStatus.ToString()</td>
-                <td>@order.PaymentStatus.ToString()</td>
-                <td>@order.ShippingStatus.ToString()</td>
+                <th scope="col">Order #</th>
+                <th scope="col">Order Source</th>
+                <th scope="col">Order Source Order #</th>
+                <th scope="col">Customer Name</th>
+                <th scope="col">Grand Total</th>
+                <th scope="col">Order Status</th>
+                <th scope="col">Payment Status</th>
+                <th scope="col">Shipping Status</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.Orders)
+            {
+                <tr>
+                    <td><a asp-controller="Orders" asp-action="OrderDetails" asp-route-id="@order.Id">@order.Id</a></td>
+                    <td>@order.Channel.ToString()</td>
+                    <td>@order.SourceOrderId</td>
+                    <td>@order.CustomerName</td>
+                    <td>@order.GrandTotal</td>
+                    <td>@order.OrderStatus.ToString()</td>
+                    <td>@order.PaymentStatus.ToString()</td>
+                    <td>@order.ShippingStatus.ToString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @{
+        ViewData["controller"] = "Orders";
+        ViewData["action"] = "ManageOrders";
+    }
+</div>
+    <partial name="_PagingWithFilters" for="@Model" />

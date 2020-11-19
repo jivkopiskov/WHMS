@@ -23,6 +23,8 @@
     <Compile Remove="Migrations\20201028183752_ProductConditionName.Designer.cs" />
     <Compile Remove="Migrations\20201108124240_OrderCreatedByField.cs" />
     <Compile Remove="Migrations\20201108124240_OrderCreatedByField.Designer.cs" />
+    <Compile Remove="Migrations\20201119205349_OrderItemPrimaryKeyChange.cs" />
+    <Compile Remove="Migrations\20201119205349_OrderItemPrimaryKeyChange.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

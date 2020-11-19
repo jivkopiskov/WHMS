@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
 
+    using WHMS.Web.ViewModels.Products.Enums;
+
     public class ProductFilterInputModel
     {
         public int Page { get; set; } = 1;

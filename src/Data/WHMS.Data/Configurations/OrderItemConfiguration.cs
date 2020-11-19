@@ -9,8 +9,6 @@
     {
         public void Configure(EntityTypeBuilder<OrderItem> orderItem)
         {
-            orderItem.HasKey(x => new { x.OrderId, x.ProductId });
-
             orderItem.HasOne(oi => oi.Order)
                 .WithMany(o => o.OrderItems);
 

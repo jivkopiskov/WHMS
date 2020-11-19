@@ -11,6 +11,8 @@
     {
         IEnumerable<T> GetAllOrders<T>(OrdersFilterInputModel input);
 
+        int GetAllOrdersCount();
+
         T GetOrderDetails<T>(int orderId);
 
         Task<int> AddOrderAsync(AddOrderInputModel input);
@@ -24,7 +26,7 @@
         Task<int> EditOrderItemAsync(int orderItemId);
 
         // remember to recalcualte order grand total
-        Task<int> DeleteOrderItemAsync(int orderItemId);
+        Task DeleteOrderItemAsync(int orderItemId);
 
         Task CancelOrderAsync(int orderId);
 
@@ -45,6 +47,8 @@
         IEnumerable<T> GetAllServicesForCarrier<T>(int carrierId);
 
         Task<int> AddShippingMethodAsync(int carrierId, string shippingMethod);
+
+        Task DeleteShippingMethodAsync(int id);
 
         Task<int> CreateCustomerAsync();
 

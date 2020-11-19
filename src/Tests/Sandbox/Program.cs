@@ -17,6 +17,7 @@
     using WHMS.Data.Models;
     using WHMS.Data.Seeding;
     using WHMS.Services.Data;
+    using WHMS.Services.Data.Common;
     using WHMS.Services.Messaging;
 
     public static class Program

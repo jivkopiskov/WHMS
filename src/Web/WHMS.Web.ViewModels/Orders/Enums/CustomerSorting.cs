@@ -1,4 +1,4 @@
-﻿namespace WHMS.Web.ViewModels
+﻿namespace WHMS.Web.ViewModels.Orders.Enums
 {
     using System.ComponentModel.DataAnnotations;
 

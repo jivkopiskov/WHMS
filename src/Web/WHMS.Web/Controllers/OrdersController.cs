@@ -29,8 +29,14 @@
 
         public IActionResult ManageOrders(OrdersFilterInputModel input)
         {
-            var model = new ManageOrdersViewModel();
-            model.Orders = this.ordersService.GetAllOrders<OrdersViewModel>(input);
+            var model = new ManageOrdersViewModel()
+            {
+                Page = input.Page,
+                Filters = input,
+                Orders = this.ordersService.GetAllOrders<OrdersViewModel>(input),
+                PagesCount = (int)Math.Ceiling((double)this.ordersService.GetAllOrdersCount() / GlobalConstants.PageSize),
+            };
+
             return this.View(model);
         }
 
@@ -69,6 +75,20 @@
 
             await this.ordersService.AddOrderItemAsync(input);
             return this.View(input);
+        }
+
+        public async Task<IActionResult> DeleteOrderItem([ValidOrder] int orderId, int id)
+        {
+            if (this.ModelState.IsValid)
+            {
+                await this.ordersService.DeleteOrderItemAsync(id);
+            }
+            else
+            {
+                this.TempData["invalidOrder"] = true;
+            }
+
+            return this.RedirectToAction(nameof(this.OrderDetails), new { id = orderId });
         }
 
         public IActionResult OrderDetails(int id)
@@ -212,6 +232,13 @@
 
             await this.ordersService.AddShippingMethodAsync(input.CarrierId, input.Name);
             return this.RedirectToAction(nameof(this.ManageShippingMethods), new { id = input.CarrierId });
+        }
+
+        public async Task<IActionResult> DeleteShippingMethod(int id, int carrierId)
+        {
+            await this.ordersService.DeleteShippingMethodAsync(id);
+
+            return this.RedirectToAction(nameof(this.ManageShippingMethods), new { id = carrierId });
         }
 
         public IActionResult ManageCustomers(CustomersFilterInputModel input)

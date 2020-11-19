@@ -122,7 +122,7 @@
             }
 
             await this.ordersService.AddOrderItemAsync(input);
-            return this.View();
+            return this.Redirect("/Orders/OrderDetails/" + input.OrderId);
         }
 
         public IActionResult ManageInventory(int id)

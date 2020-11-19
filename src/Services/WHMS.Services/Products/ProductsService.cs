@@ -12,6 +12,7 @@
     using WHMS.Services.Mapping;
     using WHMS.Web.ViewModels;
     using WHMS.Web.ViewModels.Products;
+    using WHMS.Web.ViewModels.Products.Enums;
 
     public class ProductsService : IProductsService
     {
@@ -85,7 +86,7 @@
 
         public IEnumerable<T> GetAllProducts<T>(ProductFilterInputModel input)
         {
-            IQueryable<Product> filteredList = this.FilterProducts(input);
+            var filteredList = this.FilterProducts(input);
 
             var products =
                 filteredList

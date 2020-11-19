@@ -9,6 +9,8 @@
 
     public class OrderItemViewModel : IHaveCustomMappings
     {
+        public int Id { get; set; }
+
         public int ProductId { get; set; }
 
         public string ProductSKU { get; set; }

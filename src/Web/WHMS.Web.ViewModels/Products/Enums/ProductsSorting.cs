@@ -1,4 +1,4 @@
-﻿namespace WHMS.Web.ViewModels
+﻿namespace WHMS.Web.ViewModels.Products.Enums
 {
     using System.ComponentModel.DataAnnotations;
 

@@ -24,7 +24,11 @@
             <tr>
                 <td>@method.Id</td>
                 <td>@method.Name</td>
-                <th class="float-right"><a class="btn btn-danger align-items-end" asp-action="DeleteShippingMethod" asp-route-id="@method.Id">Delete</a></th>
+                <th class="float-right">
+                    <a class="btn btn-danger align-items-end" asp-action="DeleteShippingMethod" asp-route-id="@method.Id" asp-route-carrierId="@Model.CarrierId">
+                        Delete
+                    </a>
+                </th>
             </tr>
         }
     </tbody>
