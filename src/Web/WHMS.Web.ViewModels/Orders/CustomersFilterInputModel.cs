@@ -4,7 +4,7 @@
 
     using WHMS.Web.ViewModels.Orders.Enums;
 
-    public class CustomersFilterInputModel
+    public class CustomersFilterInputModel : IFilter
     {
         public int Page { get; set; } = 1;
 

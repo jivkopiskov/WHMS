@@ -5,7 +5,5 @@
     public class ManageProductsViewModel : PagedViewModel
     {
         public IEnumerable<ProductsViewModel> Products { get; set; }
-
-        public ProductFilterInputModel Filters { get; set; }
     }
 }

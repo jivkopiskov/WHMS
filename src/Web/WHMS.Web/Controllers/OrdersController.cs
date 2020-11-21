@@ -20,11 +20,22 @@
     {
         private readonly IOrdersService ordersService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly ICustomersService customersService;
+        private readonly IOrderItemsService orderItemsService;
+        private readonly IShippingService shippingService;
 
-        public OrdersController(IOrdersService ordersService, UserManager<ApplicationUser> userManager)
+        public OrdersController(
+            IOrdersService ordersService,
+            UserManager<ApplicationUser> userManager,
+            ICustomersService customersService,
+            IOrderItemsService orderItemsService,
+            IShippingService shippingService)
         {
             this.ordersService = ordersService;
             this.userManager = userManager;
+            this.customersService = customersService;
+            this.orderItemsService = orderItemsService;
+            this.shippingService = shippingService;
         }
 
         public IActionResult ManageOrders(OrdersFilterInputModel input)
@@ -73,7 +84,7 @@
                 return this.View(input);
             }
 
-            await this.ordersService.AddOrderItemAsync(input);
+            await this.orderItemsService.AddOrderItemAsync(input);
             return this.View(input);
         }
 
@@ -81,7 +92,7 @@
         {
             if (this.ModelState.IsValid)
             {
-                await this.ordersService.DeleteOrderItemAsync(id);
+                await this.orderItemsService.DeleteOrderItemAsync(id);
             }
             else
             {
@@ -163,7 +174,7 @@
 
         public IActionResult ShipOrder([ValidOrder] int id)
         {
-            var model = new ShipOrderInputModel() { OrderId = id, Carriers = this.ordersService.GetAllCarriers<CarrierViewModel>() };
+            var model = new ShipOrderInputModel() { OrderId = id, Carriers = this.shippingService.GetAllCarriers<CarrierViewModel>() };
             return this.View(model);
         }
 
@@ -172,25 +183,25 @@
         {
             if (!this.ModelState.IsValid)
             {
-                var model = new ShipOrderInputModel() { OrderId = input.OrderId, Carriers = this.ordersService.GetAllCarriers<CarrierViewModel>() };
+                var model = new ShipOrderInputModel() { OrderId = input.OrderId, Carriers = this.shippingService.GetAllCarriers<CarrierViewModel>() };
                 return this.View(model);
             }
 
-            await this.ordersService.ShipOrderAsync(input);
+            await this.shippingService.ShipOrderAsync(input);
 
             return this.RedirectToAction(nameof(this.OrderDetails), new { id = input.OrderId });
         }
 
         public async Task<IActionResult> UnshipOrder(int id)
         {
-            await this.ordersService.UnshipOrderAsync(id);
+            await this.shippingService.UnshipOrderAsync(id);
 
             return this.RedirectToAction(nameof(this.OrderDetails), new { id = id });
         }
 
         public IActionResult ManageCarriers()
         {
-            var model = this.ordersService.GetAllCarriers<CarrierViewModel>();
+            var model = this.shippingService.GetAllCarriers<CarrierViewModel>();
             return this.View(model);
         }
 
@@ -202,15 +213,15 @@
         [HttpPost]
         public async Task<IActionResult> AddCarrier(CarrierViewModel input)
         {
-            await this.ordersService.AddCarrierAsync(input.Name);
+            await this.shippingService.AddCarrierAsync(input.Name);
             return this.RedirectToAction(nameof(this.ManageCarriers));
         }
 
         public IActionResult ManageShippingMethods(int id)
         {
             var model = new ManageShippingMethodsViewModel();
-            model.Methods = this.ordersService.GetAllServicesForCarrier<ShippingMethodViewModel>(id);
-            model.CarrierName = this.ordersService.GetAllCarriers<CarrierViewModel>().FirstOrDefault(x => x.Id == id).Name;
+            model.Methods = this.shippingService.GetAllServicesForCarrier<ShippingMethodViewModel>(id);
+            model.CarrierName = this.shippingService.GetAllCarriers<CarrierViewModel>().FirstOrDefault(x => x.Id == id).Name;
             model.CarrierId = id;
 
             return this.View(model);
@@ -230,13 +241,13 @@
                 return this.View(input);
             }
 
-            await this.ordersService.AddShippingMethodAsync(input.CarrierId, input.Name);
+            await this.shippingService.AddShippingMethodAsync(input.CarrierId, input.Name);
             return this.RedirectToAction(nameof(this.ManageShippingMethods), new { id = input.CarrierId });
         }
 
         public async Task<IActionResult> DeleteShippingMethod(int id, int carrierId)
         {
-            await this.ordersService.DeleteShippingMethodAsync(id);
+            await this.shippingService.DeleteShippingMethodAsync(id);
 
             return this.RedirectToAction(nameof(this.ManageShippingMethods), new { id = carrierId });
         }
@@ -246,8 +257,8 @@
             var model = new ManageCustomersViewModel()
             {
                 Page = input.Page,
-                Customers = this.ordersService.GetAllCustomers<CustomerViewModel>(input),
-                PagesCount = (int)Math.Ceiling((double)this.ordersService.CustomersCount() / GlobalConstants.PageSize),
+                Customers = this.customersService.GetAllCustomers<CustomerViewModel>(input),
+                PagesCount = (int)Math.Ceiling((double)this.customersService.CustomersCount() / GlobalConstants.PageSize),
                 Filters = input,
             };
 
@@ -256,14 +267,14 @@
 
         public JsonResult GetMethodsForCarrier(int carrierId)
         {
-            var methods = this.ordersService.GetAllServicesForCarrier<ShippingMethodViewModel>(carrierId);
+            var methods = this.shippingService.GetAllServicesForCarrier<ShippingMethodViewModel>(carrierId);
             var result = new SelectList(methods, "Id", "Name");
             return this.Json(result);
         }
 
         public IActionResult CheckCustomerAddress(string email)
         {
-            var model = this.ordersService.GetCustomer<CustomerViewModel>(email);
+            var model = this.customersService.GetCustomer<CustomerViewModel>(email);
             return this.Json(model);
         }
     }

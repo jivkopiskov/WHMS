@@ -24,80 +24,15 @@
     {
         private readonly WHMSDbContext context;
         private readonly IInventoryService inventoryService;
+        private readonly ICustomersService customersService;
         private IMapper mapper;
 
-        public OrdersService(WHMSDbContext context, IInventoryService inventoryService)
+        public OrdersService(WHMSDbContext context, IInventoryService inventoryService, ICustomersService customersService)
         {
             this.context = context;
             this.inventoryService = inventoryService;
+            this.customersService = customersService;
             this.mapper = AutoMapperConfig.MapperInstance;
-        }
-
-        public async Task<int> AddCarrierAsync(string carrierName)
-        {
-            var carrier = this.context.Carriers.FirstOrDefault(c => c.Name.ToLower() == carrierName.ToLower());
-            if (carrier != null)
-            {
-                return carrier.Id;
-            }
-
-            carrier = new Carrier { Name = carrierName };
-            await this.context.AddAsync(carrier);
-            await this.context.SaveChangesAsync();
-
-            return carrier.Id;
-        }
-
-        public async Task<int> AddOrderItemAsync(AddProductToOrderInputModel input)
-        {
-            var order = this.context.Orders.FirstOrDefault(x => x.Id == input.OrderId);
-
-            var orderItem = this.context.OrderItems.FirstOrDefault(x => x.ProductId == input.ProductId && x.OrderId == input.OrderId);
-            if (orderItem == null)
-            {
-                orderItem = new OrderItem() { ProductId = input.ProductId, Qty = input.Qty };
-                var productPrices = this.context.Products.Where(x => x.Id == orderItem.ProductId).Select(x => new { WebsitePrice = x.WebsitePrice, WholesalePrice = x.WholesalePrice }).FirstOrDefault();
-                orderItem.Price = order.Channel == Channel.Wholesale ? productPrices.WholesalePrice : productPrices.WebsitePrice;
-                order.OrderItems.Add(orderItem);
-            }
-            else
-            {
-                orderItem.Qty += input.Qty;
-            }
-
-            await this.context.SaveChangesAsync();
-            await this.RecalculateOrderStatusesAsync(input.OrderId);
-
-            return order.Id;
-        }
-
-        public async Task<int> AddOrderItemAsync(AddOrderItemsInputModel input)
-        {
-            var order = this.context.Orders.FirstOrDefault(x => x.Id == input.OrderId);
-            foreach (var item in input.OrderItems)
-            {
-                var orderItem = this.context.OrderItems.FirstOrDefault(x => x.ProductId == item.ProductId && x.OrderId == input.OrderId);
-                if (orderItem == null)
-                {
-                    orderItem = new OrderItem() { ProductId = item.ProductId, Qty = item.Qty };
-                    var productPrices = this.context.Products.Where(x => x.Id == orderItem.ProductId).Select(x => new { WebsitePrice = x.WebsitePrice, WholesalePrice = x.WholesalePrice }).FirstOrDefault();
-                    orderItem.Price = order.Channel == Channel.Wholesale ? productPrices.WholesalePrice : productPrices.WebsitePrice;
-                    order.OrderItems.Add(orderItem);
-                }
-                else
-                {
-                    orderItem.Qty += item.Qty;
-                    if (orderItem.Qty == 0)
-                    {
-                        this.context.OrderItems.Remove(orderItem);
-                    }
-                }
-            }
-
-            await this.context.SaveChangesAsync();
-            await this.RecalculateOrderStatusesAsync(input.OrderId);
-
-            return order.Id;
         }
 
         public async Task RecalculateOrderReservesAsync(int orderId)
@@ -168,36 +103,9 @@
             await this.RecalculatePaymentStatusAsync(payment.OrderId);
         }
 
-        public async Task<int> AddShippingMethodAsync(int carrierId, string shippingMethod)
-        {
-            var newMethod = this.context.ShippingMethods.Where(sm => sm.CarrierId == carrierId).FirstOrDefault(sm => sm.Name.ToLower() == shippingMethod.ToLower());
-            if (newMethod != null)
-            {
-                return newMethod.Id;
-            }
-
-            newMethod = new ShippingMethod { Name = shippingMethod, CarrierId = carrierId };
-            await this.context.AddAsync(newMethod);
-            await this.context.SaveChangesAsync();
-
-            return newMethod.Id;
-        }
-
-        public async Task DeleteShippingMethodAsync(int id)
-        {
-            var method = this.context.ShippingMethods.FirstOrDefault(x => x.Id == id);
-            this.context.Remove(method);
-            await this.context.SaveChangesAsync();
-        }
-
-        public Task<int> CreateCustomerAsync()
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<int> AddOrderAsync(AddOrderInputModel input)
         {
-            var customer = this.GetCustomer<Customer>(input.Customer.Email);
+            var customer = this.customersService.GetCustomer<Customer>(input.Customer.Email);
             customer = this.mapper.Map<CustomerViewModel, Customer>(input.Customer, customer);
             var order = this.mapper.Map<Order>(input);
             order.Customer = customer;
@@ -216,27 +124,7 @@
             return order.Id;
         }
 
-        public async Task DeleteOrderItemAsync(int orderItemId)
-        {
-            var oi = this.context.OrderItems.FirstOrDefault(x => x.Id == orderItemId);
-            var orderId = oi.OrderId;
-            this.context.OrderItems.Remove(oi);
-            await this.context.SaveChangesAsync();
-            await this.RecalculateOrderStatusesAsync(orderId);
-            await this.inventoryService.RecalculateAvailableInventoryAsync(oi.ProductId);
-        }
-
-        public Task<int> EditCustomerAsync(int customerId)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<int> EditOrderAsync(int orderId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> EditOrderItemAsync(int orderItemId)
         {
             throw new NotImplementedException();
         }
@@ -259,11 +147,6 @@
             return this.context.Orders.Where(x => !x.IsDeleted).Count();
         }
 
-        public Task<int> GetCustomerOrdersAsync(int customerId)
-        {
-            throw new NotImplementedException();
-        }
-
         public T GetOrderDetails<T>(int orderId)
         {
             return this.context.Orders.Where(x => x.Id == orderId).To<T>().FirstOrDefault();
@@ -276,111 +159,11 @@
             await this.context.SaveChangesAsync();
         }
 
-        public async Task ShipOrderAsync(ShipOrderInputModel input)
-        {
-            var order = this.context.Orders.FirstOrDefault(x => x.Id == input.OrderId);
-            if (order.ShippingStatus == ShippingStatus.Shipped)
-            {
-                return;
-            }
-
-            order.ShippingMethod = this.context.ShippingMethods.FirstOrDefault(x => x.Id == input.ShippingMethod.Id);
-            order.ShippingStatus = ShippingStatus.Shipped;
-            order.TrackingNumber = input.TrackingNumber;
-            order.OrderStatus = OrderStatus.Completed;
-            await this.context.SaveChangesAsync();
-
-            await this.inventoryService.RecalculateInventoryAfterShippingAsync(order.Id, order.WarehouseId);
-        }
-
-        public async Task UnshipOrderAsync(int orderId)
-        {
-            var order = this.context.Orders.FirstOrDefault(x => x.Id == orderId);
-            if (order.ShippingStatus == ShippingStatus.Unshipped)
-            {
-                return;
-            }
-
-            order.ShippingStatus = ShippingStatus.Unshipped;
-            order.OrderStatus = OrderStatus.Processing;
-            await this.context.SaveChangesAsync();
-
-            await this.inventoryService.RecalculateInventoryAfterUnshippingAsync(order.Id, order.WarehouseId);
-        }
-
-        public T GetCustomer<T>(string email)
-        {
-            var customer = this.context.Customers.Include(x => x.Address).FirstOrDefault(x => x.Email == email);
-            if (customer == null)
-            {
-                return default(T);
-            }
-
-            return this.mapper.Map<T>(customer);
-        }
-
-        public IEnumerable<T> GetAllCarriers<T>()
-        {
-            return this.context.Carriers.To<T>().ToList();
-        }
-
-        public IEnumerable<T> GetAllServicesForCarrier<T>(int carrierId)
-        {
-            return this.context.ShippingMethods.Where(x => x.CarrierId == carrierId).To<T>().ToList();
-        }
-
-        public IEnumerable<T> GetAllCustomers<T>(CustomersFilterInputModel input)
-        {
-            var customers = this.context.Customers.Where(c => c.IsDeleted == false);
-            customers = this.FilterCustomers(input, customers);
-            var result = customers
-               .Skip((input.Page - 1) * GlobalConstants.PageSize)
-               .Take(GlobalConstants.PageSize)
-               .To<T>()
-               .ToList();
-
-            return result;
-        }
-
-        public int CustomersCount()
-        {
-            return this.context.Customers.Count();
-        }
-
-        private async Task RecalculateOrderStatusesAsync(int orderId)
+        public async Task RecalculateOrderStatusesAsync(int orderId)
         {
             await this.RecalculateOrderTotal(orderId);
             await this.RecalculatePaymentStatusAsync(orderId);
             await this.RecalculateOrderReservesAsync(orderId);
-        }
-
-        private IQueryable<Customer> FilterCustomers(CustomersFilterInputModel input, IQueryable<Customer> customers)
-        {
-            if (!string.IsNullOrEmpty(input.Email))
-            {
-                customers = customers.Where(c => c.Email.Contains(input.Email));
-            }
-
-            if (!string.IsNullOrEmpty(input.PhoneNumber))
-            {
-                customers = customers.Where(c => c.PhoneNumber.Contains(input.PhoneNumber));
-            }
-
-            if (!string.IsNullOrEmpty(input.ZipCode))
-            {
-                customers = customers.Where(c => c.Address.ZIP.Contains(input.ZipCode));
-            }
-
-            customers = input.Sorting switch
-            {
-                CustomerSorting.Id => customers.OrderBy(x => x.Id),
-                CustomerSorting.IdDesc => customers.OrderByDescending(x => x.Id),
-                CustomerSorting.Alphabetically => customers.OrderBy(x => x.Email),
-                CustomerSorting.AlphabeticallyDesc => customers.OrderByDescending(x => x.Email),
-                CustomerSorting.NumberOfOrders => customers.OrderByDescending(x => x.Orders.Count()),
-                _ => customers,
-            };
-            return customers;
         }
 
         private IQueryable<Order> FilterOrders(OrdersFilterInputModel input, IQueryable<Order> orders)

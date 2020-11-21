@@ -6,7 +6,7 @@
 
     using WHMS.Data.Models.Orders.Enum;
 
-    public class OrdersFilterInputModel
+    public class OrdersFilterInputModel : IFilter
     {
         public int Page { get; set; } = 1;
 

@@ -7,7 +7,5 @@
     public class ManageOrdersViewModel : PagedViewModel
     {
         public IEnumerable<OrdersViewModel> Orders { get; set; }
-
-        public OrdersFilterInputModel Filters { get; set; }
     }
 }

@@ -20,16 +20,4 @@
         }
     </tbody>
 </table>
-<nav aria-label="Page navigation">
-    <ul class="pagination justify-content-center">
-        <li class="page-item"><a class="page-link" asp-controller="Products" asp-action="ManageManufacturers" asp-route-page="1">First Page</a></li>
-        <li class="page-item @Model.PreviousDisabled"><a class="page-link" asp-controller="Products" asp-action="ManageManufacturers" asp-route-page="@(Model.Page - 1)">Previous</a></li>
-        @for (int i = 1; i <= Model.PagesCount; i++)
-        {
-            var isactive = i == Model.Page ? "active" : string.Empty;
-            <li class="page-item @isactive"><a class="page-link" asp-controller="Products" asp-action="ManageManufacturers" asp-route-page="@i" active="@(Model.Page == i)">@i</a></li>
-        }
-        <li class="page-item @Model.NextDisabled"><a class="page-link" asp-controller="Products" asp-action="ManageManufacturers" asp-route-page="@(Model.Page + 1)">Next</a></li>
-        <li class="page-item"><a class="page-link" asp-controller="Products" asp-action="ManageManufacturers" asp-route-page="@Model.PagesCount">Last Page</a></li>
-    </ul>
-</nav>
+<partial name="_PagingPartial" for="@Model" />

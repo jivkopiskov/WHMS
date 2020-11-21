@@ -4,7 +4,7 @@
 
     using WHMS.Web.ViewModels.Products.Enums;
 
-    public class ProductFilterInputModel
+    public class ProductFilterInputModel : IFilter
     {
         public int Page { get; set; } = 1;
 

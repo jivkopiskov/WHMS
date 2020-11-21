@@ -1,0 +1,22 @@
+﻿@model PagedViewModel
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        <li class="page-item @Model.PreviousDisabled">
+            <a class="page-link" asp-controller="@ViewContext.RouteData.Values["controller"].ToString()" asp-action="@ViewContext.RouteData.Values["action"].ToString()" asp-all-route-data="Model.Filters?.ToDictionary()" asp-route-page="1">First Page</a>
+        </li>
+        <li class="page-item @Model.PreviousDisabled">
+            <a class="page-link" asp-controller="@ViewContext.RouteData.Values["controller"].ToString()" asp-action="@ViewContext.RouteData.Values["action"].ToString()" asp-all-route-data="Model.Filters?.ToDictionary()" asp-route-page="@(Model.Page - 1)">Previous</a>
+        </li>
+        @for (int i = Model.FirstPage; i <= Model.LastPage; i++)
+        {
+            var isactive = i == Model.Page ? "active" : string.Empty;
+            <li class="page-item @isactive">
+                <a class="page-link" asp-controller="@ViewContext.RouteData.Values["controller"].ToString()" asp-action="@ViewContext.RouteData.Values["action"].ToString()" asp-all-route-data="Model.Filters?.ToDictionary()" asp-route-page="@i" active="@(Model.Page == i)">@i</a>
+            </li>
+        }
+        <li class="page-item @Model.NextDisabled">
+            <a class="page-link" asp-controller="@ViewContext.RouteData.Values["controller"].ToString()" asp-action="@ViewContext.RouteData.Values["action"].ToString()" asp-all-route-data="Model.Filters?.ToDictionary()" asp-route-page="@(Model.Page + 1)">Next</a>
+        </li>
+        <li class="page-item  @Model.NextDisabled"><a class="page-link" asp-controller="@ViewContext.RouteData.Values["controller"].ToString()" asp-action="@ViewContext.RouteData.Values["action"].ToString()" asp-all-route-data="Model.Filters?.ToDictionary()" asp-route-page="@Model.PagesCount">Last Page</a></li>
+    </ul>
+</nav>

@@ -28,7 +28,7 @@
         private readonly IManufacturersService manufacturersService;
         private readonly IWarehouseService warehouseService;
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IOrdersService ordersService;
+        private readonly IOrderItemsService orderItemsService;
 
         public ProductsController(
             IProductsService productsService,
@@ -38,7 +38,7 @@
             IManufacturersService manufacturersService,
             IWarehouseService warehouseService,
             UserManager<ApplicationUser> userManager,
-            IOrdersService ordersSrvice)
+            IOrderItemsService orderItemsService)
         {
             this.productService = productsService;
             this.brandsService = brandsService;
@@ -47,7 +47,7 @@
             this.manufacturersService = manufacturersService;
             this.warehouseService = warehouseService;
             this.userManager = userManager;
-            this.ordersService = ordersSrvice;
+            this.orderItemsService = orderItemsService;
         }
 
         #region products
@@ -121,7 +121,7 @@
                 return this.View(input);
             }
 
-            await this.ordersService.AddOrderItemAsync(input);
+            await this.orderItemsService.AddOrderItemAsync(input);
             return this.Redirect("/Orders/OrderDetails/" + input.OrderId);
         }
 

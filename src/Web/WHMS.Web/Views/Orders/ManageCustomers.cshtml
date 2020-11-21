@@ -25,6 +25,4 @@
         }
     </tbody>
 </table>
-@(ViewData["controller"] = "Orders");
-@(ViewData["action"] = "ManageCustomers");
-<partial name="_PagingWithFilters" for="@Model" />
+<partial name="_PagingPartial" for="@Model" />

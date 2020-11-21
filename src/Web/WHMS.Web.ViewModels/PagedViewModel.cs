@@ -16,6 +16,8 @@
 
         public int LastPage => this.PagesCount > 10 ? this.MidPage() + 5 : this.PagesCount == 0 ? 1 : this.PagesCount;
 
+        public IFilter Filters { get; set; }
+
         private int MidPage()
         {
             if (this.Page - 5 < 1)
