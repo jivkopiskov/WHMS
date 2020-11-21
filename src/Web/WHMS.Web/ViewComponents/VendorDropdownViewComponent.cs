@@ -4,22 +4,21 @@
 
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using WHMS.Services.PurchaseOrders;
+    using WHMS.Web.ViewModels.PurchaseOrders;
 
-    using WHMS.Services.Products;
-    using WHMS.Web.ViewModels.Products;
-
-    public class WarehouseDropdownViewComponent : ViewComponent
+    public class VendorDropdownViewComponent : ViewComponent
     {
-        private readonly IWarehouseService warehouseService;
+        private readonly IPurchaseOrdersService purchaseOrderService;
 
-        public WarehouseDropdownViewComponent(IWarehouseService warehouseService)
+        public VendorDropdownViewComponent(IPurchaseOrdersService purchaseOrderService)
         {
-            this.warehouseService = warehouseService;
+            this.purchaseOrderService = purchaseOrderService;
         }
 
         public IViewComponentResult Invoke(int id)
         {
-            var warehouses = this.warehouseService.GetAllWarehouses<WarehouseViewModel>()
+            var vendors = this.purchaseOrderService.GetAllVendors<VendorViewModel>()
                 .OrderBy(x => x.Name)
                 .Select(x => new SelectListItem
                 {
@@ -27,7 +26,7 @@
                     Text = x.Name,
                     Selected = x.Id == id,
                 });
-            return this.View(warehouses);
+            return this.View(vendors);
         }
     }
 }

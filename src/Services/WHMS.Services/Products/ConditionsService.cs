@@ -10,8 +10,8 @@
 
     public class ConditionsService : ICondiitonsService
     {
-        private WHMSDbContext context;
-        private IMapper mapper;
+        private readonly WHMSDbContext context;
+        private readonly IMapper mapper;
 
         public ConditionsService(WHMSDbContext context)
         {

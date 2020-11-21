@@ -18,8 +18,10 @@
 
         public Dictionary<string, string> ToDictionary()
         {
-            var dict = new Dictionary<string, string>();
-            dict[nameof(this.Sorting)] = this.Sorting.ToString();
+            var dict = new Dictionary<string, string>
+            {
+                [nameof(this.Sorting)] = this.Sorting.ToString(),
+            };
 
             if (!string.IsNullOrEmpty(this.Email))
             {

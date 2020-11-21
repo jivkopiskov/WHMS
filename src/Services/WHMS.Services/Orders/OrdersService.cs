@@ -25,7 +25,7 @@
         private readonly WHMSDbContext context;
         private readonly IInventoryService inventoryService;
         private readonly ICustomersService customersService;
-        private IMapper mapper;
+        private readonly IMapper mapper;
 
         public OrdersService(WHMSDbContext context, IInventoryService inventoryService, ICustomersService customersService)
         {

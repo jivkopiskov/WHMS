@@ -17,7 +17,7 @@
     public class CustomersService : ICustomersService
     {
         private readonly WHMSDbContext context;
-        private IMapper mapper;
+        private readonly IMapper mapper;
 
         public CustomersService(WHMSDbContext context)
         {
@@ -35,7 +35,7 @@
             var customer = this.context.Customers.Include(x => x.Address).FirstOrDefault(x => x.Email == email);
             if (customer == null)
             {
-                return default(T);
+                return default;
             }
 
             return this.mapper.Map<T>(customer);
@@ -92,7 +92,7 @@
                 CustomerSorting.IdDesc => customers.OrderByDescending(x => x.Id),
                 CustomerSorting.Alphabetically => customers.OrderBy(x => x.Email),
                 CustomerSorting.AlphabeticallyDesc => customers.OrderByDescending(x => x.Email),
-                CustomerSorting.NumberOfOrders => customers.OrderByDescending(x => x.Orders.Count()),
+                CustomerSorting.NumberOfOrders => customers.OrderByDescending(x => x.Orders.Count),
                 _ => customers,
             };
             return customers;

@@ -24,6 +24,22 @@
             return this.View();
         }
 
+        public IActionResult AddPurchaseOrder()
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        public IActionResult AddPurchaseOrder(AddPurchaseOrderInputModel input)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(input);
+            }
+
+            return this.View(input);
+        }
+
         public IActionResult ManageVendors(int page = 1)
         {
             var model = new ManageVendorsViewModel

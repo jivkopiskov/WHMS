@@ -16,8 +16,8 @@
 
     public class ProductsService : IProductsService
     {
-        private WHMSDbContext context;
-        private IMapper mapper;
+        private readonly WHMSDbContext context;
+        private readonly IMapper mapper;
 
         public ProductsService(WHMSDbContext context)
         {
@@ -28,7 +28,7 @@
         public async Task AddProductImageAsync<T>(T input)
         {
             var image = this.mapper.Map<Image>(input);
-            if (this.context.Images.Where(i => i.ProductId == image.ProductId && i.IsPrimary == true).Count() == 0)
+            if (!this.context.Images.Where(i => i.ProductId == image.ProductId && i.IsPrimary == true).Any())
             {
                 image.IsPrimary = true;
             }

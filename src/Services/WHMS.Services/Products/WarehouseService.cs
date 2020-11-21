@@ -12,8 +12,8 @@
 
     public class WarehouseService : IWarehouseService
     {
-        private WHMSDbContext context;
-        private IMapper mapper;
+        private readonly WHMSDbContext context;
+        private readonly IMapper mapper;
 
         public WarehouseService(WHMSDbContext context)
         {

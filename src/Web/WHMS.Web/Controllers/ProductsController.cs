@@ -102,7 +102,7 @@
                 return this.ProductDetails(input.Id);
             }
 
-            ProductDetailsViewModel product = await this.productService.EditProductAsync<ProductDetailsViewModel, ProductDetailsInputModel>(input);
+            await this.productService.EditProductAsync<ProductDetailsViewModel, ProductDetailsInputModel>(input);
             this.TempData["success"] = true;
             return this.ProductDetails(input.Id);
         }

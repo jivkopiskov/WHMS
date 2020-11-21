@@ -1,0 +1,39 @@
+﻿@model AddPurchaseOrderInputModel
+@inject WHMS.Services.Common.ICountriesService countries;
+@{this.ViewData["Title"] = $"Add vendor";}
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="ManagePurchaseOrders">Manage Purchase Orders</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Purchase Order</li>
+        </ol>
+    </nav>
+}
+
+<div class="col-md-6 justify-content-center offset-2">
+    <form asp-controller="Orders" asp-action="AddOrder" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div>
+            <label asp-for="Description"></label>
+            <input asp-for="Description" class="form-control">
+            <span asp-validation-for="Description" class="text-danger"></span><br />
+        </div>
+        <div>
+            <vc:vendor-dropdown id="Model?.VendorId ?? 0"></vc:vendor-dropdown>
+        </div>
+        <div>
+            <vc:warehouse-dropdown id="@Model?.WarehouseId ?? 0"></vc:warehouse-dropdown>
+        </div>
+        <div>
+            <label asp-for="ETA"></label>
+            <input asp-for="ETA" class="form-control">
+            <span asp-validation-for="ETA" class="text-danger"></span><br />
+
+            <label asp-for="ShippingFee"></label>
+            <input asp-for="ShippingFee" class="form-control" value="@(Model?.ShippingFee ?? 0.00m)">
+            <span asp-validation-for="ShippingFee" class="text-danger"></span><br />
+        </div>
+        <button class="btn btn-outline-primary justify-content-center mt-2" asp-action="AddPurchaseOrder">Add Order</button>
+    </form>
+   
+</div>

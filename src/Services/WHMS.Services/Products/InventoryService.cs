@@ -15,8 +15,8 @@
 
     public class InventoryService : IInventoryService
     {
-        private WHMSDbContext context;
-        private IMapper mapper;
+        private readonly WHMSDbContext context;
+        private readonly IMapper mapper;
 
         public InventoryService(WHMSDbContext context)
         {

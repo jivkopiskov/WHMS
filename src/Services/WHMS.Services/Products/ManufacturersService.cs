@@ -12,8 +12,8 @@
 
     public class ManufacturersService : IManufacturersService
     {
-        private WHMSDbContext context;
-        private IMapper mapper;
+        private readonly WHMSDbContext context;
+        private readonly IMapper mapper;
 
         public ManufacturersService(WHMSDbContext context)
         {

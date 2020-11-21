@@ -18,13 +18,11 @@
     {
         private readonly WHMSDbContext context;
         private readonly IInventoryService inventoryService;
-        private IMapper mapper;
 
         public ShippingService(WHMSDbContext context, IInventoryService inventoryService)
         {
             this.context = context;
             this.inventoryService = inventoryService;
-            this.mapper = AutoMapperConfig.MapperInstance;
         }
 
         public async Task ShipOrderAsync(ShipOrderInputModel input)

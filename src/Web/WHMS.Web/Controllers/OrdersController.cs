@@ -156,7 +156,7 @@
                 this.TempData["CancelOrder"] = false;
             }
 
-            return this.RedirectToAction(nameof(this.OrderDetails), new { id = id });
+            return this.RedirectToAction(nameof(this.OrderDetails), new { id });
         }
 
         public async Task<IActionResult> SetInProcess([ValidOrder] int id)
@@ -171,7 +171,7 @@
                 this.TempData["InProcess"] = false;
             }
 
-            return this.RedirectToAction(nameof(this.OrderDetails), new { id = id });
+            return this.RedirectToAction(nameof(this.OrderDetails), new { id });
         }
 
         public IActionResult ShipOrder([ValidOrder] int id)
@@ -198,7 +198,7 @@
         {
             await this.shippingService.UnshipOrderAsync(id);
 
-            return this.RedirectToAction(nameof(this.OrderDetails), new { id = id });
+            return this.RedirectToAction(nameof(this.OrderDetails), new { id });
         }
 
         public IActionResult ManageCarriers()
@@ -221,10 +221,12 @@
 
         public IActionResult ManageShippingMethods(int id)
         {
-            var model = new ManageShippingMethodsViewModel();
-            model.Methods = this.shippingService.GetAllServicesForCarrier<ShippingMethodViewModel>(id);
-            model.CarrierName = this.shippingService.GetAllCarriers<CarrierViewModel>().FirstOrDefault(x => x.Id == id).Name;
-            model.CarrierId = id;
+            var model = new ManageShippingMethodsViewModel
+            {
+                Methods = this.shippingService.GetAllServicesForCarrier<ShippingMethodViewModel>(id),
+                CarrierName = this.shippingService.GetAllCarriers<CarrierViewModel>().FirstOrDefault(x => x.Id == id).Name,
+                CarrierId = id,
+            };
 
             return this.View(model);
         }

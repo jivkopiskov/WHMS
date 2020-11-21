@@ -17,14 +17,12 @@
         private readonly WHMSDbContext context;
         private readonly IInventoryService inventoryService;
         private readonly IOrdersService ordersService;
-        private IMapper mapper;
 
         public OrderItemsService(WHMSDbContext context, IInventoryService inventoryService, IOrdersService ordersService)
         {
             this.context = context;
             this.inventoryService = inventoryService;
             this.ordersService = ordersService;
-            this.mapper = AutoMapperConfig.MapperInstance;
         }
 
         public async Task<int> AddOrderItemAsync(AddProductToOrderInputModel input)
@@ -35,7 +33,7 @@
             if (orderItem == null)
             {
                 orderItem = new OrderItem() { ProductId = input.ProductId, Qty = input.Qty };
-                var productPrices = this.context.Products.Where(x => x.Id == orderItem.ProductId).Select(x => new { WebsitePrice = x.WebsitePrice, WholesalePrice = x.WholesalePrice }).FirstOrDefault();
+                var productPrices = this.context.Products.Where(x => x.Id == orderItem.ProductId).Select(x => new { x.WebsitePrice, x.WholesalePrice }).FirstOrDefault();
                 orderItem.Price = order.Channel == Channel.Wholesale ? productPrices.WholesalePrice : productPrices.WebsitePrice;
                 order.OrderItems.Add(orderItem);
             }
@@ -59,7 +57,7 @@
                 if (orderItem == null)
                 {
                     orderItem = new OrderItem() { ProductId = item.ProductId, Qty = item.Qty };
-                    var productPrices = this.context.Products.Where(x => x.Id == orderItem.ProductId).Select(x => new { WebsitePrice = x.WebsitePrice, WholesalePrice = x.WholesalePrice }).FirstOrDefault();
+                    var productPrices = this.context.Products.Where(x => x.Id == orderItem.ProductId).Select(x => new { x.WebsitePrice, x.WholesalePrice }).FirstOrDefault();
                     orderItem.Price = order.Channel == Channel.Wholesale ? productPrices.WholesalePrice : productPrices.WebsitePrice;
                     order.OrderItems.Add(orderItem);
                 }

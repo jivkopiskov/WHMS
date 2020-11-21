@@ -10,6 +10,8 @@
 
         IEnumerable<T> GetAllVendors<T>(int page);
 
+        IEnumerable<T> GetAllVendors<T>();
+
         int GetAllVendorsCount();
 
         T GetVendorDetails<T>(int id);

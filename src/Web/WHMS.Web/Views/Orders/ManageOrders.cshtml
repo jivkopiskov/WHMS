@@ -3,7 +3,7 @@
 @{this.ViewData["Title"] = "Manage Orders";}
 
 <div>
-    <a type="button" class="btn-success p-2 mb-4" href="/Orders/AddOrder" role="button">Add order</a>
+    <a type="button" class="btn btn-success p-2 mb-4" asp-action="AddOrder" role="button">Add order</a>
 </div>
 
 <partial name="_SearchOrders" model="Model.Filters"/>

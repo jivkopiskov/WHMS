@@ -79,6 +79,14 @@
                 .ToList();
         }
 
+        public IEnumerable<T> GetAllVendors<T>()
+        {
+            return this.context.Vendors
+                .OrderBy(x => x.Name)
+                .To<T>()
+                .ToList();
+        }
+
         public Task<int> GetPurchaseOrderDetails(int purchaseOrderId)
         {
             throw new System.NotImplementedException();
