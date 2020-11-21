@@ -2,6 +2,7 @@
 @{
     var sku = @Model.FirstOrDefault().ProductSKU;
     var productId = Model.FirstOrDefault().ProductId;
+    this.ViewData["Title"] = $"Manage Inventory {productId}"; 
 }
 @section Breadcrumbs{
     <nav aria-label="breadcrumb">

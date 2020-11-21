@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,6 +17,7 @@
     using WHMS.Web.ViewModels.Orders;
     using WHMS.Web.ViewModels.ValidationAttributes;
 
+    [Authorize]
     public class OrdersController : Controller
     {
         private readonly IOrdersService ordersService;

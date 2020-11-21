@@ -1,5 +1,5 @@
 ﻿@model ShipOrderInputModel
-
+@{this.ViewData["Title"] = $"Ship Order {Model.OrderId}";}
 @section Breadcrumbs{
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -30,7 +30,7 @@
             </div>
             <div>
                 <label asp-for="TrackingNumber"></label>
-                <input class="form-control col-sm-2" asp-for="TrackingNumber"/>
+                <input class="form-control col-sm-2" asp-for="TrackingNumber" />
                 <span asp-validation-for="TrackingNumber" class="text-danger"></span>
             </div>
         </div>

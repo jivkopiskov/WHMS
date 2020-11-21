@@ -1,7 +1,7 @@
 ﻿@model ProductDetailsViewModel
 @using Microsoft.Extensions.Configuration
 @inject IConfiguration Configuration
-
+@{this.ViewData["Title"] = $"Product Details {Model.Id}";}
 @section Breadcrumbs{
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">

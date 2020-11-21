@@ -1,5 +1,6 @@
 ﻿@model AddOrderInputModel
 @inject WHMS.Services.Common.ICountriesService countries;
+@{this.ViewData["Title"] = "Add Order";}
 @section Breadcrumbs{
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -87,7 +88,7 @@
 @section Scripts{
     <script>
         $("#getCustomerDetails")
-            .click (function () {
+            .click(function () {
                 $.getJSON("CheckCustomerAddress", { email: $("#Customer_Email").val() })
                     .done(function (customer) {
                         if (customer != null) {
@@ -102,7 +103,7 @@
                         else {
                             alert("Customer with this email was not found!")
                         }
-                    })               
+                    })
             })
     </script>
 }

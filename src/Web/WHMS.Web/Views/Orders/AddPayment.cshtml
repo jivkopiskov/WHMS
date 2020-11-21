@@ -1,5 +1,6 @@
 ﻿@model PaymentInputModel
 
+@{this.ViewData["Title"] = $"Add Payment {Model.OrderId}";}
 @section Breadcrumbs{
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -13,11 +14,11 @@
 <div asp-validation-summary="All" class="text-danger"></div>
 <div class="mt-2">
     <form asp-controller="Orders" asp-action="AddPayment" method="post">
-        <input id="orderId" name="orderId" value="@Model.OrderId" hidden />      
+        <input id="orderId" name="orderId" value="@Model.OrderId" hidden />
         <div>
             <div>
                 <label asp-for="Amount"></label>
-                <input class="form-control col-sm-1" asp-for="Amount"  />
+                <input class="form-control col-sm-1" asp-for="Amount" />
                 <span asp-validation-for="Amount" class="text-danger"></span>
             </div>
             <div>
