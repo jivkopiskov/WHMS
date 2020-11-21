@@ -27,10 +27,12 @@
     public class Startup
     {
         private readonly IConfiguration configuration;
+        private readonly IWebHostEnvironment env;
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             this.configuration = configuration;
+            this.env = env;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -38,6 +40,11 @@
         {
             services.AddDbContext<WHMSDbContext>(
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
+
+            if (this.env.IsDevelopment())
+            {
+                services.AddDatabaseDeveloperPageExceptionFilter();
+            }
 
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                 .AddRoles<ApplicationRole>().AddEntityFrameworkStores<WHMSDbContext>();
@@ -87,7 +94,7 @@
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                app.UseMigrationsEndPoint();
             }
             else
             {

@@ -1,12 +1,15 @@
 ﻿namespace WHMS.Web.Tests
 {
+    using System;
+
     using OpenQA.Selenium;
     using OpenQA.Selenium.Chrome;
     using OpenQA.Selenium.Remote;
-
     using Xunit;
 
+#pragma warning disable CA1001 // Types that own disposable fields should be disposable
     public class SeleniumTests : IClassFixture<SeleniumServerFactory<Startup>>
+#pragma warning restore CA1001 // Types that own disposable fields should be disposable
     {
         private readonly SeleniumServerFactory<Startup> server;
         private readonly IWebDriver browser;
