@@ -1,11 +1,18 @@
 ﻿namespace WHMS.Services.PurchaseOrders
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public interface IPurchaseOrdersService
     {
         // id for pagination
         Task<int> GetAllPurchaseOrders(int purchaseOrderId);
+
+        IEnumerable<T> GetAllVendors<T>(int page);
+
+        int GetAllVendorsCount();
+
+        T GetVendorDetails<T>(int id);
 
         Task<int> GetPurchaseOrderDetails(int purchaseOrderId);
 
@@ -26,7 +33,7 @@
 
         Task<int> ReceivePurchaseItem(int purchaseItemId);
 
-        Task<int> CreateVendorAsync(string vendorName);
+        Task<int> AddVendorAsync<T>(T input);
 
         Task<int> EditVendorAsync(int vendorId);
     }

@@ -20,6 +20,8 @@
 
         public string ImageUrl { get; set; }
 
+        public decimal WebsitePrice { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Product, ProductsViewModel>().ForMember(

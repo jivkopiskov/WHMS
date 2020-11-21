@@ -57,6 +57,11 @@
             <input asp-for="Customer.Address.StreetAddress2" class="form-control">
             <span asp-validation-for="Customer.Address.StreetAddress2" class="text-danger"></span><br />
         </div>
+        <div>
+            <label asp-for="Customer.Address.City"></label>
+            <input asp-for="Customer.Address.City" class="form-control col-md-5 ">
+            <span asp-validation-for="Customer.Address.City" class="text-danger"></span><br />
+        </div>
         <div class="row">
             <div class="col-sm-6">
                 <label asp-for="Customer.Address.Zip"></label>

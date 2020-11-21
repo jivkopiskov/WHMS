@@ -11,8 +11,8 @@
             <img class="card-img-top" src="@(!String.IsNullOrEmpty(item.ImageUrl) ? item.ImageUrl : "/img/noimage.png")" style="height: 150px; width: 151px;">
             <div class="card-body">
                 <h5 class="card-title">@item.ProductName</h5>
-                <p class="card-text"><b>Description:</b>@item.ShortDescription</p>
-                <p class="card-text"><b>SKU:</b> @item.SKU</p>
+                <p class="card-text"><b>Id:</b> @item.Id <b>SKU:</b> @item.SKU</p>
+                <p class="card-text"><b>Price:</b> $@item.WebsitePrice </p>
                 <a class="btn btn-primary" asp-controller="Products" asp-action="ProductDetails" asp-route-id="@item.Id">View Details</a>
             </div>
         </div>

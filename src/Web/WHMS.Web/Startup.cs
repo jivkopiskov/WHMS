@@ -22,6 +22,7 @@
     using WHMS.Services.Messaging;
     using WHMS.Services.Orders;
     using WHMS.Services.Products;
+    using WHMS.Services.PurchaseOrders;
     using WHMS.Web.ViewModels;
 
     public class Startup
@@ -79,6 +80,7 @@
             services.AddTransient<ICustomersService, CustomersService>();
             services.AddTransient<IOrderItemsService, OrderItemsService>();
             services.AddTransient<IShippingService, ShippingService>();
+            services.AddTransient<IPurchaseOrdersService, PurchaseOrdersService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,0 +1,27 @@
+﻿@model ManageVendorsViewModel
+@{this.ViewData["Title"] = $"Manage Vendors";}
+<div>
+    <a type="button" class="btn-primary p-2" asp-action="AddVendor" role="button">Add Vendor</a>
+</div>
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Vendor Name</th>
+            <th scope="col">Vendor Address</th>
+            <th scope="col">Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vendor in Model.Vendors)
+        {
+            <tr>
+                <td>@vendor.Id</td>
+                <td>@vendor.Name</td>
+                <td>@vendor.Address.ToString()</td>
+                <td><a asp-action="VendorDetails" asp-route-id="@vendor.Id" class="btn btn-primary">Edit Details</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<partial name="_PagingPartial" for="@Model" />

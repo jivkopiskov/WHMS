@@ -42,18 +42,23 @@
 
         public IEnumerable<ProductWarehouseViewModel> GetProductWarehouseInfo(int productId)
         {
-            return this.context.Warehouses
+            var warehouses = this.context.Warehouses
                 .Select(x => new ProductWarehouseViewModel
                 {
                     ProductId = productId,
                     ProductSKU = this.context.Products.Find(productId).SKU,
                     WarehouseName = x.Name,
                     WarehouseIsSellable = x.IsSellable,
-                    TotalPhysicalQuanitity = this.context.ProductWarehouses.FirstOrDefault(pw => pw.WarehouseId == x.Id && pw.ProductId == productId) == null ? 0 : this.context.ProductWarehouses.FirstOrDefault(pw => pw.WarehouseId == x.Id && pw.ProductId == productId).TotalPhysicalQuanitiy,
-                    AggregateQuantity = this.context.ProductWarehouses.FirstOrDefault(pw => pw.WarehouseId == x.Id && pw.ProductId == productId) == null ? 0 : this.context.ProductWarehouses.FirstOrDefault(pw => pw.WarehouseId == x.Id && pw.ProductId == productId).AggregateQuantity,
-                    ReservedQuantity = this.context.ProductWarehouses.FirstOrDefault(pw => pw.WarehouseId == x.Id && pw.ProductId == productId) == null ? 0 : this.context.ProductWarehouses.FirstOrDefault(pw => pw.WarehouseId == x.Id && pw.ProductId == productId).ReservedQuantity,
                 })
                 .ToList();
+            foreach (var wh in warehouses)
+            {
+                wh.TotalPhysicalQuanitity = this.context.ProductWarehouses.FirstOrDefault(pw => pw.ProductId == productId && pw.Warehouse.Name == wh.WarehouseName) == null ? 0 : this.context.ProductWarehouses.FirstOrDefault(pw => pw.ProductId == productId && pw.Warehouse.Name == wh.WarehouseName).TotalPhysicalQuanitiy;
+                wh.AggregateQuantity = this.context.ProductWarehouses.FirstOrDefault(pw => pw.ProductId == productId && pw.Warehouse.Name == wh.WarehouseName) == null ? 0 : this.context.ProductWarehouses.FirstOrDefault(pw => pw.ProductId == productId && pw.Warehouse.Name == wh.WarehouseName).AggregateQuantity;
+                wh.ReservedQuantity = this.context.ProductWarehouses.FirstOrDefault(pw => pw.ProductId == productId && pw.Warehouse.Name == wh.WarehouseName) == null ? 0 : this.context.ProductWarehouses.FirstOrDefault(pw => pw.ProductId == productId && pw.Warehouse.Name == wh.WarehouseName).ReservedQuantity;
+            }
+
+            return warehouses;
         }
     }
 }

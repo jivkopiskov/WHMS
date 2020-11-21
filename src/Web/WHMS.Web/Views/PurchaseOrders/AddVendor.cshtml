@@ -1,25 +1,25 @@
-﻿@model WarehouseViewModel
+﻿@model AddVendorViewModel
 @inject WHMS.Services.Common.ICountriesService countries;
-@{this.ViewData["Title"] = $"Add warehouse";}
+@{this.ViewData["Title"] = $"Add vendor";}
 @section Breadcrumbs{
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-action="ManageWarehouses">Manage Warehouses</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Add Warehouse</li>
+            <li class="breadcrumb-item"><a asp-action="ManageVendors">Manage Vendors</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Vendor</li>
         </ol>
     </nav>
 }
-<form asp-controller="Products" asp-action="AddCondition" method="post">
-    <div asp-validation-summary="ModelOnly"></div>
+<form asp-controller="Products" asp-action="AddVendor" method="post">
+    <div asp-validation-summary="All"></div>
     <div>
         <label asp-for="Name"></label>
         <input asp-for="Name" class="form-control col-md-3">
         <span asp-validation-for="Name" class="text-danger"></span><br />
     </div>
-    <div class="form-check-inline col-sm-4">
-        <label asp-for="IsSellable"></label>
-        <input asp-for="IsSellable" class="form-control col-sm-1 ml-2">
-        <span asp-validation-for="IsSellable" class="text-danger"></span><br />
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control col-md-3">
+        <span asp-validation-for="Email" class="text-danger"></span><br />
     </div>
     <div class="mt-2">
         <label asp-for="Address.StreetAddress"></label>
@@ -48,5 +48,5 @@
         </select>
         <span asp-validation-for="Address.Country" class="text-danger"></span><br />
     </div>
-    <button class="btn btn-outline-primary" asp-controller="Products" asp-action="AddWarehouse">Add Warehouse</button>
+    <button class="btn btn-outline-primary" asp-controller="PurchaseOrders" asp-action="AddVendor">Add Vendor</button>
 </form>

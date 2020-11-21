@@ -1,7 +1,7 @@
 ﻿@model ManageManufacturersViewModel
 @{this.ViewData["Title"] = $"Manage manufacturers";}
 <div>
-    <a type="button" class="btn-primary p-2" href="/Products/AddManufacturer" role="button">Add Manufacturer</a>
+    <a type="button" class="btn-primary p-2" asp-action="AddManufacturer" role="button">Add Manufacturer</a>
 </div>
 <table class="table table-hover table-striped">
     <thead>

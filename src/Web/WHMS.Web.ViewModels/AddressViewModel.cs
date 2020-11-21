@@ -15,11 +15,14 @@
 
         public string Zip { get; set; }
 
+        [Required]
+        public string City { get; set; }
+
         public string Country { get; set; }
 
         public override string ToString()
         {
-            return $"{this.StreetAddress},{this.StreetAddress2},{this.Zip},{this.Country}";
+            return $"{this.StreetAddress},{this.StreetAddress2},{this.City},{this.Zip},{this.Country}";
         }
     }
 }
