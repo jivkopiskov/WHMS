@@ -1,0 +1,17 @@
+﻿@model PurchaseOrderDetailsViewModel
+
+@if (Model.PurchaseOrderStatus == PurchaseOrderStatus.Created)
+{
+    <a asp-action="MarkOrdered" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Set as Ordered</a>
+    <a asp-action="CancelPO" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Cancel PO</a>
+
+}
+else if (Model.PurchaseOrderStatus == PurchaseOrderStatus.Ordered)
+{
+    <a asp-action="ReceivePO" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Receive PO</a>
+    <a asp-action="CancelPO" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Cancel PO</a>
+}
+else if (Model.PurchaseOrderStatus == PurchaseOrderStatus.Cancelled)
+{
+    <a asp-action="MarkCreated" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Set as Created</a>
+}

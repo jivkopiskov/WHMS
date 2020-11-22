@@ -3,12 +3,14 @@
 @section Breadcrumbs{
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/Orders/ManageOrders">Manage Purchase Orders</a></li>
+            <li class="breadcrumb-item"><a asp-action="ManagePurchaseOrders">Manage Purchase Orders</a></li>
             <li class="breadcrumb-item active" aria-current="page">PO details #@Model.Id</li>
         </ol>
     </nav>
 }
 
+<partial name="_PurchaseOrderDetailsActions" model="@Model" />
+<partial name="_ChangePurchaseOrderStatusAlert" />
 <table class="table">
     <thead class="thead-dark">
         <tr>
@@ -73,7 +75,10 @@
 </div>
 <div class="mt-2">
     <h3 class="d-inline">Order items</h3>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-AddPurchaseItems-modal-lg">Add Items</button>
+    @if (this.Model.PurchaseOrderStatus == PurchaseOrderStatus.Created)
+    {
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-AddPurchaseItems-modal-lg">Add Items</button>
+    }
     <table class="table table-hover table-striped mt-2">
         <thead>
             <tr>
@@ -87,16 +92,16 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var oi in Model.PurchaseItems)
+            @foreach (var purchaseItem in Model.PurchaseItems)
             {
                 <tr>
-                    <td> @oi.ProductId</td>
-                    <td> <img src="@oi.ImageURL" class="rounded-circle img-thumbnail" style="height: 75px; width: 75px;"></td>
-                    <td><a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@oi.ProductId">@oi.ProductSKU</a></td>
-                    <td>@oi.Qty</td>
-                    <td>@oi.Cost</td>
-                    <td>@(oi.Qty * oi.Cost)</td>
-                    <td><a class="btn btn-danger" asp-action="DeletePurchaseItem" asp-route-orderId="@Model.Id" asp-route-Id="@oi.Id">Delete</a></td>
+                    <td> @purchaseItem.ProductId</td>
+                    <td> <img src="@purchaseItem.ImageURL" class="rounded-circle img-thumbnail" style="height: 75px; width: 75px;"></td>
+                    <td><a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@purchaseItem.ProductId">@purchaseItem.ProductSKU</a></td>
+                    <td>@purchaseItem.Qty</td>
+                    <td>@purchaseItem.Cost</td>
+                    <td>@(purchaseItem.Qty * purchaseItem.Cost)</td>
+                    <td><a class="btn btn-danger" asp-action="DeletePurchaseItem" asp-route-Id="@Model.Id" asp-route-purchaseItemId="@purchaseItem.Id" >Delete</a></td>
                 </tr>
             }
             <tr class="bg-secondary text-light">
@@ -112,10 +117,12 @@
     </table>
 </div>
 
-<partial name="_AddPurchaseItemsModal" model="@Model" />
+@if (this.Model.PurchaseOrderStatus == PurchaseOrderStatus.Created)
+{
+    <partial name="_AddPurchaseItemsModal" model="@Model" />
 
-@section Scripts{
-    <script>
+    @section Scripts{
+        <script>
             $(document).ready(function () {
                 var max_fields = 10;
                 var wrapper = $(".PurchaseItem");
@@ -144,5 +151,6 @@
                     x--;
                 })
             });
-    </script>
+        </script>
+    }
 }

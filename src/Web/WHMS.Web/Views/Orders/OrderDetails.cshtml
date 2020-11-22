@@ -113,7 +113,7 @@
                     <td>@oi.Qty</td>
                     <td>@oi.Price</td>
                     <td>@(oi.Qty * oi.Price)</td>
-                    <td><a class="btn btn-danger" asp-action="DeleteOrderItem" asp-route-orderId="@Model.Id" asp-route-Id="@oi.Id">Delete</a></td>
+                    <td><a class="btn btn-danger" asp-action="DeleteOrderItem" asp-route-Id="@Model.Id" asp-route-orderItemId="@oi.Id" >Delete</a></td>
                 </tr>
             }
             <tr class="bg-secondary text-light">

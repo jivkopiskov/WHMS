@@ -29,6 +29,11 @@
             return this.context.ProductWarehouses.Where(x => x.ProductId == productId).Sum(x => x.AggregateQuantity);
         }
 
+        public int GetProductPhysicalInventory(int productId)
+        {
+            return this.context.ProductWarehouses.Where(x => x.ProductId == productId).Sum(x => x.TotalPhysicalQuanitiy);
+        }
+
         public async Task RecalculateAvailableInventoryAsync(int productId)
         {
             var warehouses = this.context.Warehouses.ToList();
@@ -60,7 +65,7 @@
             await this.context.SaveChangesAsync();
         }
 
-        public async Task<bool> AdjustInventory(ProductAdjustmentInputModel input)
+        public async Task<bool> AdjustInventoryAsync(ProductAdjustmentInputModel input)
         {
             var productWarehouse = this.context.ProductWarehouses
                 .FirstOrDefault(
@@ -73,10 +78,6 @@
             }
 
             productWarehouse.TotalPhysicalQuanitiy += input.Qty;
-            if (productWarehouse.TotalPhysicalQuanitiy < 0)
-            {
-                return false;
-            }
 
             await this.context.SaveChangesAsync();
             await this.RecalculateAvailableInventoryAsync(input.ProductId);

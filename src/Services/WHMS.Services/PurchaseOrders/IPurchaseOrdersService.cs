@@ -13,6 +13,12 @@
 
         IEnumerable<T> GetAllVendors<T>();
 
+        Task MarkOrdered(int purchaseOrderId);
+
+        Task MarkCreated(int id);
+
+        Task CancelPO(int purchaseOrderId);
+
         int GetAllVendorsCount();
 
         int GetAllPurchaseOrdersCount();
@@ -30,13 +36,13 @@
         Task AddPurchaseItemAsync(AddPurchaseItemsInputModel input);
 
         // remember to recalcualte order grand total
-        Task<int> DeletePurchaseItemAsync(int purchaseItemId);
+        Task DeletePurchaseItemAsync(int purchaseItemId);
 
         Task RecalculatePurchaseOrderTotal(int purchaseOrderId);
 
-        Task<int> ReceiveWholePurchaseOrder(int purchaseOrderId);
+        Task ReceiveWholePurchaseOrderAsync(int purchaseOrderId);
 
-        Task<int> ReceivePurchaseItem(int purchaseItemId);
+        Task ReceivePurchaseItem(int purchaseItemId);
 
         Task<int> AddVendorAsync<T>(T input);
 

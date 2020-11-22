@@ -6,15 +6,15 @@
 
     public interface IInventoryService
     {
-        Task<bool> AdjustInventory(ProductAdjustmentInputModel input);
+        Task<bool> AdjustInventoryAsync(ProductAdjustmentInputModel input);
 
         int GetProductAvailableInventory(int productId);
+
+        int GetProductPhysicalInventory(int productId);
 
         Task RecalculateAvailableInventoryAsync(int productId);
 
         Task RecalculateReservedInventoryAsync(int productId, int warehouseId);
-
-        Task RecalculateInventoryAfterShippingAsync(int orderId, int warehouseId);
 
         Task RecalculateInventoryAfterUnshippingAsync(int orderId, int warehouseId);
     }

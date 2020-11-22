@@ -1,13 +1,13 @@
 ﻿namespace WHMS.Web.ViewModels.PurchaseOrders
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+
+    using WHMS.Data.Models.PurchaseOrder.Enum;
+    using WHMS.Web.ViewModels.ValidationAttributes;
 
     public class AddPurchaseItemsInputModel
     {
+        [ValidPO(PurchaseOrderStatus.Created)]
         public int PurchaseOrderId { get; set; }
 
         public int VendorId { get; set; }

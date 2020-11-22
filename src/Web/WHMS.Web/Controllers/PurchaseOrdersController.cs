@@ -8,8 +8,10 @@
 
     using Microsoft.AspNetCore.Mvc;
     using WHMS.Common;
+    using WHMS.Data.Models.PurchaseOrder.Enum;
     using WHMS.Services.PurchaseOrders;
     using WHMS.Web.ViewModels.PurchaseOrders;
+    using WHMS.Web.ViewModels.ValidationAttributes;
 
     public class PurchaseOrdersController : Controller
     {
@@ -62,8 +64,8 @@
         {
             var model = new AddPurchaseItemsInputModel
             {
-               PurchaseOrderId = purchaseOrderId,
-               VendorId = vendorId,
+                PurchaseOrderId = purchaseOrderId,
+                VendorId = vendorId,
             };
 
             return this.View(model);
@@ -79,6 +81,81 @@
 
             await this.purchaseOrdersService.AddPurchaseItemAsync(input);
             return this.RedirectToAction(nameof(this.PurchaseOrderDetails), new { id = input.PurchaseOrderId });
+        }
+
+        public async Task<IActionResult> DeletePurchaseItem(int purchaseItemId, [ValidPO(PurchaseOrderStatus.Created)] int id)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                this.TempData["itemDeleted"] = false;
+            }
+            else
+            {
+                this.TempData["itemDeleted"] = true;
+                await this.purchaseOrdersService.DeletePurchaseItemAsync(purchaseItemId);
+            }
+
+            return this.RedirectToAction(nameof(this.PurchaseOrderDetails), new { id });
+        }
+
+        public async Task<IActionResult> MarkOrdered([ValidPO(PurchaseOrderStatus.Created)] int id)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                this.TempData["markOrdered"] = false;
+            }
+            else
+            {
+                this.TempData["markOrdered"] = true;
+                await this.purchaseOrdersService.MarkOrdered(id);
+            }
+
+            return this.RedirectToAction(nameof(this.PurchaseOrderDetails), new { id });
+        }
+
+        public async Task<IActionResult> CancelPO([ValidPO(PurchaseOrderStatus.Ordered, PurchaseOrderStatus.Created)] int id)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                this.TempData["cancelPO"] = false;
+            }
+            else
+            {
+                this.TempData["cancelPO"] = true;
+                await this.purchaseOrdersService.CancelPO(id);
+            }
+
+            return this.RedirectToAction(nameof(this.PurchaseOrderDetails), new { id });
+        }
+
+        public async Task<IActionResult> MarkCreated([ValidPO(PurchaseOrderStatus.Cancelled)] int id)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                this.TempData["markCreated"] = false;
+            }
+            else
+            {
+                this.TempData["markCreated"] = true;
+                await this.purchaseOrdersService.MarkCreated(id);
+            }
+
+            return this.RedirectToAction(nameof(this.PurchaseOrderDetails), new { id });
+        }
+
+        public async Task<IActionResult> ReceivePO([ValidPO(PurchaseOrderStatus.Ordered)] int id)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                this.TempData["receivePO"] = false;
+            }
+            else
+            {
+                this.TempData["receivePO"] = true;
+                await this.purchaseOrdersService.ReceiveWholePurchaseOrderAsync(id);
+            }
+
+            return this.RedirectToAction(nameof(this.PurchaseOrderDetails), new { id });
         }
 
         public IActionResult ManageVendors(int page = 1)

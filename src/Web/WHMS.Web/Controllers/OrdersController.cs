@@ -90,18 +90,18 @@
             return this.RedirectToAction(nameof(this.OrderDetails), new { id = input.OrderId });
         }
 
-        public async Task<IActionResult> DeleteOrderItem([ValidOrder] int orderId, int id)
+        public async Task<IActionResult> DeleteOrderItem([ValidOrder] int id, int orderItemId)
         {
             if (this.ModelState.IsValid)
             {
-                await this.orderItemsService.DeleteOrderItemAsync(id);
+                await this.orderItemsService.DeleteOrderItemAsync(orderItemId);
             }
             else
             {
                 this.TempData["invalidOrder"] = true;
             }
 
-            return this.RedirectToAction(nameof(this.OrderDetails), new { id = orderId });
+            return this.RedirectToAction(nameof(this.OrderDetails), new { id });
         }
 
         public IActionResult OrderDetails(int id)

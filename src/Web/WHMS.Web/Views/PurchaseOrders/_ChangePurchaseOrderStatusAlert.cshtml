@@ -1,0 +1,55 @@
+﻿@if (this.TempData.ContainsKey("markOrdered"))
+{
+    if ((bool)this.TempData["markOrdered"] == true)
+    {
+        <div class="alert alert-success" role="alert">The PO was marked as ordered!</div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">PO was not in status created. Failed to update it!</div>
+    }
+}
+@if (this.TempData.ContainsKey("receivePO"))
+{
+    if ((bool)this.TempData["receivePO"] == true)
+    {
+        <div class="alert alert-success" role="alert">The PO was received successfully!</div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">The PO is not ordered. Cannot receive it!</div>
+    }
+}
+@if (this.TempData.ContainsKey("cancelPO"))
+{
+    if ((bool)this.TempData["cancelPO"] == true)
+    {
+        <div class="alert alert-success" role="alert">The PO was cancelled successfully!</div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">The PO is received. Cannot cancel it!</div>
+    }
+}
+@if (this.TempData.ContainsKey("markCreated"))
+{
+    if ((bool)this.TempData["markCreated"] == true)
+    {
+        <div class="alert alert-success" role="alert">The PO was marked as Created successfully!</div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">The PO is not cancelled. Cannot mark it as created it!</div>
+    }
+}
+@if (this.TempData.ContainsKey("itemDeleted"))
+{
+    if ((bool)this.TempData["itemDeleted"] == true)
+    {
+        <div class="alert alert-success" role="alert">The item was deleted successfully!</div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">The PO is not in status created. Cannot modify it!</div>
+    }
+}

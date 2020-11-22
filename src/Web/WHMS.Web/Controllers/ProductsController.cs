@@ -50,7 +50,6 @@
             this.orderItemsService = orderItemsService;
         }
 
-        #region products
         public IActionResult ManageProducts(ProductFilterInputModel input)
         {
             var model = new ManageProductsViewModel()
@@ -178,9 +177,6 @@
             return this.Redirect("/Products/ProductImages/" + input.ProductId);
         }
 
-        #endregion
-
-        #region brands
         public IActionResult ManageBrands(int page = 1)
         {
             var model = new ManageBrandsViewModel
@@ -211,9 +207,6 @@
             return this.Redirect("/Products/ManageBrands");
         }
 
-        #endregion
-
-        #region manufacturers
         public IActionResult ManageManufacturers(int page = 1)
         {
             var model = new ManageManufacturersViewModel()
@@ -243,9 +236,7 @@
 
             return this.Redirect("/Products/ManageManufacturers");
         }
-        #endregion
 
-        #region conditions
         public IActionResult ManageConditions()
         {
             var conditions = this.condiitonsService.GetAllConditions<ConditionViewModel>();
@@ -267,7 +258,6 @@
 
             return this.Redirect("/Products/ManageConditions");
         }
-        #endregion
 
         public IActionResult ManageWarehouses()
         {
@@ -295,7 +285,7 @@
         {
             if (this.productService.IsValidProductId(input.ProductId))
             {
-                await this.inventoryService.AdjustInventory(input);
+                await this.inventoryService.AdjustInventoryAsync(input);
             }
 
             return this.Redirect("ManageInventory/" + input.ProductId);

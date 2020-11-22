@@ -7,12 +7,14 @@
     using System.Threading.Tasks;
 
     using AutoMapper;
+    using Microsoft.EntityFrameworkCore;
     using WHMS.Data;
     using WHMS.Data.Models.Orders;
     using WHMS.Data.Models.Orders.Enum;
     using WHMS.Services.Mapping;
     using WHMS.Services.Products;
     using WHMS.Web.ViewModels.Orders;
+    using WHMS.Web.ViewModels.Products;
 
     public class ShippingService : IShippingService
     {
@@ -27,7 +29,7 @@
 
         public async Task ShipOrderAsync(ShipOrderInputModel input)
         {
-            var order = this.context.Orders.FirstOrDefault(x => x.Id == input.OrderId);
+            var order = this.context.Orders.Include(x => x.OrderItems).FirstOrDefault(x => x.Id == input.OrderId);
             if (order.ShippingStatus == ShippingStatus.Shipped)
             {
                 return;
@@ -39,7 +41,17 @@
             order.OrderStatus = OrderStatus.Completed;
             await this.context.SaveChangesAsync();
 
-            await this.inventoryService.RecalculateInventoryAfterShippingAsync(order.Id, order.WarehouseId);
+            foreach (var item in order.OrderItems)
+            {
+                var adjustment = new ProductAdjustmentInputModel
+                {
+                    ProductId = item.ProductId,
+                    Qty = item.Qty * (-1),
+                    WarehouseId = order.WarehouseId,
+                };
+
+                await this.inventoryService.AdjustInventoryAsync(adjustment);
+            }
         }
 
         public async Task UnshipOrderAsync(int orderId)
