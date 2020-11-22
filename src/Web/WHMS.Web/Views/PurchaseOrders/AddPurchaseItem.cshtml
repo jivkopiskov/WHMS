@@ -1,0 +1,75 @@
+﻿@model AddPurchaseItemsInputModel
+@{this.ViewData["Title"] = $"Add Order Items {Model.PurchaseOrderId}";}
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="ManageOrders">Manage Purchase Orders</a></li>
+            <li class="breadcrumb-item"><a asp-action="OrderDetails" asp-route-id="@Model.PurchaseOrderId">PO # @Model.PurchaseOrderId </a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Purchase Items</li>
+        </ol>
+    </nav>
+}
+
+<h4 class="h4 mt-3">Add purchase items</h4>
+<div class="mt-2">
+    <form asp-controller="PurchaseItems" asp-action="AddPurchaseItems" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <input id="purchaseOrderId" name="purchaseOrderId" value="@Model.PurchaseOrderId" hidden />
+        <input id="vendorId" name="vendorId" value="@Model.VendorId" hidden />
+        <button class="btn btn-primary add_form_field">
+            Add new purchase item &nbsp;
+            <span style="font-size:16px; font-weight:bold;">+ </span>
+        </button>
+        <div class="PurchaseItem">
+            <div>
+                <label for="PurchaseItems[0].ProductId">Product Id</label>
+                <input class="form-control" required id="PurchaseItems[0].ProductId" name="PurchaseItems[0].ProductId" />
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="PurchaseItems[0].Qty">Qty</label>
+                    <input class="form-control" required id="PurchaseItems[0].Qty" name="PurchaseItems[0].Qty" />
+                </div>
+                <div class="col-sm-6">
+                    <label for="PurchaseItems[0].Cost">Cost</label>
+                    <input class="form-control" required id="PurchaseItems[0].Cost" name="PurchaseItems[0].Cost" />
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-outline-primary justify-content-center mt-2" asp-controller="PurchaseOrders" asp-action="AddPurchaseItem">Add items to PO</button>
+    </form>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var max_fields = 10;
+            var wrapper = $(".PurchaseItem");s
+            var add_button = $(".add_form_field");
+
+            var x = 1;
+            $(add_button).click(function (e) {
+                e.preventDefault();
+                if (x < max_fields) {
+                    $(wrapper).append('<div> '
+                        + '<div><label for="PurchaseItems[' + x + '].ProductId">ProductId</label>'
+                        + '<input class= "form-control" required id ="PurchaseItems[' + x + '].ProductId" name = "PurchaseItems[' + x + '].ProductId" /></div >'
+                        + '<div class="row">'
+                        + '<div class="col-sm-6" ><label for="PurchaseItems[' + x + '].Qty">Qty</label><input class="form-control" required id="PurchaseItems[' + x + '].Qty" name="PurchaseItems[' + x + '].Qty"/></div >'
+                        + '<div class="col-sm-6" ><label for="PurchaseItems[' + x + '].Cost">Cost</label><input class="form-control" required id="PurchaseItems[' + x + '].Cost" name="PurchaseItems[' + x + '].Cost"/></div >'
+                        + '<a href ="#" class="delete ml-3"> Delete</a ></div > </div > </div >'); //add input box
+                    x++;
+                } else {
+                    alert('You can only add up to 10 order items at once')
+                }
+            });
+
+            $(wrapper).on("click", ".delete", function (e) {
+                e.preventDefault();
+                $(this).parent('div').parent('div').remove();
+                x--;
+            })
+        });
+    </script>
+}

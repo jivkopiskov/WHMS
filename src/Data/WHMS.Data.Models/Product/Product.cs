@@ -6,7 +6,7 @@
 
     using WHMS.Data.Common.Models;
     using WHMS.Data.Models.Orders;
-    using WHMS.Data.Models.PurchaseOrders;
+    using WHMS.Data.Models.PurchaseOrder;
 
     public class Product : BaseDeletableModel<int>
     {
@@ -77,5 +77,7 @@
         public int? VendorId { get; set; }
 
         public Vendor Vendor { get; set; }
+
+        public ICollection<VendorProduct> VendorProducts { get; set; } = new HashSet<VendorProduct>();
     }
 }

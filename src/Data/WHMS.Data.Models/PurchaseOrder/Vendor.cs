@@ -1,4 +1,4 @@
-﻿namespace WHMS.Data.Models.PurchaseOrders
+﻿namespace WHMS.Data.Models.PurchaseOrder
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -18,5 +18,7 @@
         public Address Address { get; set; }
 
         public ICollection<PurchaseOrder> PurchaseOrders { get; set; } = new HashSet<PurchaseOrder>();
+
+        public ICollection<VendorProduct> VendorProducts { get; set; } = new HashSet<VendorProduct>();
     }
 }

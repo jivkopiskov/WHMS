@@ -5,10 +5,11 @@
     using System.Threading.Tasks;
 
     using AutoMapper;
+    using Microsoft.EntityFrameworkCore;
     using WHMS.Common;
     using WHMS.Data;
-    using WHMS.Data.Models.PurchaseOrders;
-    using WHMS.Data.Models.PurchaseOrders.Enum;
+    using WHMS.Data.Models.PurchaseOrder;
+    using WHMS.Data.Models.PurchaseOrder.Enum;
     using WHMS.Services.Mapping;
     using WHMS.Web.ViewModels.PurchaseOrders;
 
@@ -23,17 +24,50 @@
             this.mapper = AutoMapperConfig.MapperInstance;
         }
 
-        public Task<int> AddPurchaseItemAsync(int purchaseOrderId, int productId)
+        public async Task AddPurchaseItemAsync(AddPurchaseItemsInputModel input)
         {
-            throw new System.NotImplementedException();
+            var po = this.context.PurchaseOrders.Include(x => x.PurchaseItems).FirstOrDefault(x => x.Id == input.PurchaseOrderId);
+            foreach (var item in input.PurchaseItems)
+            {
+                var purchaseItem = po.PurchaseItems.FirstOrDefault(x => x.ProductId == item.ProductId);
+                if (purchaseItem == null)
+                {
+                    purchaseItem = new PurchaseItem
+                    {
+                        ProductId = item.ProductId,
+                        Cost = item.Cost,
+                        PurchaseOrderId = input.PurchaseOrderId,
+                    };
+                    this.context.Add(purchaseItem);
+                }
+
+                purchaseItem.Qty += item.Qty;
+                var vendorProduct = this.context.VendorProducts.FirstOrDefault(x => x.ProductId == item.ProductId && x.VendorId == input.VendorId);
+                if (vendorProduct == null)
+                {
+                    vendorProduct = new VendorProduct
+                    {
+                        ProductId = item.ProductId,
+                        VendorId = po.VendorId,
+                    };
+                    this.context.Add(vendorProduct);
+                }
+
+                vendorProduct.VendorCost = item.Cost;
+
+                await this.context.SaveChangesAsync();
+
+                await this.RecalculatePurchaseOrderTotal(po.Id);
+            }
         }
 
-        public async Task<int> AddPurchaseOrderAsync<T>(T input)
+        public async Task<int> AddPurchaseOrderAsync<T>(T input, string createdBy)
         {
             var po = this.mapper.Map<PurchaseOrder>(input);
             po.PurchaseOrderStatus = PurchaseOrderStatus.Created;
             po.ReceivingStatus = ReceivingStatus.Unreceived;
             po.GrandTotal += po.ShippingFee;
+            po.CreatedById = createdBy;
             await this.context.AddAsync(po);
             await this.context.SaveChangesAsync();
             return po.Id;
@@ -62,9 +96,11 @@
             throw new System.NotImplementedException();
         }
 
-        public Task<int> EditVendorAsync(int vendorId)
+        public async Task EditVendorAsync(VendorViewModel input)
         {
-            throw new System.NotImplementedException();
+            var vendor = this.context.Vendors.Include(x => x.Address).FirstOrDefault(x => x.Id == input.Id);
+            this.mapper.Map<VendorViewModel, Vendor>(input, vendor);
+            await this.context.SaveChangesAsync();
         }
 
         public int GetAllPurchaseOrdersCount()
@@ -106,9 +142,12 @@
                 .ToList();
         }
 
-        public Task<int> GetPurchaseOrderDetails(int purchaseOrderId)
+        public T GetPurchaseOrderDetails<T>(int purchaseOrderId)
         {
-            throw new System.NotImplementedException();
+            return this.context.PurchaseOrders
+                .Where(x => x.Id == purchaseOrderId)
+                .To<T>()
+                .FirstOrDefault();
         }
 
         public T GetVendorDetails<T>(int id)
@@ -117,9 +156,11 @@
             return vendor;
         }
 
-        public Task<int> RecalculatePurchaseOrderTotal(int purchaseOrderId)
+        public async Task RecalculatePurchaseOrderTotal(int purchaseOrderId)
         {
-            throw new System.NotImplementedException();
+            var po = this.context.PurchaseOrders.FirstOrDefault(x => x.Id == purchaseOrderId);
+            po.GrandTotal = po.PurchaseItems.Sum(x => x.Qty * x.Cost) + po.ShippingFee;
+            await this.context.SaveChangesAsync();
         }
 
         public Task<int> ReceivePurchaseItem(int purchaseItemId)
@@ -137,6 +178,11 @@
             if (input.Id != null)
             {
                 purchaseOrders = purchaseOrders.Where(x => x.Id == input.Id);
+            }
+
+            if (input.WarehouseId != null && input.WarehouseId != 0)
+            {
+                purchaseOrders = purchaseOrders.Where(x => x.WarehouseId == input.WarehouseId);
             }
 
             if (input.PurchaseOrderStatus != null)

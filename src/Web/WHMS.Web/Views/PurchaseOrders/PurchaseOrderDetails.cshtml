@@ -1,0 +1,148 @@
+﻿@model PurchaseOrderDetailsViewModel
+@{this.ViewData["Title"] = $"PO Details {Model.Id}";}
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Orders/ManageOrders">Manage Purchase Orders</a></li>
+            <li class="breadcrumb-item active" aria-current="page">PO details #@Model.Id</li>
+        </ol>
+    </nav>
+}
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Description</th>
+            <th scope="col">PO Status</th>
+            <th scope="col">Receiving Status</th>
+            <th scope="col">Receiving warehouse</th>
+        </tr>
+    </thead>
+    <tbody class="bg-light">
+        <tr>
+            <th>@Model.Description</th>
+            <th>@Model.PurchaseOrderStatus.ToString()</th>
+            <th>@Model.ReceivingStatus.ToString()</th>
+            <th>@Model.Warehouse.Name</th>
+        </tr>
+    </tbody>
+</table>
+
+
+<div class="row justify-content-around">
+    <div>
+        <div class="card" style="width: 22rem;">
+            <div class="card-body">
+                <h3>Vendor information</h3>
+                <h5 class="card-title">@Model.Vendor.Name</h5>
+                <h6 class="card-subtitle mb-2 text-muted">@Model.Vendor.Email</h6>
+                <p class="mb-0"><b>Address:</b></p>
+                <p class="card-text">@Model.Vendor.Address.ToString()</p>
+                <a asp-action="VendorDetails" asp-route-id="@Model.Vendor.Id" class="card-link">Vendor details</a>
+            </div>
+        </div>
+    </div>
+    @{ var purchaser = String.IsNullOrEmpty(Model.CreatedByEmail) ? "Unknown" : Model.CreatedByEmail;}
+    <div class="ml-4 justify-content-around">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h3> PO Information</h3>
+                <h5 class="card-title">Description:</h5>
+                <h6 class="card-subtitle mb-2 text-muted">@Model.Description</h6>
+                <p class="mb-0"><b>Shipping charges</b></p>
+                <p class="card-text">$@Model.ShippingFee</p>
+                <p class="mb-0"><b>Grand total</b></p>
+                <p class="card-text">$@Model.GrandTotal</p>
+                <p class="mb-0"><b>Salesman</b></p>
+                <p class="card-text">@purchaser</p>
+                <hr />
+            </div>
+        </div>
+    </div>
+    <div class="ml-4 justify-content-around">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h4>Warehouse Info</h4>
+                <h5 class="card-title">Receiving address:</h5>
+                <h6 class="card-text mb-2 font-weight-bold">@Model.Warehouse.Address?.ToString()</h6>
+                <p class="card-text"><b>Warehouse:</b> @Model.Warehouse.Name</p>
+                <hr />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mt-2">
+    <h3 class="d-inline">Order items</h3>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-AddPurchaseItems-modal-lg">Add Items</button>
+    <table class="table table-hover table-striped mt-2">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Image</th>
+                <th scope="col">Product SKU</th>
+                <th scope="col">Qty</th>
+                <th scope="col">Price</th>
+                <th scope="col">Line total</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var oi in Model.PurchaseItems)
+            {
+                <tr>
+                    <td> @oi.ProductId</td>
+                    <td> <img src="@oi.ImageURL" class="rounded-circle img-thumbnail" style="height: 75px; width: 75px;"></td>
+                    <td><a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@oi.ProductId">@oi.ProductSKU</a></td>
+                    <td>@oi.Qty</td>
+                    <td>@oi.Cost</td>
+                    <td>@(oi.Qty * oi.Cost)</td>
+                    <td><a class="btn btn-danger" asp-action="DeletePurchaseItem" asp-route-orderId="@Model.Id" asp-route-Id="@oi.Id">Delete</a></td>
+                </tr>
+            }
+            <tr class="bg-secondary text-light">
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>Grand total</th>
+                <th>@Model.GrandTotal</th>
+                <th></th>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<partial name="_AddPurchaseItemsModal" model="@Model" />
+
+@section Scripts{
+    <script>
+            $(document).ready(function () {
+                var max_fields = 10;
+                var wrapper = $(".PurchaseItem");
+                var add_button = $(".add_form_field");
+
+                var x = 1;
+                $(add_button).click(function (e) {
+                    e.preventDefault();
+                    if (x < max_fields) {
+                        $(wrapper).append('<div> '
+                            + '<div><label for="PurchaseItems[' + x + '].ProductId">ProductId</label>'
+                            + '<input class= "form-control" required id ="PurchaseItems[' + x + '].ProductId" name = "PurchaseItems[' + x + '].ProductId" /></div >'
+                            + '<div class="row">'
+                            + '<div class="col-sm-6" ><label for="PurchaseItems[' + x + '].Qty">Qty</label><input class="form-control" required id="PurchaseItems[' + x + '].Qty" name="PurchaseItems[' + x + '].Qty"/></div >'
+                            + '<div class="col-sm-6" ><label for="PurchaseItems[' + x + '].Cost">Cost</label><input class="form-control" required id="PurchaseItems[' + x + '].Cost" name="PurchaseItems[' + x + '].Cost"/></div >'
+                            + '<a href ="#" class="delete ml-3"> Delete</a ></div > </div > </div >'); //add input box
+                        x++;
+                    } else {
+                        alert('You can only add up to 10 order items at once')
+                    }
+                });
+
+                $(wrapper).on("click", ".delete", function (e) {
+                    e.preventDefault();
+                    $(this).parent('div').parent('div').remove();
+                    x--;
+                })
+            });
+    </script>
+}

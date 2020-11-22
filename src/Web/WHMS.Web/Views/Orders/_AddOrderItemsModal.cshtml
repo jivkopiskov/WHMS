@@ -1,0 +1,33 @@
+﻿@model OrderDetailsViewModel
+
+<div class="modal fade bd-AddOrderItems-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="col-lg-10">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <h4 class="h4 mt-3">Add order items</h4>
+                <div class="mt-2">
+                    <form asp-controller="Orders" asp-action="AddOrderItems" method="post">
+                        <input id="orderId" name="orderId" value="@Model.Id" hidden />
+                        <button class="btn btn-primary add_form_field">
+                            Add new order item &nbsp;
+                            <span style="font-size:16px; font-weight:bold;">+ </span>
+                        </button>
+                        <div class="OrderItem mt-2">
+                            <div>
+                                <label for="productId">Product Id</label>
+                                <input class="form-control" required id="ProductId" name="ProductId" />
+                            </div>
+                            <div>
+                                <label for="Qty">Qty</label>
+                                <input class="form-control" required id="Qty" name="Qty" />
+                            </div>
+                        </div>
+
+                        <button class="btn btn-outline-primary justify-content-center mt-2 mb-2" asp-controller="Orders" asp-action="AddOrderItems">Add order items</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

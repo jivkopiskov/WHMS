@@ -13,7 +13,7 @@
     using WHMS.Data.Models;
     using WHMS.Data.Models.Orders;
     using WHMS.Data.Models.Products;
-    using WHMS.Data.Models.PurchaseOrders;
+    using WHMS.Data.Models.PurchaseOrder;
 
     public class WHMSDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
@@ -62,6 +62,8 @@
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
 
         public DbSet<PurchaseItem> PurchaseItems { get; set; }
+
+        public DbSet<VendorProduct> VendorProducts { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

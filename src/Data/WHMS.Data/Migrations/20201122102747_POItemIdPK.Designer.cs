@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WHMS.Data;
 
 namespace WHMS.Data.Migrations
 {
     [DbContext(typeof(WHMSDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201122102747_POItemIdPK")]
+    partial class POItemIdPK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -833,7 +835,7 @@ namespace WHMS.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("AddressId")
+                    b.Property<int?>("AddressId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
@@ -865,7 +867,7 @@ namespace WHMS.Data.Migrations
                     b.ToTable("Warehouses");
                 });
 
-            modelBuilder.Entity("WHMS.Data.Models.PurchaseOrder.PurchaseItem", b =>
+            modelBuilder.Entity("WHMS.Data.Models.PurchaseOrders.PurchaseItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -907,15 +909,12 @@ namespace WHMS.Data.Migrations
                     b.ToTable("PurchaseItems");
                 });
 
-            modelBuilder.Entity("WHMS.Data.Models.PurchaseOrder.PurchaseOrder", b =>
+            modelBuilder.Entity("WHMS.Data.Models.PurchaseOrders.PurchaseOrder", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
-
-                    b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -957,8 +956,6 @@ namespace WHMS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedById");
-
                     b.HasIndex("IsDeleted");
 
                     b.HasIndex("VendorId");
@@ -968,7 +965,7 @@ namespace WHMS.Data.Migrations
                     b.ToTable("PurchaseOrders");
                 });
 
-            modelBuilder.Entity("WHMS.Data.Models.PurchaseOrder.Vendor", b =>
+            modelBuilder.Entity("WHMS.Data.Models.PurchaseOrders.Vendor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1006,45 +1003,6 @@ namespace WHMS.Data.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("Vendors");
-                });
-
-            modelBuilder.Entity("WHMS.Data.Models.PurchaseOrder.VendorProduct", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("VendorCost")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("VendorId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("VendorId");
-
-                    b.ToTable("VendorProducts");
                 });
 
             modelBuilder.Entity("WHMS.Data.Models.Setting", b =>
@@ -1242,7 +1200,7 @@ namespace WHMS.Data.Migrations
                         .WithMany("Products")
                         .HasForeignKey("ManufacturerId");
 
-                    b.HasOne("WHMS.Data.Models.PurchaseOrder.Vendor", "Vendor")
+                    b.HasOne("WHMS.Data.Models.PurchaseOrders.Vendor", "Vendor")
                         .WithMany()
                         .HasForeignKey("VendorId");
 
@@ -1280,14 +1238,12 @@ namespace WHMS.Data.Migrations
                 {
                     b.HasOne("WHMS.Data.Models.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("AddressId");
 
                     b.Navigation("Address");
                 });
 
-            modelBuilder.Entity("WHMS.Data.Models.PurchaseOrder.PurchaseItem", b =>
+            modelBuilder.Entity("WHMS.Data.Models.PurchaseOrders.PurchaseItem", b =>
                 {
                     b.HasOne("WHMS.Data.Models.Products.Product", "Product")
                         .WithMany("PurchaseItems")
@@ -1295,7 +1251,7 @@ namespace WHMS.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WHMS.Data.Models.PurchaseOrder.PurchaseOrder", "PurchaseOrder")
+                    b.HasOne("WHMS.Data.Models.PurchaseOrders.PurchaseOrder", "PurchaseOrder")
                         .WithMany("PurchaseItems")
                         .HasForeignKey("PurchaseOrderId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1306,13 +1262,9 @@ namespace WHMS.Data.Migrations
                     b.Navigation("PurchaseOrder");
                 });
 
-            modelBuilder.Entity("WHMS.Data.Models.PurchaseOrder.PurchaseOrder", b =>
+            modelBuilder.Entity("WHMS.Data.Models.PurchaseOrders.PurchaseOrder", b =>
                 {
-                    b.HasOne("WHMS.Data.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
-                    b.HasOne("WHMS.Data.Models.PurchaseOrder.Vendor", "Vendor")
+                    b.HasOne("WHMS.Data.Models.PurchaseOrders.Vendor", "Vendor")
                         .WithMany("PurchaseOrders")
                         .HasForeignKey("VendorId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1324,39 +1276,18 @@ namespace WHMS.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("CreatedBy");
-
                     b.Navigation("Vendor");
 
                     b.Navigation("Warehouse");
                 });
 
-            modelBuilder.Entity("WHMS.Data.Models.PurchaseOrder.Vendor", b =>
+            modelBuilder.Entity("WHMS.Data.Models.PurchaseOrders.Vendor", b =>
                 {
                     b.HasOne("WHMS.Data.Models.Address", "Address")
                         .WithMany()
                         .HasForeignKey("AddressId");
 
                     b.Navigation("Address");
-                });
-
-            modelBuilder.Entity("WHMS.Data.Models.PurchaseOrder.VendorProduct", b =>
-                {
-                    b.HasOne("WHMS.Data.Models.Products.Product", "Product")
-                        .WithMany("VendorProducts")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("WHMS.Data.Models.PurchaseOrder.Vendor", "Vendor")
-                        .WithMany("VendorProducts")
-                        .HasForeignKey("VendorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("Vendor");
                 });
 
             modelBuilder.Entity("WHMS.Data.Models.ApplicationUser", b =>
@@ -1406,8 +1337,6 @@ namespace WHMS.Data.Migrations
                     b.Navigation("ProductWarehouses");
 
                     b.Navigation("PurchaseItems");
-
-                    b.Navigation("VendorProducts");
                 });
 
             modelBuilder.Entity("WHMS.Data.Models.Products.ProductCondition", b =>
@@ -1422,16 +1351,14 @@ namespace WHMS.Data.Migrations
                     b.Navigation("ProductWarehouses");
                 });
 
-            modelBuilder.Entity("WHMS.Data.Models.PurchaseOrder.PurchaseOrder", b =>
+            modelBuilder.Entity("WHMS.Data.Models.PurchaseOrders.PurchaseOrder", b =>
                 {
                     b.Navigation("PurchaseItems");
                 });
 
-            modelBuilder.Entity("WHMS.Data.Models.PurchaseOrder.Vendor", b =>
+            modelBuilder.Entity("WHMS.Data.Models.PurchaseOrders.Vendor", b =>
                 {
                     b.Navigation("PurchaseOrders");
-
-                    b.Navigation("VendorProducts");
                 });
 #pragma warning restore 612, 618
         }

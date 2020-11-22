@@ -2,5 +2,7 @@
 @model IEnumerable<SelectListItem>
 
 <label for="@nameof(ProductAdjustmentInputModel.WarehouseId)"> Warehouse Name </label>
-<select name="@nameof(ProductAdjustmentInputModel.WarehouseId)" id="@nameof(ProductAdjustmentInputModel.WarehouseId)" class="form-control" asp-items="Model"></select>
+<select name="@nameof(ProductAdjustmentInputModel.WarehouseId)" id="@nameof(ProductAdjustmentInputModel.WarehouseId)" class="form-control" asp-items="Model">
+    <option value="0">Select warehouse</option>
+</select>
 

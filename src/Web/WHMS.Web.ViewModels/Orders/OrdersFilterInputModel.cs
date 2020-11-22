@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Text;
 
     using WHMS.Data.Models.Orders.Enum;
@@ -12,13 +13,19 @@
 
         public string SKU { get; set; }
 
+        [Display(Name = "Customer Email")]
         public string CustomerEmail { get; set; }
 
+        [Display(Name = "Shipping Status")]
         public ShippingStatus? ShippingStatus { get; set; }
 
+        [Display(Name = "Payment Status")]
         public PaymentStatus? PaymentStatus { get; set; }
 
+        [Display(Name = "Payment Status")]
         public OrderStatus? OrderStatus { get; set; }
+
+        public int? WarehouseId { get; set; }
 
         public Dictionary<string, string> ToDictionary()
         {
@@ -32,6 +39,11 @@
             if (!string.IsNullOrEmpty(this.CustomerEmail))
             {
                 dict[nameof(this.CustomerEmail)] = this.CustomerEmail;
+            }
+
+            if (this.WarehouseId != null && this.WarehouseId != 0)
+            {
+                dict["warehouseId"] = this.WarehouseId.ToString();
             }
 
             if (this.ShippingStatus != null)

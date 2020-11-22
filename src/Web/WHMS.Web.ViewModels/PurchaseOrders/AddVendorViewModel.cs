@@ -5,7 +5,7 @@
     using System.Linq;
 
     using WHMS.Data;
-    using WHMS.Data.Models.PurchaseOrders;
+    using WHMS.Data.Models.PurchaseOrder;
     using WHMS.Services.Mapping;
 
     public class AddVendorViewModel : IMapFrom<Vendor>, IMapTo<Vendor>, IValidatableObject

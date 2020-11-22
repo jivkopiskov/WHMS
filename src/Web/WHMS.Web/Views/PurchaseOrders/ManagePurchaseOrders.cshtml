@@ -1,10 +1,9 @@
 ﻿@model ManagePurchaseOrdersViewModel 
 @{this.ViewData["Title"] = $"Manage Purchase orders";}
-
-<div>
-    <a type="button" class="btn-success p-2 mb-4" asp-action="AddPurchaseOrder">Add PO</a>
+<div class="bg-light">
+    <a type="button" class="btn-dark p-2 mb-4" asp-action="AddPurchaseOrder">Add PO</a>
 </div>
-
+<h3 class="h3 text-center">Manage POs</h3>
 <partial name="_SearchPurchaseOrders" model="Model.Filters" />
 
 <div class="row">

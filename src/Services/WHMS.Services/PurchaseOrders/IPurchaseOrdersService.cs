@@ -19,20 +19,20 @@
 
         T GetVendorDetails<T>(int id);
 
-        Task<int> GetPurchaseOrderDetails(int purchaseOrderId);
+        T GetPurchaseOrderDetails<T>(int purchaseOrderId);
 
-        Task<int> AddPurchaseOrderAsync<T>(T input);
+        Task<int> AddPurchaseOrderAsync<T>(T input, string userId);
 
         Task<int> EditPurchaseOrderAsync(int purchaseOrderId);
 
         Task<int> EditPurchaseItemAsync(int purchaseItemId);
 
-        Task<int> AddPurchaseItemAsync(int purchaseOrderId, int productId);
+        Task AddPurchaseItemAsync(AddPurchaseItemsInputModel input);
 
         // remember to recalcualte order grand total
         Task<int> DeletePurchaseItemAsync(int purchaseItemId);
 
-        Task<int> RecalculatePurchaseOrderTotal(int purchaseOrderId);
+        Task RecalculatePurchaseOrderTotal(int purchaseOrderId);
 
         Task<int> ReceiveWholePurchaseOrder(int purchaseOrderId);
 
@@ -40,6 +40,6 @@
 
         Task<int> AddVendorAsync<T>(T input);
 
-        Task<int> EditVendorAsync(int vendorId);
+        Task EditVendorAsync(VendorViewModel input);
     }
 }

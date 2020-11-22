@@ -1,10 +1,10 @@
 ﻿@model PurchaseOrdersFilterModel
-@using WHMS.Data.Models.PurchaseOrders.Enum 
+@using WHMS.Data.Models.PurchaseOrder.Enum 
 
 <h5 class="h5"> Search filters</h5>
 <div class="row border-top my-3 bg-dark">
     <form  method="get">
-        <div class="row text-white pb-2 ml-1 d-flex justify-content-between">
+        <div class="row text-white pb-2 ml-1 d-flex justify-content-lg-start">
             <div class="col-sm-3">
                 <label asp-for="Id"></label>
                 <input asp-for="Id" class="form-control" value="@Model.Id" />
@@ -28,6 +28,9 @@
                 <select asp-for="ReceivingStatus" asp-items="@Html.GetEnumSelectList<ReceivingStatus>()" class="form-control" value="@Model.ReceivingStatus">
                     <option>All</option>
                 </select>
+            </div>
+            <div class="col-sm-3">
+                <vc:warehouse-dropdown id="Model.WarehouseId ?? 0"></vc:warehouse-dropdown>
             </div>
         </div>
         <button class="btn btn-light mt-2 ml-2" asp-action="ManagePurchaseOrders">Search</button>

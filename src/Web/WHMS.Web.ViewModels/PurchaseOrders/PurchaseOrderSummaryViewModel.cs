@@ -1,7 +1,7 @@
 ﻿namespace WHMS.Web.ViewModels.PurchaseOrders
 {
-    using WHMS.Data.Models.PurchaseOrders;
-    using WHMS.Data.Models.PurchaseOrders.Enum;
+    using WHMS.Data.Models.PurchaseOrder;
+    using WHMS.Data.Models.PurchaseOrder.Enum;
     using WHMS.Services.Mapping;
 
     public class PurchaseOrderSummaryViewModel : IMapFrom<PurchaseOrder>

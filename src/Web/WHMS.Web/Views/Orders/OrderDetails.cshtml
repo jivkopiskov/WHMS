@@ -86,7 +86,7 @@
 </div>
 <div class="mt-2">
     <h3 class="d-inline">Order items</h3>
-    <a asp-action="AddOrderItems" asp-route-id="@Model.Id" class="btn btn-primary ml-3">Add order items</a>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-AddOrderItems-modal-lg">Add Order Item</button>
     @if (this.TempData.ContainsKey("invalidOrder") && (bool)this.TempData["invalidOrder"] == true)
     {
         <div class="alert alert-danger">Order is shipped or cancelled. Cannot delete order item.</div>
@@ -123,7 +123,37 @@
                 <th></th>
                 <th>Grand total</th>
                 <th>@Model.GrandTotal</th>
+                <th></th>
             </tr>
         </tbody>
     </table>
 </div>
+
+<partial name="_AddOrderItemsModal" model="@Model" />
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var max_fields = 10;
+            var wrapper = $(".OrderItem");
+            var add_button = $(".add_form_field");
+
+            var x = 1;
+            $(add_button).click(function (e) {
+                e.preventDefault();
+                if (x < max_fields) {
+                    x++;
+                    $(wrapper).append('<div> <div><label for="productId">ProductId</label><input class="form-control"required id="productId" name="productId"/></div><div><label for="Qty">Qty</label><input class="form-control" required id="Qty" name="Qty"/></div> <a href="#" class="delete">Delete</a></div> </div>'); //add input box
+                } else {
+                    alert('You can only add up to 10 order items at once')
+                }
+            });
+
+            $(wrapper).on("click", ".delete", function (e) {
+                e.preventDefault();
+                $(this).parent('div').remove();
+                x--;
+            })
+        });
+    </script>
+}

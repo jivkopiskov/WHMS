@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using WHMS.Data.Models.PurchaseOrders.Enum;
+    using WHMS.Data.Models.PurchaseOrder.Enum;
 
     public class PurchaseOrdersFilterModel : IFilter
     {
@@ -13,6 +13,8 @@
         public int? Id { get; set; }
 
         public int? VendorId { get; set; }
+
+        public int? WarehouseId { get; set; }
 
         [Display(Name = "SKU / Product ID")]
         public string SKU { get; set; }
@@ -35,6 +37,11 @@
             if (this.VendorId != null && this.VendorId != 0)
             {
                 dictionary["vendorId"] = this.VendorId.ToString();
+            }
+
+            if (this.WarehouseId != null && this.WarehouseId != 0)
+            {
+                dictionary["warehouseId"] = this.WarehouseId.ToString();
             }
 
             if (this.PurchaseOrderStatus != null)

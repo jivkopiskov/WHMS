@@ -14,6 +14,8 @@
 
         public bool IsSellable { get; set; }
 
+        public int AddressId { get; set; }
+
         public Address Address { get; set; }
 
         public ICollection<ProductWarehouse> ProductWarehouses { get; set; } = new HashSet<ProductWarehouse>();

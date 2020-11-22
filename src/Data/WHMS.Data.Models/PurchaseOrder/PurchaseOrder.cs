@@ -1,4 +1,4 @@
-﻿namespace WHMS.Data.Models.PurchaseOrders
+﻿namespace WHMS.Data.Models.PurchaseOrder
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,7 @@
 
     using WHMS.Data.Common.Models;
     using WHMS.Data.Models.Products;
-    using WHMS.Data.Models.PurchaseOrders.Enum;
+    using WHMS.Data.Models.PurchaseOrder.Enum;
 
     public class PurchaseOrder : BaseDeletableModel<int>
     {
@@ -33,5 +33,9 @@
         public decimal ShippingFee { get; set; }
 
         public decimal GrandTotal { get; set; }
+
+        public string CreatedById { get; set; }
+
+        public ApplicationUser CreatedBy { get; set; }
     }
 }

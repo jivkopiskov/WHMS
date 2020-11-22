@@ -1,4 +1,4 @@
-﻿namespace WHMS.Data.Models.PurchaseOrders.Enum
+﻿namespace WHMS.Data.Models.PurchaseOrder.Enum
 {
     using System.ComponentModel.DataAnnotations;
 

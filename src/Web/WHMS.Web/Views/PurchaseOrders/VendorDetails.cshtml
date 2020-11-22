@@ -58,17 +58,21 @@
         <table class="table table-hover table-striped">
             <thead>
                 <tr>
-                    <td>PO Id</td>
-                    <td>PO Description</td>
-                    <td>PO Grand Total</td>
+                    <td>Id</td>
+                    <td>Description</td>
+                    <td>Grand Total</td>
+                    <td>Status</td>
+                    <td>Received</td>
                 </tr>
             </thead>
             @foreach (var po in Model.PurchaseOrders.OrderByDescending(x => x.Id).Take(5))
             {
                 <tr>
-                    <td>@po.Id</td>
+                    <td><a asp-action="PurchaseOrderDetails" asp-route-id="@po.Id">@po.Id </a></td>
                     <td>@po.Description</td>
                     <td>@po.GrandTotal</td>
+                    <td>@po.PurchaseOrderStatus.ToString()</td>
+                    <td>@po.ReceivingStatus.ToString()</td>
                 </tr>
             }
         </table>

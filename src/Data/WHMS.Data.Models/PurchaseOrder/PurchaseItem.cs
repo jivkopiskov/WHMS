@@ -1,9 +1,9 @@
-﻿namespace WHMS.Data.Models.PurchaseOrders
+﻿namespace WHMS.Data.Models.PurchaseOrder
 {
     using WHMS.Data.Common.Models;
     using WHMS.Data.Models.Products;
 
-    public class PurchaseItem
+    public class PurchaseItem : BaseDeletableModel<int>
     {
         public int PurchaseOrderId { get; set; }
 

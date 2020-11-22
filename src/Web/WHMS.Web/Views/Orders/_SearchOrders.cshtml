@@ -4,7 +4,7 @@
 <h5 class="h5"> Search filters</h5>
 <div class="row border-top my-3 bg-dark">
     <form asp-controller="Orders" asp-action="ManageOrders" method="get">
-        <div class="row text-white pb-2 ml-1 d-flex justify-content-between">
+        <div class="row text-white pb-2 ml-1 d-flex justify-content-start">
             <div class="col-sm-3">
                 <label asp-for="SKU"></label>
                 <input asp-for="SKU" class="form-control" value="@Model.SKU" />
@@ -26,11 +26,14 @@
                 </select>
             </div>
             <div class="col-sm-3">
-                <label asp-for="OrderStatus">                
+                <label asp-for="OrderStatus">
                 </label>
                 <select asp-for="OrderStatus" asp-items="@Html.GetEnumSelectList<PaymentStatus>()" class="form-control" value="@Model.OrderStatus">
                     <option>Select</option>
                 </select>
+            </div>
+            <div class="col-sm-3">
+                <vc:warehouse-dropdown id="Model.WarehouseId ?? 0"></vc:warehouse-dropdown>
             </div>
         </div>
         <button class="btn btn-light mt-2 ml-2" asp-controller="Orders" asp-action="ManageOrders">Search</button>

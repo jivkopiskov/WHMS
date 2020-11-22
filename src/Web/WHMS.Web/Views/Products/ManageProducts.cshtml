@@ -1,7 +1,7 @@
 ﻿@model ManageProductsViewModel
 @{this.ViewData["Title"] = $"Manage Products";}
-<div>
-    <a type="button" class="btn-success p-2 mb-4" href="/Products/AddProduct" role="button">Add Product</a>
+<div class="bg-light">
+    <a type="button" class="btn-dark p-2 mb-4" asp-action="AddProduct" role="button">Add Product</a>
 </div>
 <partial name="_SearchProducts" model="Model.Filters" />
 <div class="row">
@@ -13,7 +13,7 @@
                 <h5 class="card-title">@item.ProductName</h5>
                 <p class="card-text"><b>Id:</b> @item.Id <b>SKU:</b> @item.SKU</p>
                 <p class="card-text"><b>Price:</b> $@item.WebsitePrice </p>
-                <a class="btn btn-primary" asp-controller="Products" asp-action="ProductDetails" asp-route-id="@item.Id">View Details</a>
+                <a class="btn btn-dark" asp-controller="Products" asp-action="ProductDetails" asp-route-id="@item.Id">View Details</a>
             </div>
         </div>
     }

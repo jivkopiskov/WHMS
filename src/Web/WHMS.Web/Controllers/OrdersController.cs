@@ -87,7 +87,7 @@
             }
 
             await this.orderItemsService.AddOrderItemAsync(input);
-            return this.View(input);
+            return this.RedirectToAction(nameof(this.OrderDetails), new { id = input.OrderId });
         }
 
         public async Task<IActionResult> DeleteOrderItem([ValidOrder] int orderId, int id)

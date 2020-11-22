@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,13 @@
             return this.View(model);
         }
 
+        public IActionResult PurchaseOrderDetails(int id)
+        {
+            var model = this.purchaseOrdersService.GetPurchaseOrderDetails<PurchaseOrderDetailsViewModel>(id);
+
+            return this.View(model);
+        }
+
         public IActionResult AddPurchaseOrder()
         {
             return this.View();
@@ -45,8 +53,32 @@
                 return this.View(input);
             }
 
-            await this.purchaseOrdersService.AddPurchaseOrderAsync(input);
+            var userId = this.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            await this.purchaseOrdersService.AddPurchaseOrderAsync(input, userId);
             return this.RedirectToAction(nameof(this.ManagePurchaseOrders));
+        }
+
+        public IActionResult AddPurchaseItem(int purchaseOrderId, int vendorId)
+        {
+            var model = new AddPurchaseItemsInputModel
+            {
+               PurchaseOrderId = purchaseOrderId,
+               VendorId = vendorId,
+            };
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddPurchaseItem(AddPurchaseItemsInputModel input)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(input);
+            }
+
+            await this.purchaseOrdersService.AddPurchaseItemAsync(input);
+            return this.RedirectToAction(nameof(this.PurchaseOrderDetails), new { id = input.PurchaseOrderId });
         }
 
         public IActionResult ManageVendors(int page = 1)
@@ -85,14 +117,17 @@
         }
 
         [HttpPost]
-        public IActionResult VendorDetails(VendorViewModel input)
+        public async Task<IActionResult> VendorDetails(VendorViewModel input)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.View(input);
             }
 
-            return this.View(input);
+            await this.purchaseOrdersService.EditVendorAsync(input);
+
+            var model = this.purchaseOrdersService.GetVendorDetails<VendorViewModel>(input.Id);
+            return this.View(model);
         }
     }
 }

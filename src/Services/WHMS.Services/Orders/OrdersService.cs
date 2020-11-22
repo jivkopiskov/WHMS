@@ -178,6 +178,11 @@
                 orders = orders.Where(x => x.ShippingStatus == input.ShippingStatus);
             }
 
+            if (input.WarehouseId != null && input.WarehouseId != 0)
+            {
+                orders = orders.Where(x => x.WarehouseId == input.WarehouseId);
+            }
+
             if (input.OrderStatus != null)
             {
                 orders = orders.Where(x => x.OrderStatus == input.OrderStatus);
