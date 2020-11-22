@@ -8,6 +8,8 @@
 
     public interface IFilter
     {
+        public int Page { get; set; }
+
         public abstract Dictionary<string, string> ToDictionary();
     }
 }

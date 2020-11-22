@@ -3,10 +3,11 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using WHMS.Web.ViewModels.PurchaseOrders;
+
     public interface IPurchaseOrdersService
     {
-        // id for pagination
-        Task<int> GetAllPurchaseOrders(int purchaseOrderId);
+        IEnumerable<T> GetAllPurchaseOrders<T>(PurchaseOrdersFilterModel input);
 
         IEnumerable<T> GetAllVendors<T>(int page);
 
@@ -14,11 +15,13 @@
 
         int GetAllVendorsCount();
 
+        int GetAllPurchaseOrdersCount();
+
         T GetVendorDetails<T>(int id);
 
         Task<int> GetPurchaseOrderDetails(int purchaseOrderId);
 
-        Task<int> CreatePurchaseOrderAsync();
+        Task<int> AddPurchaseOrderAsync<T>(T input);
 
         Task<int> EditPurchaseOrderAsync(int purchaseOrderId);
 

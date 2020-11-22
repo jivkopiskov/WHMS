@@ -67,9 +67,9 @@
             }
 
             input.CreatedById = this.userManager.GetUserId(this.User);
-            await this.ordersService.AddOrderAsync(input);
+            var orderId = await this.ordersService.AddOrderAsync(input);
 
-            return this.RedirectToAction(nameof(this.ManageOrders));
+            return this.RedirectToAction(nameof(this.OrderDetails), new { id = orderId });
         }
 
         public IActionResult AddOrderItems(int id)

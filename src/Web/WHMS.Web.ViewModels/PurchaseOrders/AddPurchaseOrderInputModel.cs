@@ -17,7 +17,7 @@
 
         public DateTime? ETA { get; set; }
 
-        [Range(1,double.MaxValue)]
+        [Range(1, double.MaxValue)]
         public int VendorId { get; set; }
 
         [Range(0, double.MaxValue)]

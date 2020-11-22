@@ -20,6 +20,8 @@
 
         public DateTime? ETA { get; set; }
 
+        public int VendorId { get; set; }
+
         public Vendor Vendor { get; set; }
 
         public ICollection<PurchaseItem> PurchaseItems { get; set; } = new HashSet<PurchaseItem>();

@@ -19,9 +19,17 @@
             this.purchaseOrdersService = purchaseOrdersService;
         }
 
-        public IActionResult ManagePurchaseOrders()
+        public IActionResult ManagePurchaseOrders(PurchaseOrdersFilterModel input)
         {
-            return this.View();
+            var model = new ManagePurchaseOrdersViewModel
+            {
+                Filters = input,
+                Page = input.Page,
+                PurchaseOrders = this.purchaseOrdersService.GetAllPurchaseOrders<PurchaseOrderSummaryViewModel>(input),
+                PagesCount = (int)Math.Ceiling(this.purchaseOrdersService.GetAllPurchaseOrdersCount() / (double)GlobalConstants.PageSize),
+            };
+
+            return this.View(model);
         }
 
         public IActionResult AddPurchaseOrder()
@@ -30,14 +38,15 @@
         }
 
         [HttpPost]
-        public IActionResult AddPurchaseOrder(AddPurchaseOrderInputModel input)
+        public async Task<IActionResult> AddPurchaseOrder(AddPurchaseOrderInputModel input)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.View(input);
             }
 
-            return this.View(input);
+            await this.purchaseOrdersService.AddPurchaseOrderAsync(input);
+            return this.RedirectToAction(nameof(this.ManagePurchaseOrders));
         }
 
         public IActionResult ManageVendors(int page = 1)

@@ -1,0 +1,35 @@
+﻿@model PurchaseOrdersFilterModel
+@using WHMS.Data.Models.PurchaseOrders.Enum 
+
+<h5 class="h5"> Search filters</h5>
+<div class="row border-top my-3 bg-dark">
+    <form  method="get">
+        <div class="row text-white pb-2 ml-1 d-flex justify-content-between">
+            <div class="col-sm-3">
+                <label asp-for="Id"></label>
+                <input asp-for="Id" class="form-control" value="@Model.Id" />
+            </div>
+            <div class="col-sm-3">
+                <label asp-for="SKU"></label>
+                <input asp-for="SKU" class="form-control" value="@Model.SKU" />
+            </div>
+            <div class="col-sm-3">
+                <vc:vendor-dropdown id="Model.VendorId ?? 0"></vc:vendor-dropdown>
+            </div>
+            <div class="col-sm-3">
+                <label asp-for="PurchaseOrderStatus"></label>
+                <select asp-for="PurchaseOrderStatus" asp-items="@Html.GetEnumSelectList<PurchaseOrderStatus>()" class="form-control" value="@Model.PurchaseOrderStatus">
+                    <option>All</option>
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <label asp-for="ReceivingStatus">
+                </label>
+                <select asp-for="ReceivingStatus" asp-items="@Html.GetEnumSelectList<ReceivingStatus>()" class="form-control" value="@Model.ReceivingStatus">
+                    <option>All</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn btn-light mt-2 ml-2" asp-action="ManagePurchaseOrders">Search</button>
+    </form>
+</div>

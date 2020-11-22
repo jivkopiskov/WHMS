@@ -1,5 +1,39 @@
-﻿@{this.ViewData["Title"] = $"Manage Purchase orders";}
+﻿@model ManagePurchaseOrdersViewModel 
+@{this.ViewData["Title"] = $"Manage Purchase orders";}
 
 <div>
     <a type="button" class="btn-success p-2 mb-4" asp-action="AddPurchaseOrder">Add PO</a>
 </div>
+
+<partial name="_SearchPurchaseOrders" model="Model.Filters" />
+
+<div class="row">
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th scope="col">PO #</th>
+                <th scope="col">Vendor</th>
+                <th scope="col">Description</th>
+                <th scope="col">Grand Total</th>
+                <th scope="col">PO Status</th>
+                <th scope="col">Receiving Status</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var po in Model.PurchaseOrders)
+            {
+                <tr>
+                    <td><a asp-action="PurchaseOrderDetails" asp-route-id="@po.Id">@po.Id</a></td>
+                    <td>@po.VendorName</td>
+                    <td>@po.Description</td>
+                    <td>$@po.GrandTotal</td>
+                    <td>@po.PurchaseOrderStatus.ToString()</td>
+                    <td>@po.ReceivingStatus.ToString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+<partial name="_PagingPartial" model="Model"/>

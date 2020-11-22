@@ -1,8 +1,14 @@
 ﻿namespace WHMS.Data.Models.PurchaseOrders.Enum
 {
+    using System.ComponentModel.DataAnnotations;
+
     public enum ReceivingStatus
     {
         Unreceived = 0,
-        Received = 1,
+
+        [Display(Name = "Partially received")]
+        PartiallyReceived = 1,
+
+        Received = 2,
     }
 }
