@@ -13,6 +13,7 @@
     using WHMS.Common;
     using WHMS.Data.Models;
     using WHMS.Data.Models.Products;
+    using WHMS.Services.Messaging;
     using WHMS.Services.Orders;
     using WHMS.Services.Products;
     using WHMS.Web.ViewModels.Orders;
@@ -29,6 +30,7 @@
         private readonly IWarehouseService warehouseService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IOrderItemsService orderItemsService;
+        private readonly IEmailSender emailSender;
 
         public ProductsController(
             IProductsService productsService,
@@ -38,7 +40,8 @@
             IManufacturersService manufacturersService,
             IWarehouseService warehouseService,
             UserManager<ApplicationUser> userManager,
-            IOrderItemsService orderItemsService)
+            IOrderItemsService orderItemsService,
+            IEmailSender emailSender)
         {
             this.productService = productsService;
             this.brandsService = brandsService;
@@ -48,6 +51,14 @@
             this.warehouseService = warehouseService;
             this.userManager = userManager;
             this.orderItemsService = orderItemsService;
+            this.emailSender = emailSender;
+        }
+
+        public async Task<IActionResult> Test()
+        {
+            await this.emailSender.SendEmailAsync("jivkopiskov@gmail.com", "Jivko", "jivkopiskov@gmail.com", "Test 1", "Success!");
+
+            return this.StatusCode(1);
         }
 
         public IActionResult ManageProducts(ProductFilterInputModel input)
