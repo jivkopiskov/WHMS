@@ -81,6 +81,7 @@
             services.AddTransient<IOrderItemsService, OrderItemsService>();
             services.AddTransient<IShippingService, ShippingService>();
             services.AddTransient<IPurchaseOrdersService, PurchaseOrdersService>();
+            services.AddTransient<IHtmlToPdfConverter, HtmlToPdfConverter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

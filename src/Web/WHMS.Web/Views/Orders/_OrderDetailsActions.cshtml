@@ -1,6 +1,7 @@
 ﻿@model OrderDetailsViewModel
 
 <a asp-action="ManagePayments" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Manage payments</a>
+<a asp-action="GetPdf" asp-route-id="@Model.Id" download="Invoice_@Model.Id" target="_blank" class="btn btn-primary mb-2">Print invoice</a>
 @if (Model.OrderStatus == OrderStatus.Processing)
 {
     <a asp-action="CancelOrder" asp-route-id="@Model.Id" class="btn btn-primary mb-2">Cancel order</a>

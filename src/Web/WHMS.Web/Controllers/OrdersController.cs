@@ -2,15 +2,18 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using WHMS.Common;
     using WHMS.Data.Models;
+    using WHMS.Services.Common;
     using WHMS.Services.Orders;
     using WHMS.Web.Infrastructure.ModelBinders;
     using WHMS.Web.ViewModels;
@@ -18,26 +21,32 @@
     using WHMS.Web.ViewModels.ValidationAttributes;
 
     [Authorize]
-    public class OrdersController : Controller
+    public class OrdersController : BaseController
     {
         private readonly IOrdersService ordersService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ICustomersService customersService;
         private readonly IOrderItemsService orderItemsService;
         private readonly IShippingService shippingService;
+        private readonly IHtmlToPdfConverter htmlToPdfConverter;
+        private readonly IWebHostEnvironment environment;
 
         public OrdersController(
             IOrdersService ordersService,
             UserManager<ApplicationUser> userManager,
             ICustomersService customersService,
             IOrderItemsService orderItemsService,
-            IShippingService shippingService)
+            IShippingService shippingService,
+            IHtmlToPdfConverter htmlToPdfConverter,
+            IWebHostEnvironment environment)
         {
             this.ordersService = ordersService;
             this.userManager = userManager;
             this.customersService = customersService;
             this.orderItemsService = orderItemsService;
             this.shippingService = shippingService;
+            this.htmlToPdfConverter = htmlToPdfConverter;
+            this.environment = environment;
         }
 
         public IActionResult ManageOrders(OrdersFilterInputModel input)
@@ -267,6 +276,15 @@
             };
 
             return this.View(model);
+        }
+
+        public async Task<IActionResult> GetPdf(int id)
+        {
+            var model = this.ordersService.GetOrderDetails<OrderDetailsViewModel>(id);
+            var viewHtml = await this.RenderViewAsync("GetPdf", model);
+            var result = this.htmlToPdfConverter.Convert(this.environment.ContentRootPath, viewHtml);
+
+            return this.File(result, "application/pdf");
         }
 
         public JsonResult GetMethodsForCarrier(int carrierId)
