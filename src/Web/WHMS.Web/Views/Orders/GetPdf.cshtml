@@ -27,7 +27,7 @@
             </div>
         </div>
         @{ var salesMan = String.IsNullOrEmpty(Model.CreatedByEmail) ? "Unknown" : Model.CreatedByEmail;}
-        <div class="ml-4" style="display:inline-block">
+        <div class="ml-4" style="display:inline-block;">
             <div class="card" style="width: 300px; display:inline-block;">
                 <div class="card-body" style="display:inline-block;">
                     <h3> Order Information</h3>
@@ -37,6 +37,20 @@
                     <p class="card-text">@Model.PaidAmount</p>
                     <p class="mb-0"><b>Grand total</b></p>
                     <p class="card-text">@Model.GrandTotal</p>
+                </div>
+            </div>
+        </div>
+        <div class="ml-4"  style="display:inline-block">
+            <div class="card" style="width: 400px; display:inline-block;">
+                <div class="card-body" style="width: 400px; display:inline-block;" >
+                    <h3>Shipping information</h3>
+                    <p class="mb-0"><b>Shipping method</b></p>
+                    <p class="card-text">@(Model?.ShippingMethod?.Carrier?.Name ?? "No carrier select") / @(Model?.ShippingMethod?.Name ?? "No method select")</p>
+                    <p class="mb-0"><b>Ship By Date</b></p>
+                    <p class="card-text">@(Model.ShipByDate?.ToString() ?? "No Ship By Date")</p>
+                    <p class="mb-0"><b>Tracking number</b></p>
+                    <p class="card-text">@Model.TrackingNumber</p>
+                    <hr />
                 </div>
             </div>
         </div>

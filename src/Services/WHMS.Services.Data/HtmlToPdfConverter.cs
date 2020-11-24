@@ -16,6 +16,7 @@
                 WorkingDirectory = basePath,
                 Arguments = $"rasterize.js \"{inputFileName}\" \"{outputFileName}\" \"{formatType}\" \"{orientationType.ToLower()}\"",
                 UseShellExecute = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
             };
 
             var process = new Process { StartInfo = startInfo };
