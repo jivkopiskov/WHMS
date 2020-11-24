@@ -6,6 +6,7 @@
     using System.Security.Claims;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using WHMS.Common;
     using WHMS.Data.Models.PurchaseOrder.Enum;
@@ -13,6 +14,7 @@
     using WHMS.Web.ViewModels.PurchaseOrders;
     using WHMS.Web.ViewModels.ValidationAttributes;
 
+    [Authorize]
     public class PurchaseOrdersController : Controller
     {
         private readonly IPurchaseOrdersService purchaseOrdersService;
