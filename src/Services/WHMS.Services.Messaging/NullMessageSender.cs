@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public class NullMessageSender : IEmailSender
+    public class NullMessageSender : IManualEmailSender
     {
         public Task SendEmailAsync(
             string from,

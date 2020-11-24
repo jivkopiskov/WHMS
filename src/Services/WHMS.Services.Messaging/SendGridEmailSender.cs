@@ -5,10 +5,11 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Identity.UI.Services;
     using SendGrid;
     using SendGrid.Helpers.Mail;
 
-    public class SendGridEmailSender : IEmailSender
+    public class SendGridEmailSender : IEmailSender, IManualEmailSender
     {
         private readonly SendGridClient client;
 
@@ -46,6 +47,11 @@
                 Console.WriteLine(e);
                 throw;
             }
+        }
+
+        public Task SendEmailAsync(string email, string subject, string htmlMessage)
+        {
+            return this.SendEmailAsync("jivkopiskov@gmail.com", "WHMS", email, subject, htmlMessage, null);
         }
     }
 }

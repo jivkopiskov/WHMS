@@ -30,7 +30,7 @@
         private readonly IWarehouseService warehouseService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IOrderItemsService orderItemsService;
-        private readonly IEmailSender emailSender;
+        private readonly IManualEmailSender emailSender;
 
         public ProductsController(
             IProductsService productsService,
@@ -41,7 +41,7 @@
             IWarehouseService warehouseService,
             UserManager<ApplicationUser> userManager,
             IOrderItemsService orderItemsService,
-            IEmailSender emailSender)
+            IManualEmailSender emailSender)
         {
             this.productService = productsService;
             this.brandsService = brandsService;

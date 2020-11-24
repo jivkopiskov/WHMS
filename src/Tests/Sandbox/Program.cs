@@ -75,7 +75,7 @@
                 .AddRoles<ApplicationRole>().AddEntityFrameworkStores<WHMSDbContext>();
 
             // Application services
-            services.AddTransient<IEmailSender, NullMessageSender>();
+            services.AddTransient<IManualEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
         }
     }
