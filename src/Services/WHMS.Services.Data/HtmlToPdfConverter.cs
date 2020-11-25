@@ -3,6 +3,7 @@
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Text;
 
     public class HtmlToPdfConverter : IHtmlToPdfConverter
     {
@@ -10,7 +11,7 @@
         {
             var inputFileName = $"input_{Guid.NewGuid()}.html";
             var outputFileName = $"output_{Guid.NewGuid()}.pdf";
-            File.WriteAllText($"{basePath}/{inputFileName}", htmlCode);
+            File.WriteAllText($"{basePath}/{inputFileName}", htmlCode, encoding: Encoding.UTF8);
             var startInfo = new ProcessStartInfo("phantomjs.exe")
             {
                 WorkingDirectory = basePath,
