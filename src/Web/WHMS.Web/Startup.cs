@@ -1,7 +1,12 @@
 ﻿namespace WHMS.Web
 {
+    using System;
     using System.Reflection;
 
+    using Hangfire;
+    using Hangfire.Console;
+    using Hangfire.Dashboard;
+    using Hangfire.SqlServer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -11,14 +16,13 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-
+    using WHMS.Common;
     using WHMS.Data;
-    using WHMS.Data.Common;
     using WHMS.Data.Models;
     using WHMS.Data.Seeding;
     using WHMS.Services.Common;
-    using WHMS.Services.Data;
     using WHMS.Services.Data.Common;
+    using WHMS.Services.CronJobs;
     using WHMS.Services.Mapping;
     using WHMS.Services.Messaging;
     using WHMS.Services.Orders;
@@ -40,6 +44,20 @@
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHangfire(
+                config => config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                    .UseSimpleAssemblyNameTypeSerializer().UseRecommendedSerializerSettings().UseSqlServerStorage(
+                        this.configuration.GetConnectionString("DefaultConnection"),
+                        new SqlServerStorageOptions
+                        {
+                            CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                            SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                            QueuePollInterval = TimeSpan.Zero,
+                            UseRecommendedIsolationLevel = true,
+                            UsePageLocksOnDequeue = true,
+                            DisableGlobalLocks = true,
+                        }).UseConsole());
+
             services.AddDbContext<WHMSDbContext>(
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
@@ -87,7 +105,7 @@
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IRecurringJobManager recurringJobManager)
         {
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
 
@@ -97,6 +115,7 @@
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<WHMSDbContext>();
                 dbContext.Database.Migrate();
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
+                this.SeedHangfireJobs(recurringJobManager, dbContext);
             }
 
             if (env.IsDevelopment())
@@ -119,13 +138,40 @@
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseHangfireServer(new BackgroundJobServerOptions { WorkerCount = 2 });
+            app.UseHangfireDashboard();
+
             app.UseEndpoints(
-                endpoints =>
-                    {
-                        endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-                        endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-                        endpoints.MapRazorPages();
-                    });
+                    endpoints =>
+                        {
+                            endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                            endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                            endpoints.MapRazorPages();
+                        });
+        }
+
+        private void SeedHangfireJobs(IRecurringJobManager recurringJobManager, WHMSDbContext dbContext)
+        {
+            recurringJobManager.AddOrUpdate<ReportsGenerator>("GenerateReports", x => x.GenerateReports(null), "0 23 * * *");
+            // recurringJobManager.AddOrUpdate<DbCleanupJob>("DbCleanupJob", x => x.Work(), Cron.Weekly);
+            // recurringJobManager.AddOrUpdate<MainNewsGetterJob>("MainNewsGetterJob", x => x.Work(null), "*/2 * * * *");
+            // var sources = dbContext.Sources.Where(x => !x.IsDeleted).ToList();
+            // foreach (var source in sources)
+            // {
+            //     recurringJobManager.AddOrUpdate<GetLatestPublicationsJob>(
+            //         $"GetLatestPublicationsJob_{source.Id}_{source.ShortName}",
+            //         x => x.Work(source.TypeName, null),
+            //         "*/5 * * * *");
+            // }
+        }
+
+        private class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
+        {
+            public bool Authorize(DashboardContext context)
+            {
+                var httpContext = context.GetHttpContext();
+                return httpContext.User.IsInRole(GlobalConstants.AdministratorRoleName);
+            }
         }
     }
 }

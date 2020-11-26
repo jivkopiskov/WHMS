@@ -14,6 +14,7 @@
     using WHMS.Data.Models.Orders;
     using WHMS.Data.Models.Products;
     using WHMS.Data.Models.PurchaseOrder;
+    using WHMS.Data.Models.Reports;
 
     public class WHMSDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
@@ -64,6 +65,12 @@
         public DbSet<PurchaseItem> PurchaseItems { get; set; }
 
         public DbSet<VendorProduct> VendorProducts { get; set; }
+
+        public DbSet<QtySoldByDay> QtySoldByDay { get; set; }
+
+        public DbSet<QtySoldByChannel> QtySoldByChannel { get; set; }
+
+        public DbSet<InventorySnapshot> InventorySnapshot { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 
