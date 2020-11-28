@@ -29,6 +29,7 @@
     using WHMS.Services.Products;
     using WHMS.Services.PurchaseOrders;
     using WHMS.Web.ViewModels;
+    using WHMS.Services;
 
     public class Startup
     {
@@ -101,6 +102,7 @@
             services.AddTransient<IOrderItemsService, OrderItemsService>();
             services.AddTransient<IShippingService, ShippingService>();
             services.AddTransient<IPurchaseOrdersService, PurchaseOrdersService>();
+            services.AddTransient<IReportServices, ReportServices>();
             services.AddTransient<IHtmlToPdfConverter, HtmlToPdfConverter>();
         }
 
@@ -153,16 +155,7 @@
         private void SeedHangfireJobs(IRecurringJobManager recurringJobManager, WHMSDbContext dbContext)
         {
             recurringJobManager.AddOrUpdate<ReportsGenerator>("GenerateReports", x => x.GenerateReports(null), "0 23 * * *");
-            // recurringJobManager.AddOrUpdate<DbCleanupJob>("DbCleanupJob", x => x.Work(), Cron.Weekly);
-            // recurringJobManager.AddOrUpdate<MainNewsGetterJob>("MainNewsGetterJob", x => x.Work(null), "*/2 * * * *");
-            // var sources = dbContext.Sources.Where(x => !x.IsDeleted).ToList();
-            // foreach (var source in sources)
-            // {
-            //     recurringJobManager.AddOrUpdate<GetLatestPublicationsJob>(
-            //         $"GetLatestPublicationsJob_{source.Id}_{source.ShortName}",
-            //         x => x.Work(source.TypeName, null),
-            //         "*/5 * * * *");
-            // }
+            recurringJobManager.AddOrUpdate<ReportsGenerator>("RecalculateQtySoldToday", x => x.GenerateQtySoldReport(null), "*/5 * * * *");
         }
 
         private class HangfireAuthorizationFilter : IDashboardAuthorizationFilter

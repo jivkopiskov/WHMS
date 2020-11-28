@@ -44,7 +44,7 @@
     <ProjectReference Include="..\..\Data\WHMS.Data.Models\WHMS.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\WHMS.Data\WHMS.Data.csproj" />
     <ProjectReference Include="..\..\Services\WHMS.Services.Data\WHMS.Services.Common.csproj" />
-    <ProjectReference Include="..\..\Services\WHMS.Services.Hangfire\WHMS.Services.Hangfire.csproj" />
+    <ProjectReference Include="..\..\Services\WHMS.Services.Hangfire\WHMS.Services.CronJobs.csproj" />
     <ProjectReference Include="..\..\Services\WHMS.Services.Mapping\WHMS.Services.Mapping.csproj" />
     <ProjectReference Include="..\..\Services\WHMS.Services.Messaging\WHMS.Services.Messaging.csproj" />
     <ProjectReference Include="..\..\Services\WHMS.Services\WHMS.Services.csproj" />

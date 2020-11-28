@@ -35,6 +35,23 @@
             }
 
         }
+        public async Task GenerateQtySoldReport(PerformContext console)
+        {
+            var qtySold = this.context.OrderItems.Where(x => x.Order.CreatedOn >= DateTime.Now.Date).Sum(x => x.Qty);
+            var qtySoldAmount = this.context.OrderItems.Where(x => x.Order.CreatedOn >= DateTime.Now.Date).Sum(x => x.Qty * x.Price);
+
+            var reportEntry = this.context.QtySoldByDay.Where(x => x.Date >= DateTime.Now.Date).FirstOrDefault();
+            if (reportEntry == null)
+            {
+                reportEntry = new QtySoldByDay();
+                this.context.Add(reportEntry);
+            }
+            reportEntry.QtySold = qtySold;
+            reportEntry.AmountSold = qtySoldAmount;
+            reportEntry.Date = DateTime.Now;
+            console.WriteLine($"{DateTime.Now}: QtySold: {qtySold}, $ amount:  ${qtySoldAmount}");
+            await this.context.SaveChangesAsync();
+        }
 
         private async Task GeneateInventorySnapshot(PerformContext console)
         {
@@ -80,24 +97,6 @@
                 console.WriteLine($"{DateTime.Now}: Channel: {channel.ToString()}, QtySold: {qtySold}, $ amount:  ${qtySoldAmount}");
                 await this.context.SaveChangesAsync();
             }
-        }
-
-        private async Task GenerateQtySoldReport(PerformContext console)
-        {
-            var qtySold = this.context.OrderItems.Where(x => x.Order.CreatedOn >= DateTime.Now.Date).Sum(x => x.Qty);
-            var qtySoldAmount = this.context.OrderItems.Where(x => x.Order.CreatedOn >= DateTime.Now.Date).Sum(x => x.Qty * x.Price);
-
-            var reportEntry = this.context.QtySoldByDay.Where(x => x.Date >= DateTime.Now.Date).FirstOrDefault();
-            if (reportEntry == null)
-            {
-                reportEntry = new QtySoldByDay();
-                this.context.Add(reportEntry);
-            }
-            reportEntry.QtySold = qtySold;
-            reportEntry.AmountSold = qtySoldAmount;
-            reportEntry.Date = DateTime.Now;
-            console.WriteLine($"{DateTime.Now}: QtySold: {qtySold}, $ amount:  ${qtySoldAmount}");
-            await this.context.SaveChangesAsync();
         }
     }
 }

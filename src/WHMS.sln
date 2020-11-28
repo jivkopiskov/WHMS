@@ -42,7 +42,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WHMS.Web.ViewModels", "Web\
 		{4B844ECB-E845-49A6-8B31-85E577933598} = {4B844ECB-E845-49A6-8B31-85E577933598}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WHMS.Services.Hangfire", "Services\WHMS.Services.Hangfire\WHMS.Services.Hangfire.csproj", "{7EA769CF-20C5-4765-AEE8-96E63F842CCD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WHMS.Services.CronJobs", "Services\WHMS.Services.Hangfire\WHMS.Services.CronJobs.csproj", "{7EA769CF-20C5-4765-AEE8-96E63F842CCD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
