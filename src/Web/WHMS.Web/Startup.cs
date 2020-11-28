@@ -20,16 +20,16 @@
     using WHMS.Data;
     using WHMS.Data.Models;
     using WHMS.Data.Seeding;
+    using WHMS.Services;
     using WHMS.Services.Common;
-    using WHMS.Services.Data.Common;
     using WHMS.Services.CronJobs;
+    using WHMS.Services.Data.Common;
     using WHMS.Services.Mapping;
     using WHMS.Services.Messaging;
     using WHMS.Services.Orders;
     using WHMS.Services.Products;
     using WHMS.Services.PurchaseOrders;
     using WHMS.Web.ViewModels;
-    using WHMS.Services;
 
     public class Startup
     {
@@ -154,8 +154,9 @@
 
         private void SeedHangfireJobs(IRecurringJobManager recurringJobManager, WHMSDbContext dbContext)
         {
-            recurringJobManager.AddOrUpdate<ReportsGenerator>("GenerateReports", x => x.GenerateReports(null), "0 23 * * *");
-            recurringJobManager.AddOrUpdate<ReportsGenerator>("RecalculateQtySoldToday", x => x.GenerateQtySoldReport(null), "*/5 * * * *");
+            recurringJobManager.AddOrUpdate<ReportsGenerator>("GenerateReports", x => x.GenerateReports(null, DateTime.Now.Date), "0 23 * * *");
+            recurringJobManager.AddOrUpdate<ReportsGenerator>("RegenerateYesterdayReports", x => x.GenerateReports(null, DateTime.Now.Date.AddDays(-1)), "0 03 * * *");
+            recurringJobManager.AddOrUpdate<ReportsGenerator>("RecalculateQtySoldToday", x => x.GenerateQtySoldReport(null, DateTime.Now), "*/5 * * * *");
         }
 
         private class HangfireAuthorizationFilter : IDashboardAuthorizationFilter

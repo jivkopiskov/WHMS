@@ -25,6 +25,14 @@
                 SoldToday = this.reportServices.GetQtySoldToday(),
                 QtySoldLastXDays = this.reportServices.GetQtySoldLast(7),
             };
+            model.QtySoldLastXDays.QtySoldList.OrderBy(x => x.Date);
+            return this.View(model);
+        }
+
+        public IActionResult SalesComparasion()
+        {
+            var qtySold = this.reportServices.GetQtySoldPerChannelLast(7).OrderBy(x => x.Date);
+            var model = qtySold.GroupBy(x => x.Channel);
             return this.View(model);
         }
     }

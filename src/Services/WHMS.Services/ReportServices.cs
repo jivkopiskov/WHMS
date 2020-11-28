@@ -29,6 +29,11 @@
             return new QtySoldLastViewModel { QtySoldList = qtySoldInfo };
         }
 
+        public IEnumerable<QtySoldByChannelViewModel> GetQtySoldPerChannelLast(int numberOfDays)
+        {
+            return this.context.QtySoldByChannel.Where(x => x.Date.Date >= DateTime.Now.Date.AddDays(-numberOfDays)).To<QtySoldByChannelViewModel>().ToList();
+        }
+
         public QtySoldViewModel GetQtySoldToday()
         {
             return this.mapper.Map<QtySoldByDay, QtySoldViewModel>(this.context.QtySoldByDay.FirstOrDefault(x => x.Date.Date == DateTime.Now.Date));

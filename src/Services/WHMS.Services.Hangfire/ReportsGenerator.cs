@@ -20,12 +20,12 @@
             this.context = context;
         }
 
-        public async Task GenerateReports(PerformContext console)
+        public async Task GenerateReports(PerformContext console, DateTime date)
         {
             try
             {
-                await GenerateQtySoldReport(console);
-                await GenerateQtySoldPerChannelReport(console);
+                await GenerateQtySoldReport(console, date);
+                await GenerateQtySoldPerChannelReport(console, date);
                 await GeneateInventorySnapshot(console);
             }
             catch (Exception ex)
@@ -35,12 +35,12 @@
             }
 
         }
-        public async Task GenerateQtySoldReport(PerformContext console)
+        public async Task GenerateQtySoldReport(PerformContext console, DateTime date)
         {
-            var qtySold = this.context.OrderItems.Where(x => x.Order.CreatedOn >= DateTime.Now.Date).Sum(x => x.Qty);
-            var qtySoldAmount = this.context.OrderItems.Where(x => x.Order.CreatedOn >= DateTime.Now.Date).Sum(x => x.Qty * x.Price);
+            var qtySold = this.context.OrderItems.Where(x => x.Order.CreatedOn >= date.Date && x.Order.CreatedOn < date.Date.AddDays(1)).Sum(x => x.Qty);
+            var qtySoldAmount = this.context.OrderItems.Where(x => x.Order.CreatedOn >= date.Date && x.Order.CreatedOn < date.Date.AddDays(1)).Sum(x => x.Qty * x.Price);
 
-            var reportEntry = this.context.QtySoldByDay.Where(x => x.Date >= DateTime.Now.Date).FirstOrDefault();
+            var reportEntry = this.context.QtySoldByDay.Where(x => x.Date >= date.Date && x.Date < date.Date.AddDays(1)).FirstOrDefault();
             if (reportEntry == null)
             {
                 reportEntry = new QtySoldByDay();
@@ -48,7 +48,7 @@
             }
             reportEntry.QtySold = qtySold;
             reportEntry.AmountSold = qtySoldAmount;
-            reportEntry.Date = DateTime.Now;
+            reportEntry.Date = date;
             console.WriteLine($"{DateTime.Now}: QtySold: {qtySold}, $ amount:  ${qtySoldAmount}");
             await this.context.SaveChangesAsync();
         }
@@ -71,20 +71,20 @@
             await this.context.SaveChangesAsync();
         }
 
-        private async Task GenerateQtySoldPerChannelReport(PerformContext console)
+        private async Task GenerateQtySoldPerChannelReport(PerformContext console, DateTime date)
         {
             var channels = Enum.GetValues<Channel>();
 
             foreach (var channel in channels)
             {
                 var qtySold = this.context.OrderItems
-                    .Where(x => x.Order.CreatedOn >= DateTime.Now.Date && x.Order.Channel == channel)
+                    .Where(x => x.Order.CreatedOn >= date.Date && x.Order.CreatedOn < date.Date.AddDays(1) && x.Order.Channel == channel)
                     .Sum(x => x.Qty);
                 var qtySoldAmount = this.context.OrderItems
-                    .Where(x => x.Order.CreatedOn >= DateTime.Now.Date && x.Order.Channel == channel)
+                    .Where(x => x.Order.CreatedOn >= date.Date && x.Order.CreatedOn < date.Date.AddDays(1) && x.Order.Channel == channel)
                     .Sum(x => x.Qty * x.Price);
 
-                var reportEntry = this.context.QtySoldByChannel.Where(x => x.Date >= DateTime.Now.Date && x.Channel == channel).FirstOrDefault();
+                var reportEntry = this.context.QtySoldByChannel.Where(x => x.Date >= date.Date && x.Date < date.Date.AddDays(1) && x.Channel == channel).FirstOrDefault();
                 if (reportEntry == null)
                 {
                     reportEntry = new QtySoldByChannel();
@@ -93,7 +93,7 @@
                 reportEntry.QtySold = qtySold;
                 reportEntry.AmountSold = qtySoldAmount;
                 reportEntry.Channel = channel;
-                reportEntry.Date = DateTime.Now;
+                reportEntry.Date = date;
                 console.WriteLine($"{DateTime.Now}: Channel: {channel.ToString()}, QtySold: {qtySold}, $ amount:  ${qtySoldAmount}");
                 await this.context.SaveChangesAsync();
             }
