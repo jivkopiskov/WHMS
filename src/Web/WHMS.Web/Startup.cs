@@ -154,9 +154,9 @@
 
         private void SeedHangfireJobs(IRecurringJobManager recurringJobManager, WHMSDbContext dbContext)
         {
-            recurringJobManager.AddOrUpdate<ReportsGenerator>("GenerateReports", x => x.GenerateReports(null, DateTime.Now.Date), "0 23 * * *");
-            recurringJobManager.AddOrUpdate<ReportsGenerator>("RegenerateYesterdayReports", x => x.GenerateReports(null, DateTime.Now.Date.AddDays(-1)), "0 03 * * *");
-            recurringJobManager.AddOrUpdate<ReportsGenerator>("RecalculateQtySoldToday", x => x.GenerateQtySoldReport(null, DateTime.Now), "*/5 * * * *");
+            recurringJobManager.AddOrUpdate<ReportsGenerator>("GenerateReports", x => x.GenerateTodaysReportsAsync(null), "0 23 * * *");
+            recurringJobManager.AddOrUpdate<ReportsGenerator>("RegenerateYesterdayReports", x => x.RegenerateYesterdaysReportsAsync(null), "0 03 * * *");
+            recurringJobManager.AddOrUpdate<ReportsGenerator>("RecalculateQtySoldToday", x => x.GenerateQtySoldReport(null), "*/5 * * * *");
         }
 
         private class HangfireAuthorizationFilter : IDashboardAuthorizationFilter

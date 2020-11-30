@@ -1,0 +1,22 @@
+﻿@model ImportProductsInputModel
+@{this.ViewData["Title"] = $"Import Products";}
+@section Breadcrumbs{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="ManageProducts">Manage Products</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Import Products</li>
+        </ol>
+    </nav>
+}
+<div class="bg-light">
+    <a asp-action="DownloadTemplate"  download="ProductImportTemplate.xlsx" target="_blank" class="btn btn-primary mb-2">Download template</a>
+</div>
+<form method="post" enctype="multipart/form-data">
+    <div>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <label asp-for="File"></label>
+        <input asp-for="File" class="form-control col-md-3">
+        <span asp-validation-for="File" class="text-danger"></span><br />
+    </div>
+    <button class="btn btn-outline-primary mt-2" asp-controller="Products" asp-action="ImportProducts">Import products</button>
+</form>

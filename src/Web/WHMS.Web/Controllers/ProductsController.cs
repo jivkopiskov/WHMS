@@ -3,13 +3,17 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-
+    using NPOI.SS.UserModel;
+    using NPOI.XSSF.UserModel;
     using WHMS.Common;
     using WHMS.Data.Models;
     using WHMS.Data.Models.Products;
@@ -31,6 +35,7 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IOrderItemsService orderItemsService;
         private readonly IManualEmailSender emailSender;
+        private readonly IWebHostEnvironment environment;
 
         public ProductsController(
             IProductsService productsService,
@@ -41,7 +46,8 @@
             IWarehouseService warehouseService,
             UserManager<ApplicationUser> userManager,
             IOrderItemsService orderItemsService,
-            IManualEmailSender emailSender)
+            IManualEmailSender emailSender,
+            IWebHostEnvironment environment)
         {
             this.productService = productsService;
             this.brandsService = brandsService;
@@ -52,6 +58,7 @@
             this.userManager = userManager;
             this.orderItemsService = orderItemsService;
             this.emailSender = emailSender;
+            this.environment = environment;
         }
 
         public async Task<IActionResult> Test()
@@ -96,6 +103,56 @@
             model.CreatedById = this.userManager.GetUserId(this.User);
             await this.productService.CreateProductAsync(model);
             return this.Redirect("/Products/ManageProducts");
+        }
+
+        public IActionResult ImportProducts()
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ImportProducts(ImportProductsInputModel input)
+        {
+            var file = input.File;
+            var folderName = GlobalConstants.UploadedExcelFilesFolder;
+            var webRootPath = this.environment.WebRootPath;
+            var newPath = Path.Combine(webRootPath, folderName);
+            var sb = new StringBuilder();
+            if (!Directory.Exists(newPath))
+            {
+                Directory.CreateDirectory(newPath);
+            }
+
+            if (file == null || file.Length == 0)
+            {
+                this.ModelState.AddModelError("file", "Invalid file");
+                return this.View();
+            }
+
+            string uploadFileExtension = Path.GetExtension(file.FileName).ToLower();
+            if (uploadFileExtension.ToUpper() != ".XLS" && uploadFileExtension.ToUpper() != ".XLSX")
+            {
+                this.ModelState.AddModelError("file", "Invalid file format");
+                return this.View();
+            }
+
+            string fullPath = Path.Combine(newPath, file.FileName);
+            using var stream = new FileStream(fullPath, FileMode.Create);
+            await file.CopyToAsync(stream);
+
+            var errors = await this.productService.ImportProductsAsync(stream);
+            if (!string.IsNullOrEmpty(errors))
+            {
+                this.ModelState.AddModelError("file", errors);
+            }
+
+            return this.View();
+        }
+
+        public async Task<IActionResult> DownloadTemplate()
+        {
+            var result = System.IO.File.ReadAllBytes(Path.Combine(this.environment.WebRootPath, GlobalConstants.UploadedExcelFilesFolder, GlobalConstants.ProductImportTemplateFileName));
+            return this.File(result, "application/vnd.ms-excel");
         }
 
         public IActionResult ProductDetails(int id)

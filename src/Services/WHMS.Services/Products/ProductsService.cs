@@ -1,10 +1,17 @@
 ﻿namespace WHMS.Services.Products
 {
+    using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Data;
+    using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
 
     using AutoMapper;
+    using NPOI.SS.UserModel;
+    using NPOI.XSSF.UserModel;
     using WHMS.Common;
     using WHMS.Data;
     using WHMS.Data.Models.Orders.Enum;
@@ -174,5 +181,93 @@
 
             return filteredList;
         }
+
+        public async Task<string> ImportProductsAsync(Stream stream)
+        {
+            var sb = new StringBuilder();
+            var dt = GetDataTableFromExcel(stream);
+            var products = ConvertDatatableToEnumrable(dt);
+            var invalidProducts = products.Where(x => !this.IsSkuAvailable(x.SKU));
+            if (invalidProducts.Count() > 0)
+            {
+                sb.AppendLine($"Failed to create the following products due to duplicate SKUs: {string.Join(", ", invalidProducts.Select(x => x.SKU))}");
+            }
+
+            products = products.Except(invalidProducts);
+
+            foreach (var product in products)
+            {
+                ICollection<ValidationResult> validationResults = new List<ValidationResult>();
+                if (!HelperClass.TryValidate(product, out validationResults))
+                {
+                    sb.AppendLine(string.Join(Environment.NewLine, validationResults.Select(x => x.ErrorMessage)));
+                    continue;
+                }
+                else
+                {
+                    await this.CreateProductAsync(product);
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        private static DataTable GetDataTableFromExcel(Stream stream)
+        {
+            ISheet sheet;
+            stream.Seek(0, SeekOrigin.Begin);
+            XSSFWorkbook hssfwb = new XSSFWorkbook(stream);
+            sheet = hssfwb.GetSheetAt(0);
+
+            var dataTable = new DataTable(sheet.SheetName);
+
+            // write the header row
+            var headerRow = sheet.GetRow(0);
+            foreach (var headerCell in headerRow)
+            {
+                dataTable.Columns.Add(headerCell.ToString());
+            }
+
+            // write the rest
+            for (int i = 1; i < sheet.PhysicalNumberOfRows; i++)
+            {
+                var sheetRow = sheet.GetRow(i);
+                var dataRow = dataTable.NewRow();
+                dataRow.ItemArray = dataTable.Columns
+                    .Cast<DataColumn>()
+                    .Select(c => sheetRow.GetCell(c.Ordinal, MissingCellPolicy.CREATE_NULL_AS_BLANK).ToString())
+                    .ToArray();
+                dataTable.Rows.Add(dataRow);
+            }
+
+            return dataTable;
+        }
+
+        private static IEnumerable<AddProductInputModel> ConvertDatatableToEnumrable(DataTable dataTable)
+        {
+            foreach (DataRow row in dataTable.Rows)
+            {
+                yield return new AddProductInputModel
+                {
+                    SKU = row["SKU"].ToString(),
+                    ProductName = row["ProductName"].ToString(),
+                    ShortDescription = row["ShortDescription"].ToString(),
+                    UPC = row["UPC"].ToString(),
+                    WebsitePrice = Convert.ToDecimal(row["WebsitePrice"]),
+                    WholesalePrice = Convert.ToDecimal(row["WholesalePrice"]),
+                    MAPPrice = Convert.ToDecimal(row["MAPPrice"]),
+                    Cost = Convert.ToDecimal(row["Cost"]),
+                    ManufacturerId = Convert.ToInt32(row["ManufacturerId"]),
+                    ConditionId = Convert.ToInt32(row["ConditionId"]),
+                    BrandId = Convert.ToInt32(row["BrandId"]),
+                    Weight = (float)Convert.ToDecimal(row["Weight"]),
+                    Width = (float)Convert.ToDecimal(row["Width"]),
+                    Height = (float)Convert.ToDecimal(row["Height"]),
+                    Lenght = (float)Convert.ToDecimal(row["Lenght"]),
+                };
+            }
+        }
+
+
     }
 }

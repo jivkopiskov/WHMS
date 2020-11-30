@@ -1,6 +1,7 @@
 ﻿namespace WHMS.Services.Products
 {
     using System.Collections.Generic;
+    using System.IO;
     using System.Threading.Tasks;
 
     using WHMS.Data.Models.Products;
@@ -32,5 +33,7 @@
         IEnumerable<T> GetAllProducts<T>();
 
         public int GetAllProductsCount(ProductFilterInputModel input);
+
+        Task<string> ImportProductsAsync(Stream stream);
     }
 }

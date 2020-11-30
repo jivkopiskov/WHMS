@@ -1,6 +1,7 @@
 ﻿namespace WHMS.Services
 {
     using System.Collections.Generic;
+
     using WHMS.Web.ViewModels.Reports;
 
     public interface IReportServices

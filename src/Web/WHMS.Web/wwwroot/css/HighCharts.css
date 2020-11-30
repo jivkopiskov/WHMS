@@ -1,5 +1,4 @@
-﻿<style>
-.highcharts-figure, .highcharts-data-table table {
+﻿.highcharts-figure, .highcharts-data-table table {
     min-width: 310px;
     max-width: initial;
     margin: 1em auto;
@@ -37,4 +36,3 @@
 .highcharts-data-table tr:hover {
     background: #f1f7ff;
 }
-</style>

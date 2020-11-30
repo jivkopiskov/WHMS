@@ -20,23 +20,23 @@
             this.context = context;
         }
 
-        public async Task GenerateReports(PerformContext console, DateTime date)
+        public async Task GenerateTodaysReportsAsync(PerformContext console)
         {
-            try
-            {
-                await GenerateQtySoldReport(console, date);
-                await GenerateQtySoldPerChannelReport(console, date);
-                await GeneateInventorySnapshot(console);
-            }
-            catch (Exception ex)
-            {
-                console.WriteLine($"{ DateTime.Now}: {ex.ToString()}");
-                throw;
-            }
+            var date = DateTime.Now.Date;
 
+            await GeneratesReportByDate(console, date);
         }
-        public async Task GenerateQtySoldReport(PerformContext console, DateTime date)
+
+        public async Task RegenerateYesterdaysReportsAsync(PerformContext console)
         {
+            var date = DateTime.Now.Date.AddDays(-1);
+
+            await GeneratesReportByDate(console, date);
+        }
+
+        public async Task GenerateQtySoldReport(PerformContext console)
+        {
+            var date = DateTime.Now;
             var qtySold = this.context.OrderItems.Where(x => x.Order.CreatedOn >= date.Date && x.Order.CreatedOn < date.Date.AddDays(1)).Sum(x => x.Qty);
             var qtySoldAmount = this.context.OrderItems.Where(x => x.Order.CreatedOn >= date.Date && x.Order.CreatedOn < date.Date.AddDays(1)).Sum(x => x.Qty * x.Price);
 
@@ -48,6 +48,7 @@
             }
             reportEntry.QtySold = qtySold;
             reportEntry.AmountSold = qtySoldAmount;
+            var dateTimeNow = DateTime.Now;
             reportEntry.Date = date;
             console.WriteLine($"{DateTime.Now}: QtySold: {qtySold}, $ amount:  ${qtySoldAmount}");
             await this.context.SaveChangesAsync();
@@ -96,6 +97,19 @@
                 reportEntry.Date = date;
                 console.WriteLine($"{DateTime.Now}: Channel: {channel.ToString()}, QtySold: {qtySold}, $ amount:  ${qtySoldAmount}");
                 await this.context.SaveChangesAsync();
+            }
+        }
+        private async Task GeneratesReportByDate(PerformContext console, DateTime date)
+        {
+            try
+            {
+                await GenerateQtySoldPerChannelReport(console, date);
+                await GeneateInventorySnapshot(console);
+            }
+            catch (Exception ex)
+            {
+                console.WriteLine($"{ DateTime.Now}: {ex.ToString()}");
+                throw;
             }
         }
     }

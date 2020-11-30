@@ -1,15 +1,34 @@
 ﻿namespace WHMS.Web.Controllers
 {
     using System.Diagnostics;
+    using System.Linq;
 
     using Microsoft.AspNetCore.Mvc;
+    using WHMS.Services;
     using WHMS.Web.ViewModels;
 
     public class HomeController : BaseController
     {
+        private readonly IReportServices reportServices;
+
+        public HomeController(IReportServices report)
+        {
+            this.reportServices = report;
+        }
+
         public IActionResult Index()
         {
-            return this.View();
+            var salesToday = this.reportServices.GetQtySoldToday();
+            var salesLast7 = this.reportServices.GetQtySoldLast(7).QtySoldList;
+
+            var model = new HomeViewModel
+            {
+                AmountSoldToday = this.reportServices.GetQtySoldToday().AmountSold,
+                AmountSoldLast7 = salesLast7.Sum(x => x.AmountSold),
+                QtySoldToday = this.reportServices.GetQtySoldToday().QtySold,
+                QtySoldLast7 = salesLast7.Sum(x => x.QtySold),
+            };
+            return this.View(model);
         }
 
         public IActionResult Privacy()
