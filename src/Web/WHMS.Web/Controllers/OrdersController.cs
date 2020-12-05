@@ -11,6 +11,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.Extensions.Caching.Memory;
     using WHMS.Common;
     using WHMS.Data.Models;
     using WHMS.Services.Common;
@@ -30,6 +31,7 @@
         private readonly IShippingService shippingService;
         private readonly IHtmlToPdfConverter htmlToPdfConverter;
         private readonly IWebHostEnvironment environment;
+        private readonly IMemoryCache cache;
 
         public OrdersController(
             IOrdersService ordersService,
@@ -38,7 +40,8 @@
             IOrderItemsService orderItemsService,
             IShippingService shippingService,
             IHtmlToPdfConverter htmlToPdfConverter,
-            IWebHostEnvironment environment)
+            IWebHostEnvironment environment,
+            IMemoryCache cache)
         {
             this.ordersService = ordersService;
             this.userManager = userManager;
@@ -47,6 +50,7 @@
             this.shippingService = shippingService;
             this.htmlToPdfConverter = htmlToPdfConverter;
             this.environment = environment;
+            this.cache = cache;
         }
 
         public IActionResult ManageOrders(OrdersFilterInputModel input)
@@ -280,9 +284,16 @@
 
         public async Task<IActionResult> GetPdf(int id)
         {
+            byte[] result = this.cache.Get<byte[]>("pdf" + id);
+            if (result != null)
+            {
+                return this.File(result, "application/pdf");
+            }
+
             var model = this.ordersService.GetOrderDetails<OrderDetailsViewModel>(id);
             var viewHtml = await this.RenderViewAsync("GetPdf", model);
-            var result = this.htmlToPdfConverter.Convert(this.environment.ContentRootPath, viewHtml);
+            result = this.htmlToPdfConverter.Convert(this.environment.ContentRootPath, viewHtml);
+            this.cache.Set<byte[]>("pdf" + id, result, new TimeSpan(24, 0, 0));
 
             return this.File(result, "application/pdf");
         }
