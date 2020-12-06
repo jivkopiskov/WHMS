@@ -38,5 +38,7 @@
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
 
         public ICollection<Product> Products { get; set; }
+
+        public bool IsApproved { get; set; }
     }
 }

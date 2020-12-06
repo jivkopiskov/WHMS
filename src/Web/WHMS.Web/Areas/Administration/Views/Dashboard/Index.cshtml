@@ -1,7 +1,36 @@
-﻿@model WHMS.Web.ViewModels.Administration.Dashboard.IndexViewModel
+﻿@model IEnumerable<EmployeeViewModel>
 @{
-    this.ViewData["Title"] = "Admin dashboard";
+    this.ViewData["Title"] = "Manage employees";
 }
 
 <h1>@this.ViewData["Title"]</h1>
-Settings: @this.Model.SettingsCount
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Employee</th>
+            <th scope="col">Approve</th>
+            <th scope="col">Make administrator</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model)
+        {
+        <tr class="table-light">
+            <td>@employee.Email</td>
+            <td>
+                @if (!employee.IsApproved)
+                {
+                    <a class="btn btn-danger" asp-action="ApproveEmployee" asp-route-email="@employee.Email">Approve</a>
+                }
+            </td>
+            <td>
+                @if (!employee.IsAdmin)
+                {
+                    <a class="btn btn-danger" asp-action="AddEmployeeToAdministratorRole" asp-route-email="@employee.Email">Set as Admin</a>
+                }
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

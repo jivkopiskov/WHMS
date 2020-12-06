@@ -102,6 +102,7 @@
             services.AddTransient<IShippingService, ShippingService>();
             services.AddTransient<IPurchaseOrdersService, PurchaseOrdersService>();
             services.AddTransient<IReportServices, ReportServices>();
+            services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IHtmlToPdfConverter, HtmlToPdfConverter>();
         }
 
