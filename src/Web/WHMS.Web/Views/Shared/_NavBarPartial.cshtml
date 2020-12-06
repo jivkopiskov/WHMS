@@ -1,0 +1,80 @@
+﻿@using WHMS.Common
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@GlobalConstants.SystemName</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-lg-row-reverse">
+                <partial name="_LoginPartial" />
+                <ul class="navbar-nav flex-grow-1">
+                    @if (this.Context.User.Identity.IsAuthenticated)
+                    {
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Dashboard">Home</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <a class="nav-link text-dark " href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Products
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="ManageProducts">Manage Products</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="ManageBrands">Manage Brands</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="ManageManufacturers">Manage Manufacturers</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="ManageConditions">Manage Product Conditions</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="ManageWarehouses">Manage Warehouses</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <a class="nav-link text-dark " href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Orders
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Orders" asp-action="ManageOrders">Manage Orders</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Orders" asp-action="ManageCarriers">Manage Carriers</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Orders" asp-action="ManageCustomers">Manage Customers</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <a class="nav-link text-dark" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Purchase Orders
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item" asp-area="" asp-controller="PurchaseOrders" asp-action="ManagePurchaseOrders">Manage Purchase Orders</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="PurchaseOrders" asp-action="ManageVendors">Manage Vendors</a>
+
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <a class="nav-link text-dark" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Reports
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Reports" asp-action="Index">Sales reports</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Reports" asp-action="SalesComparasion">Sales by channel comparasion</a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

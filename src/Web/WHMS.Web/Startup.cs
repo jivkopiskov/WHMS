@@ -23,7 +23,6 @@
     using WHMS.Services;
     using WHMS.Services.Common;
     using WHMS.Services.CronJobs;
-    using WHMS.Services.Data.Common;
     using WHMS.Services.Mapping;
     using WHMS.Services.Messaging;
     using WHMS.Services.Orders;
@@ -89,7 +88,6 @@
             // Application services
             services.AddTransient<IEmailSender, SendGridEmailSender>(x => new SendGridEmailSender(this.configuration["SendGridAPIKey"]));
             services.AddTransient<IManualEmailSender, SendGridEmailSender>(x => new SendGridEmailSender(this.configuration["SendGridAPIKey"]));
-            services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IProductsService, ProductsService>();
             services.AddTransient<IBrandsService, BrandsService>();
             services.AddTransient<ICondiitonsService, ConditionsService>();

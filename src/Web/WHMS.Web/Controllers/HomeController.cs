@@ -3,6 +3,7 @@
     using System.Diagnostics;
     using System.Linq;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using WHMS.Services;
     using WHMS.Web.ViewModels;
@@ -18,6 +19,22 @@
 
         public IActionResult Index()
         {
+            if (this.HttpContext.User.Identity.IsAuthenticated)
+            {
+                return this.RedirectToAction(nameof(this.Dashboard));
+            }
+
+            return this.View();
+        }
+
+        public IActionResult Privacy()
+        {
+            return this.View();
+        }
+
+        [Authorize]
+        public IActionResult Dashboard()
+        {
             var salesToday = this.reportServices.GetQtySoldToday();
             var salesLast7 = this.reportServices.GetQtySoldLast(7).QtySoldList;
 
@@ -29,11 +46,6 @@
                 QtySoldLast7 = salesLast7.Sum(x => x.QtySold),
             };
             return this.View(model);
-        }
-
-        public IActionResult Privacy()
-        {
-            return this.View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

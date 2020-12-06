@@ -151,7 +151,7 @@
 
         public async Task<IActionResult> DownloadTemplate()
         {
-            var result = System.IO.File.ReadAllBytes(Path.Combine(this.environment.WebRootPath, GlobalConstants.UploadedExcelFilesFolder, GlobalConstants.ProductImportTemplateFileName));
+            var result = await System.IO.File.ReadAllBytesAsync(Path.Combine(this.environment.WebRootPath, GlobalConstants.UploadedExcelFilesFolder, GlobalConstants.ProductImportTemplateFileName));
             return this.File(result, "application/vnd.ms-excel");
         }
 

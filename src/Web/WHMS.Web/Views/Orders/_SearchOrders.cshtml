@@ -19,7 +19,7 @@
                     <option>Select</option>
                 </select>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-3 mr-2">
                 <label asp-for="PaymentStatus"></label>
                 <select asp-for="PaymentStatus" asp-items="@Html.GetEnumSelectList<PaymentStatus>()" class="form-control" value="@Model.PaymentStatus">
                     <option>Select</option>
@@ -36,6 +36,6 @@
                 <vc:warehouse-dropdown id="Model.WarehouseId ?? 0"></vc:warehouse-dropdown>
             </div>
         </div>
-        <button class="btn btn-light mt-2 ml-2" asp-controller="Orders" asp-action="ManageOrders">Search</button>
+        <button class="btn btn-light mt-2 ml-3 mb-2" asp-controller="Orders" asp-action="ManageOrders">Search</button>
     </form>
 </div>

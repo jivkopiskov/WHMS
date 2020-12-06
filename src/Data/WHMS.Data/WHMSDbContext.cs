@@ -28,8 +28,6 @@
         {
         }
 
-        public DbSet<Setting> Settings { get; set; }
-
         public DbSet<Product> Products { get; set; }
 
         public DbSet<ProductCondition> ProductConditions { get; set; }

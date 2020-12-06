@@ -1,114 +1,120 @@
-﻿@model HomeViewModel
-@using WHMS.Common
-@{
-    this.ViewData["Title"] = "Home Page";
-}
+﻿@using WHMS.Common
+@{ Layout = null; }
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to @GlobalConstants.SystemName!</h1>
-</div>
+<head>
 
-<div class="container-fluid">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-    </div>
+    <title>WHMS</title>
 
-    <!-- Content Row -->
-    <div class="row">
+    <!-- Bootstrap core CSS -->
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        <div class="col-xl-6 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Earnings (Today)
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">$@Model.AmountSoldToday</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- Custom fonts for this template -->
+    <link href="/lib/font-awesome/css/all.css" rel="stylesheet">
+    <link href="/vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 
-        <div class="col-xl-6 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Earnings (Last 7 days)
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">$@Model.AmountSoldLast7</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-6 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Units sold (today)
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.QtySoldToday</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-boxes fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- Custom styles for this template -->
+    <link href="/css/landing-page.min.css" rel="stylesheet">
 
-        <div class="col-xl-6 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Units sold (last 7 days)
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.QtySoldLast7</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-boxes fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+</head>
 
+<body>
+    <!-- Masthead -->
+    <partial name="_NavBarPartial" />
+
+    <header class="masthead text-white text-center">
+        <div class="overlay"></div>
         <div class="container">
-            <iframe src="/Reports/IndexNoNavBar" id="myframe" title="Reports" frameborder="0" height="450" scrolling="no"></iframe>
+            <div class="row">
+                <div class="col-xl-9 mx-auto">
+                    <h1 class="mb-5">Made to help you grow</h1>
+                    <h2 class="mb-5">We understand e-commerce business challenges and we're here to help you simplify them.</h2>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+    </header>
 
-@section Scripts{ 
-    <script>
-        $(function () {
-            setIFrameSize();
-            $(window).resize(function () {
-                setIFrameSize();
-            });
-        });
+    <!-- Icons Grid -->
+    <section class="features-icons bg-light text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                        <div class="features-icons-icon d-flex">
+                            <i class="icon-layers m-auto text-primary"></i>
+                        </div>
+                        <h3>Manage your products</h3>
+                        <p class="lead mb-0">Keep track of your available inventory based on your purchasing and sales orders!</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                        <div class="features-icons-icon d-flex">
+                            <i class="icon-screen-desktop m-auto text-primary"></i>
+                        </div>
+                        <h3>Manage your orders</h3>
+                        <p class="lead mb-0">Create new orders manually or with excel files!</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+                        <div class="features-icons-icon d-flex">
+                            <i class="icon-check m-auto text-primary"></i>
+                        </div>
+                        <h3>Manage purchasing</h3>
+                        <p class="lead mb-0">Create POs and keep track of arriving inventory!</p>
+                    </div>
+                </div>
+                <h2 class="mx-auto mt-2">Manage your business from a single platform!</h2>
+            </div>
+        </div>
+    </section>
 
-        function setIFrameSize() {
-            var parentDivWidth = $("#myframe").parent().width();
-            var parentDivHeight = $("#myframe").parent().height();
-            $("#myframe")[0].setAttribute("width", parentDivWidth);
-            $("#myframe")[0].setAttribute("height", parentDivHeight);
-        }
-    </script>
-}
+    <!-- Image Showcases -->
+    <section class="showcase">
+        <div class="container-fluid p-0">
+            <div class="row no-gutters">
+
+                <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('img/bg-showcase-5.jpg');"></div>
+                <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+                    <h2>No more manual stock updates.</h2>
+                    <p class="lead mb-0"> WHMS automatically reserves availability when an order is first created and decreases it from physical inventory upon shipping.</p>
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <div class="col-lg-6 text-white showcase-img img-fluid" style="background-image: url('img/bg-showcase-6.jpg');"></div>
+                <div class="col-lg-6 my-auto showcase-text">
+                    <h2>Order management from start to finish.</h2>
+                    <p class="lead mb-0">WHMS helps you manage every step of your order process. Import orders from excel or via API calls. Your orders can be easily managed and fulfilled from a single interface.</p>
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <div class="col-lg-6 order-lg-2 text-white showcase-img img-fluid" style="background-image: url('img/bg-showcase-4.jpg');"></div>
+                <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+                    <h2>Never run out of stock.</h2>
+                    <p class="lead mb-0">Efficiently track, manage, and create purchase orders. Automatically track the costs associated with each item.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
