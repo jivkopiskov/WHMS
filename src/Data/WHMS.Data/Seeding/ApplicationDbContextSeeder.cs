@@ -29,6 +29,7 @@
                               new ConditionsSeeder(),
                               new CarriersSeeder(),
                               new ShippingMethodsSeeder(),
+                              new AdminSeeder(),
                           };
 
             foreach (var seeder in seeders)
