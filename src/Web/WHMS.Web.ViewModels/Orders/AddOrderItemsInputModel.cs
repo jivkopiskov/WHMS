@@ -9,6 +9,6 @@
         [ValidOrder]
         public int OrderId { get; set; }
 
-        public IEnumerable<AddOrderItemViewModel> OrderItems { get; set; }
+        public ICollection<AddOrderItemViewModel> OrderItems { get; set; }
     }
 }

@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.IO;
-    using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
 
@@ -12,15 +11,12 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using NPOI.SS.UserModel;
-    using NPOI.XSSF.UserModel;
     using WHMS.Common;
     using WHMS.Data.Models;
-    using WHMS.Data.Models.Products;
     using WHMS.Services.Messaging;
     using WHMS.Services.Orders;
     using WHMS.Services.Products;
-    using WHMS.Web.ViewModels.Orders;
+    using WHMS.Web.ViewModels;
     using WHMS.Web.ViewModels.Products;
 
     [Authorize]
@@ -111,7 +107,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> ImportProducts(ImportProductsInputModel input)
+        public async Task<IActionResult> ImportProducts(ImportFileInputModel input)
         {
             var file = input.File;
             var folderName = GlobalConstants.UploadedExcelFilesFolder;
@@ -144,9 +140,10 @@
             if (!string.IsNullOrEmpty(errors))
             {
                 this.ModelState.AddModelError("file", errors);
+                return this.View();
             }
 
-            return this.View();
+            return this.RedirectToAction(nameof(this.ManageProducts));
         }
 
         public async Task<IActionResult> DownloadTemplate()

@@ -1,6 +1,7 @@
 ﻿namespace WHMS.Services.Orders
 {
     using System.Collections.Generic;
+    using System.IO;
     using System.Threading.Tasks;
 
     using WHMS.Data.Models.Orders;
@@ -17,7 +18,7 @@
 
         Task<int> AddOrderAsync(AddOrderInputModel input);
 
-        Task<int> EditOrderAsync(int orderId);
+        Task DeleteOrderAsync(int orderId);
 
         Task CancelOrderAsync(int orderId);
 

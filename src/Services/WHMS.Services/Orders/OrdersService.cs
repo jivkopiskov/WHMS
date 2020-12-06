@@ -2,6 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Data;
+    using System.IO;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -124,9 +127,10 @@
             return order.Id;
         }
 
-        public Task<int> EditOrderAsync(int orderId)
+        public async Task DeleteOrderAsync(int orderId)
         {
-            throw new NotImplementedException();
+            this.context.Orders.Remove(this.context.Orders.Find(orderId));
+            await this.context.SaveChangesAsync();
         }
 
         public IEnumerable<T> GetAllOrders<T>(OrdersFilterInputModel input)

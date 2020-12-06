@@ -8,6 +8,8 @@
 
         public const string ProductImportTemplateFileName = "ProductImportTemplate.xlsx";
 
+        public const string OrderImportTemplateFileName = "OrdersImportTemplate.xlsx";
+
         public const string AdministratorRoleName = "Administrator";
 
         public const int PageSize = 12;

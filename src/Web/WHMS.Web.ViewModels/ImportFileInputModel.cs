@@ -1,8 +1,8 @@
-﻿namespace WHMS.Web.ViewModels.Products
+﻿namespace WHMS.Web.ViewModels
 {
     using Microsoft.AspNetCore.Http;
 
-    public class ImportProductsInputModel
+    public class ImportFileInputModel
     {
         public IFormFile File { get; set; }
     }

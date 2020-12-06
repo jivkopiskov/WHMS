@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -28,6 +29,7 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ICustomersService customersService;
         private readonly IOrderItemsService orderItemsService;
+        private readonly IImportOrderServices importServices;
         private readonly IShippingService shippingService;
         private readonly IHtmlToPdfConverter htmlToPdfConverter;
         private readonly IWebHostEnvironment environment;
@@ -38,6 +40,7 @@
             UserManager<ApplicationUser> userManager,
             ICustomersService customersService,
             IOrderItemsService orderItemsService,
+            IImportOrderServices importServices,
             IShippingService shippingService,
             IHtmlToPdfConverter htmlToPdfConverter,
             IWebHostEnvironment environment,
@@ -47,6 +50,7 @@
             this.userManager = userManager;
             this.customersService = customersService;
             this.orderItemsService = orderItemsService;
+            this.importServices = importServices;
             this.shippingService = shippingService;
             this.htmlToPdfConverter = htmlToPdfConverter;
             this.environment = environment;
@@ -115,6 +119,56 @@
             }
 
             return this.RedirectToAction(nameof(this.OrderDetails), new { id });
+        }
+
+        public IActionResult ImportOrders()
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ImportOrders(ImportFileInputModel input)
+        {
+            var file = input.File;
+            var folderName = GlobalConstants.UploadedExcelFilesFolder;
+            var webRootPath = this.environment.WebRootPath;
+            var newPath = Path.Combine(webRootPath, folderName);
+            if (!Directory.Exists(newPath))
+            {
+                Directory.CreateDirectory(newPath);
+            }
+
+            if (file == null || file.Length == 0)
+            {
+                this.ModelState.AddModelError("file", "Invalid file");
+                return this.View();
+            }
+
+            string uploadFileExtension = Path.GetExtension(file.FileName).ToLower();
+            if (uploadFileExtension.ToUpper() != ".XLS" && uploadFileExtension.ToUpper() != ".XLSX")
+            {
+                this.ModelState.AddModelError("file", "Invalid file format");
+                return this.View();
+            }
+
+            string fullPath = Path.Combine(newPath, Guid.NewGuid().ToString() + uploadFileExtension);
+            using var stream = new FileStream(fullPath, FileMode.Create);
+            await file.CopyToAsync(stream);
+
+            var errors = await this.importServices.ImportOrdersAsync(stream);
+            if (!string.IsNullOrEmpty(errors))
+            {
+                this.ModelState.AddModelError("file", errors);
+                return this.View();
+            }
+
+            return this.RedirectToAction(nameof(this.ManageOrders));
+        }
+
+        public async Task<IActionResult> DownloadTemplate()
+        {
+            var result = await System.IO.File.ReadAllBytesAsync(Path.Combine(this.environment.WebRootPath, GlobalConstants.UploadedExcelFilesFolder, GlobalConstants.OrderImportTemplateFileName));
+            return this.File(result, "application/vnd.ms-excel");
         }
 
         public IActionResult OrderDetails(int id)

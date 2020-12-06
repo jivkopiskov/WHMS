@@ -98,6 +98,7 @@
             services.AddTransient<ICountriesService, CountriesService>();
             services.AddTransient<ICustomersService, CustomersService>();
             services.AddTransient<IOrderItemsService, OrderItemsService>();
+            services.AddTransient<IImportOrderServices, ImportOrderServices>();
             services.AddTransient<IShippingService, ShippingService>();
             services.AddTransient<IPurchaseOrdersService, PurchaseOrdersService>();
             services.AddTransient<IReportServices, ReportServices>();

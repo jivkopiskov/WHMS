@@ -16,8 +16,6 @@
     using WHMS.Data.Common;
     using WHMS.Data.Models;
     using WHMS.Data.Seeding;
-    using WHMS.Services.Data;
-    using WHMS.Services.Data.Common;
     using WHMS.Services.Messaging;
 
     public static class Program
@@ -51,9 +49,6 @@
         {
             var sw = Stopwatch.StartNew();
 
-            var settingsService = serviceProvider.GetService<ISettingsService>();
-            Console.WriteLine($"Count of settings: {settingsService.GetCount()}");
-
             Console.WriteLine(sw.Elapsed);
             return await Task.FromResult(0);
         }
@@ -76,7 +71,6 @@
 
             // Application services
             services.AddTransient<IManualEmailSender, NullMessageSender>();
-            services.AddTransient<ISettingsService, SettingsService>();
         }
     }
 }
