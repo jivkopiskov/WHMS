@@ -348,6 +348,12 @@
 
         public async Task<IActionResult> AdjustInventory(ProductAdjustmentInputModel input)
         {
+            if (!this.ModelState.IsValid)
+            {
+                var model = this.warehouseService.GetProductWarehouseInfo(input.ProductId);
+                return this.RedirectToAction("ManageInventory", new { id = input.ProductId});
+            }
+
             if (this.productService.IsValidProductId(input.ProductId))
             {
                 await this.inventoryService.AdjustInventoryAsync(input);
