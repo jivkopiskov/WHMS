@@ -29,9 +29,19 @@
             return brand.Id;
         }
 
-        public Task<int> EditBrandAsync(int brandId)
+        public async Task<bool> DeleteBrandAsync(int id)
         {
-            throw new System.NotImplementedException();
+            var brand = await this.context.Brands.FindAsync(id);
+            if (brand == null)
+            {
+                return false;
+            }
+
+            this.context.Brands.Remove(brand);
+
+            await this.context.SaveChangesAsync();
+
+            return true;
         }
 
         public IEnumerable<T> GetAllBrands<T>(int page = 1)

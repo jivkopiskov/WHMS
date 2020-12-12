@@ -5,8 +5,8 @@
 
     public interface ICondiitonsService
     {
-        IEnumerable<T> GetAllConditions<T>(int id = 0);
+        IEnumerable<T> GetAllConditions<T>();
 
-        Task<int> AddProductConditionAsync<T>(T input);
+        Task<int> CreateProductConditionAsync<T>(T input);
     }
 }

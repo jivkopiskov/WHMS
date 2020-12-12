@@ -10,18 +10,14 @@
 
     public static class AutoMapperConfig
     {
-        private static bool initialized;
-
-        public static IMapper MapperInstance { get; set; }
+        public static IMapper MapperInstance { get; private set; }
 
         public static void RegisterMappings(params Assembly[] assemblies)
         {
-            if (initialized)
+            if (MapperInstance != null)
             {
                 return;
             }
-
-            initialized = true;
 
             var types = assemblies.SelectMany(a => a.GetExportedTypes()).ToList();
 

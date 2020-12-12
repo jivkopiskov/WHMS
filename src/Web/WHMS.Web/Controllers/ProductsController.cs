@@ -318,7 +318,7 @@
         {
             if (this.ModelState.IsValid)
             {
-                await this.condiitonsService.AddProductConditionAsync(input);
+                await this.condiitonsService.CreateProductConditionAsync(input);
             }
 
             return this.Redirect("/Products/ManageConditions");

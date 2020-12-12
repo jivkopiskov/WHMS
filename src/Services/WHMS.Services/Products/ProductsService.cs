@@ -24,11 +24,13 @@
     public class ProductsService : IProductsService
     {
         private readonly WHMSDbContext context;
+        private readonly IInventoryService inventoryService;
         private readonly IMapper mapper;
 
-        public ProductsService(WHMSDbContext context)
+        public ProductsService(WHMSDbContext context, IInventoryService inventoryService)
         {
             this.context = context;
+            this.inventoryService = inventoryService;
             this.mapper = AutoMapperConfig.MapperInstance;
         }
 
@@ -49,6 +51,7 @@
             var product = this.mapper.Map<Product>(model);
             await this.context.Products.AddAsync(product);
             await this.context.SaveChangesAsync();
+            await this.inventoryService.RecalculateAvailableInventoryAsync(product.Id);
             return product.Id;
         }
 
@@ -72,19 +75,6 @@
             var product = this.mapper.Map<TInput, Product>(input);
             var dbProduct = this.context.Products.Find(product.Id);
 
-            // dbProduct.BrandId = product.BrandId;
-            // dbProduct.ConditionId = product.ConditionId;
-            // dbProduct.Cost = product.Cost;
-            // dbProduct.Height = product.Height;
-            // dbProduct.Lenght = product.Lenght;
-            // dbProduct.Width = product.Width;
-            // dbProduct.LocationNotes = product.LocationNotes;
-            // dbProduct.ShortDescription = product.ShortDescription;
-            // dbProduct.LongDescription = product.LongDescription;
-            // dbProduct.ManufacturerId = product.ManufacturerId;
-            // dbProduct.MAPPrice = product.MAPPrice;
-            // dbProduct.ProductName = product.ProductName;
-            // dbProduct.UPC = product.UPC;
             this.mapper.Map<TInput, Product>(input, dbProduct);
             await this.context.SaveChangesAsync();
 

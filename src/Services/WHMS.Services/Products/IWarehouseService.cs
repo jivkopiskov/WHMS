@@ -9,8 +9,6 @@
     {
         Task CreateWarehouseAsync<T>(T input);
 
-        Task<int> EditWarehouseAsync(int warehouseId, bool isSellable);
-
         IEnumerable<T> GetAllWarehouses<T>();
 
         IEnumerable<ProductWarehouseViewModel> GetProductWarehouseInfo(int productId);
