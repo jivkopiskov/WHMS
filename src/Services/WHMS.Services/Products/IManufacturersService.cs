@@ -7,8 +7,6 @@
     {
         Task<int> CreateManufacturerAsync(string manufactuerName);
 
-        Task<int> EditManufactuerAsync(int manufactuerId);
-
         IEnumerable<T> GetAllManufacturers<T>(int page);
 
         IEnumerable<T> GetAllManufacturers<T>();

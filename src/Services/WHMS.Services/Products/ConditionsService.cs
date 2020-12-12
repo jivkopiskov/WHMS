@@ -19,13 +19,13 @@
             this.mapper = AutoMapperConfig.MapperInstance;
         }
 
-        public IEnumerable<T> GetAllConditions<T>(int id)
+        public IEnumerable<T> GetAllConditions<T>()
         {
             var conditions = this.context.ProductConditions.To<T>();
             return conditions;
         }
 
-        public async Task<int> AddProductConditionAsync<T>(T input)
+        public async Task<int> CreateProductConditionAsync<T>(T input)
         {
             var condition = this.mapper.Map<ProductCondition>(input);
             this.context.ProductConditions.Add(condition);

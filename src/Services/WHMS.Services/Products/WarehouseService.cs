@@ -28,11 +28,6 @@
             await this.context.SaveChangesAsync();
         }
 
-        public Task<int> EditWarehouseAsync(int warehouseId, bool isSellable)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public IEnumerable<T> GetAllWarehouses<T>()
         {
             return this.context.Warehouses

@@ -29,11 +29,6 @@
             return manufacturer.Id;
         }
 
-        public Task<int> EditManufactuerAsync(int manufactuerId)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public IEnumerable<T> GetAllManufacturers<T>(int page = 1)
         {
             var manufacturers = this.context.Manufacturers
