@@ -30,6 +30,7 @@
                               new CarriersSeeder(),
                               new ShippingMethodsSeeder(),
                               new AdminSeeder(),
+                              new WarehouseSeeder(),
                           };
 
             foreach (var seeder in seeders)
