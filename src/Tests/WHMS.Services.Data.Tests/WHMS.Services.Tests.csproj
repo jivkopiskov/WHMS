@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\WHMS.Data\WHMS.Data.csproj" />
-    <ProjectReference Include="..\..\Services\WHMS.Services.Data\WHMS.Services.Common.csproj" />
+    <ProjectReference Include="..\..\Services\WHMS.Services.Common\WHMS.Services.Common.csproj" />
     <ProjectReference Include="..\..\Services\WHMS.Services\WHMS.Services.csproj" />
   </ItemGroup>
 
