@@ -350,8 +350,7 @@
         {
             if (!this.ModelState.IsValid)
             {
-                var model = this.warehouseService.GetProductWarehouseInfo(input.ProductId);
-                return this.RedirectToAction("ManageInventory", new { id = input.ProductId});
+                return this.RedirectToAction("ManageInventory", new { id = input.ProductId });
             }
 
             if (this.productService.IsValidProductId(input.ProductId))

@@ -10,6 +10,7 @@
     using System.Threading.Tasks;
 
     using WHMS.Common;
+    using WHMS.Data.Models.Orders.Enum;
     using WHMS.Web.ViewModels;
     using WHMS.Web.ViewModels.Orders;
 
@@ -67,29 +68,56 @@
                 if (order == null)
                 {
                     order = new ImportOrderInputModel();
-                    order.Order = new AddOrderInputModel
+                    try
                     {
-                        SourceOrderId = row["SourceOrderId"].ToString(),
-                        Customer = new CustomerViewModel
+                        order.Order = new AddOrderInputModel
                         {
-                            Email = row["CustomerEmail"].ToString(),
-                            FirstName = row["CustomerFirstName"].ToString(),
-                            LastName = row["CustomerLastName"].ToString(),
-                            PhoneNumber = row["CustomerPhoneNumber"].ToString(),
-                            Address = new AddressViewModel
+                            SourceOrderId = row["SourceOrderId"].ToString(),
+                            Channel = (Channel)Enum.Parse(typeof(Channel), row["Channel"].ToString()),
+                            Customer = new CustomerViewModel
                             {
-                                StreetAddress = row["StreetAddress"].ToString(),
-                                StreetAddress2 = row["StreetAddress2"].ToString(),
-                                City = row["City"].ToString(),
-                                Zip = row["Zip"].ToString(),
-                                Country = row["Country"].ToString(),
+                                Email = row["CustomerEmail"].ToString(),
+                                FirstName = row["CustomerFirstName"].ToString(),
+                                LastName = row["CustomerLastName"].ToString(),
+                                PhoneNumber = row["CustomerPhoneNumber"].ToString(),
+                                Address = new AddressViewModel
+                                {
+                                    StreetAddress = row["StreetAddress"].ToString(),
+                                    StreetAddress2 = row["StreetAddress2"].ToString(),
+                                    City = row["City"].ToString(),
+                                    Zip = row["Zip"].ToString(),
+                                    Country = row["Country"].ToString(),
+                                },
                             },
-                        },
-                    };
-                    order.Items = new AddOrderItemsInputModel();
-                    order.Items.OrderItems = new List<AddOrderItemViewModel>();
-                    orders.Add(order);
+                        };
+                    }
+                    catch (Exception)
+                    {
+                        order.Order = new AddOrderInputModel
+                        {
+                            SourceOrderId = row["SourceOrderId"].ToString(),
+                            Customer = new CustomerViewModel
+                            {
+                                Email = row["CustomerEmail"].ToString(),
+                                FirstName = row["CustomerFirstName"].ToString(),
+                                LastName = row["CustomerLastName"].ToString(),
+                                PhoneNumber = row["CustomerPhoneNumber"].ToString(),
+                                Address = new AddressViewModel
+                                {
+                                    StreetAddress = row["StreetAddress"].ToString(),
+                                    StreetAddress2 = row["StreetAddress2"].ToString(),
+                                    City = row["City"].ToString(),
+                                    Zip = row["Zip"].ToString(),
+                                    Country = row["Country"].ToString(),
+                                },
+                            },
+                        };
+                    }
                 }
+
+                order.Items = new AddOrderItemsInputModel { };
+                order.Items.OrderItems = new List<AddOrderItemViewModel>();
+                orders.Add(order);
 
                 order.Items.OrderItems.Add(new AddOrderItemViewModel
                 {
@@ -97,6 +125,7 @@
                     Qty = int.Parse(row["Qty"].ToString()),
                 });
             }
+
             return orders;
         }
     }

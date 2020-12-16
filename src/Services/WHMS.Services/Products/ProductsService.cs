@@ -111,6 +111,12 @@
             return filteredProducts.Count();
         }
 
+        public int GetAllProductsCount()
+        {
+            var filteredProducts = this.context.Products;
+            return filteredProducts.Count();
+        }
+
         public T GetProductDetails<T>(int productId)
         {
             var productDetails = this.context.Products.Where(x => x.Id == productId).To<T>().FirstOrDefault();
@@ -119,8 +125,8 @@
 
         public IEnumerable<T> GetProductImages<T>(int productId)
         {
-            var productDetails = this.context.Images.Where(x => x.ProductId == productId).To<T>();
-            return productDetails;
+            var productImages = this.context.Images.Where(x => x.ProductId == productId).To<T>();
+            return productImages;
         }
 
         public async Task UpdateDefaultImageAsync(int imageId)
@@ -143,7 +149,7 @@
 
             var products = this.ConvertDatatableToProductInputEnumrable(dt);
             var invalidProducts = products.Where(x => !this.IsSkuAvailable(x.SKU));
-            if (invalidProducts.Count() > 0)
+            if (invalidProducts.Any())
             {
                 sb.AppendLine($"Failed to create the following products due to duplicate SKUs: {string.Join(", ", invalidProducts.Select(x => x.SKU))}");
             }
@@ -160,7 +166,9 @@
                 }
                 else
                 {
-                    await this.CreateProductAsync(product);
+                    var id = await this.CreateProductAsync(product);
+                    var imageInput = new ImageViewModel { ProductId = id, Url = product.ImageURL };
+                    await this.AddProductImageAsync(imageInput);
                 }
             }
 
@@ -224,6 +232,7 @@
                     Width = (float)Convert.ToDecimal(row["Width"]),
                     Height = (float)Convert.ToDecimal(row["Height"]),
                     Lenght = (float)Convert.ToDecimal(row["Lenght"]),
+                    ImageURL = row["PrimaryImageURL"].ToString(),
                 };
             }
         }

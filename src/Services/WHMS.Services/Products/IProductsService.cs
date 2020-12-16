@@ -34,6 +34,8 @@
 
         public int GetAllProductsCount(ProductFilterInputModel input);
 
+        public int GetAllProductsCount();
+
         Task<string> ImportProductsAsync(Stream stream);
     }
 }

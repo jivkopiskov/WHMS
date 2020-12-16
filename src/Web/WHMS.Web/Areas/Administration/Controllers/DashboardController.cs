@@ -1,12 +1,9 @@
 ﻿namespace WHMS.Web.Areas.Administration.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
 
-    using WHMS.Common;
+    using Microsoft.AspNetCore.Mvc;
     using WHMS.Services;
-    using WHMS.Web.ViewModels.Administration.Dashboard;
 
     public class DashboardController : AdministrationController
     {

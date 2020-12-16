@@ -64,6 +64,8 @@
         [Display(Name = "Created By")]
         public string CreatedById { get; set; }
 
+        public string ImageURL { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (this.MAPPrice > this.WebsitePrice)
