@@ -10,6 +10,11 @@
       "type": "mssql.onprem",
       "connectionId": "DefaultConnection",
       "secretStore": null
+    },
+    "mssql2": {
+      "type": "mssql.onprem",
+      "connectionId": "WHMS",
+      "secretStore": null
     }
   }
 }
