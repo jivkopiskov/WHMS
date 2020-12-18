@@ -42,7 +42,6 @@
             await this.context.SaveChangesAsync();
 
             await this.inventoryService.RecalculateInventoryAfterShippingAsync(order.Id, order.WarehouseId);
-
         }
 
         public async Task UnshipOrderAsync(int orderId)
