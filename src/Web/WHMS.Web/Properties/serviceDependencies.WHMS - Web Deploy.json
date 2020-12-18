@@ -4,16 +4,12 @@
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/microsoft.insights/components/WHMS",
       "type": "appInsights.azure",
       "connectionId": "APPINSIGHTS_CONNECTIONSTRING",
-      "secretStore": null
+      "secretStore": "AzureAppSettings"
     },
     "mssql1": {
-      "type": "mssql.onprem",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/whms/databases/WHMS.Prod",
+      "type": "mssql.azure",
       "connectionId": "DefaultConnection",
-      "secretStore": null
-    },
-    "mssql2": {
-      "type": "mssql.onprem",
-      "connectionId": "WHMS",
       "secretStore": null
     }
   }

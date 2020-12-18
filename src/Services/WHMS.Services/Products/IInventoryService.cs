@@ -17,5 +17,7 @@
         Task RecalculateReservedInventoryAsync(int productId, int warehouseId);
 
         Task RecalculateInventoryAfterUnshippingAsync(int orderId, int warehouseId);
+
+        Task RecalculateInventoryAfterShippingAsync(int orderId, int warehouseId);
     }
 }

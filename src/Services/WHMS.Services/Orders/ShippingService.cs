@@ -41,17 +41,8 @@
             order.OrderStatus = OrderStatus.Completed;
             await this.context.SaveChangesAsync();
 
-            foreach (var item in order.OrderItems)
-            {
-                var adjustment = new ProductAdjustmentInputModel
-                {
-                    ProductId = item.ProductId,
-                    Qty = item.Qty * (-1),
-                    WarehouseId = order.WarehouseId,
-                };
+            await this.inventoryService.RecalculateInventoryAfterShippingAsync(order.Id, order.WarehouseId);
 
-                await this.inventoryService.AdjustInventoryAsync(adjustment);
-            }
         }
 
         public async Task UnshipOrderAsync(int orderId)

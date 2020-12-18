@@ -22,7 +22,6 @@
         [Fact]
         public async Task CreateConditionShouldCreateNewCondition()
         {
-            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
             var options = new DbContextOptionsBuilder<WHMSDbContext>().UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()).Options;
             using var context = new WHMSDbContext(options);
             var service = new ConditionsService(context);
