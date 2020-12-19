@@ -40,6 +40,10 @@
             else
             {
                 orderItem.Qty += input.Qty;
+                if (orderItem.Qty <= 0)
+                {
+                    this.context.OrderItems.Remove(orderItem);
+                }
             }
 
             await this.context.SaveChangesAsync();
@@ -64,7 +68,7 @@
                 else
                 {
                     orderItem.Qty += item.Qty;
-                    if (orderItem.Qty == 0)
+                    if (orderItem.Qty <= 0)
                     {
                         this.context.OrderItems.Remove(orderItem);
                     }

@@ -109,7 +109,7 @@
         public async Task<int> AddOrderAsync(AddOrderInputModel input)
         {
             var customer = this.customersService.GetCustomer<Customer>(input.Customer.Email);
-            customer = this.mapper.Map<CustomerViewModel, Customer>(input.Customer, customer);
+            customer = await this.customersService.CreateOrUpdateCustomerAsync(input.Customer);
             var order = this.mapper.Map<Order>(input);
             order.Customer = customer;
             order.PaymentStatus = PaymentStatus.NoPayment;

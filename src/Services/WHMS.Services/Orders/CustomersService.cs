@@ -25,9 +25,17 @@
             this.mapper = AutoMapperConfig.MapperInstance;
         }
 
-        public Task<int> CreateCustomerAsync()
+        public async Task<Customer> CreateOrUpdateCustomerAsync(CustomerViewModel input)
         {
-            throw new NotImplementedException();
+            var customer = this.context.Customers.FirstOrDefault(x => x.Email == input.Email);
+            customer = this.mapper.Map<CustomerViewModel, Customer>(input, customer);
+            if (customer.Id == 0)
+            {
+                this.context.Customers.Add(customer);
+            }
+
+            await this.context.SaveChangesAsync();
+            return customer;
         }
 
         public T GetCustomer<T>(string email)

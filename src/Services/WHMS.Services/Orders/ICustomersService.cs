@@ -2,12 +2,12 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
+    using WHMS.Data.Models.Orders;
     using WHMS.Web.ViewModels.Orders;
 
     public interface ICustomersService
     {
-        Task<int> CreateCustomerAsync();
+        Task<Customer> CreateOrUpdateCustomerAsync(CustomerViewModel input);
 
         T GetCustomer<T>(string email);
 
